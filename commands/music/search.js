@@ -32,7 +32,7 @@ if (!args[0]) return message.channel.send(`${message.author}, Please enter a val
         embed.setDescription(`${maxTracks.map((track, i) => `**${i + 1}**. ${track.title} | ${track.author}`).join('\n')}\n\nChoose a song from **1** to **${maxTracks.length}** write send or write **cancel** and cancel selection.⬇️`);
 
         embed.setTimestamp();
-        embed.setFooter('Edited by Umut Bayraktar ❤️', message.author.avatarURL({ dynamic: true }));
+        embed.setFooter('Edited by no one', message.author.avatarURL({ dynamic: true }));
 
         message.channel.send({ embeds: [embed] });
 
