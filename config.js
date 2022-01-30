@@ -4,7 +4,7 @@ module.exports = {
 
     opt: {
         DJ: {
-            enabled: true, //IF YOU WANT ONLY DJS TO USE IT, set false to true.
+            enabled: false, //IF YOU WANT ONLY DJS TO USE IT, set false to true.
             roleName: 'Music', //WRITE WHAT THE NAME OF THE DJ ROLE WILL BE, THEY CAN USE IT ON YOUR SERVER
             commands: ['back', 'clear', 'filter', 'loop', 'pause', 'resume', 'skip', 'stop', 'volume'] //Please don't touch
         },
