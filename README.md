@@ -1,42 +1,16 @@
-# Hello Node!
-
-This project includes a Node.js server script and a web page that connects to it. The front-end page presents a form the visitor can use to submit a color name, sending the submitted value to the back-end API running on the server. The server returns info to the page that allows it to update the display with the chosen color. 🎨
-
-[Node.js](https://nodejs.org/en/about/) is a popular runtime that lets you run server-side JavaScript. This project uses the [Fastify](https://www.fastify.io/) framework and explores basic templating with [Handlebars](https://handlebarsjs.com/).
-
-## Prerequisites
-
-You'll get best use out of this project if you're familiar with basic JavaScript. If you've written JavaScript for client-side web pages this is a little different because it uses server-side JS, but the syntax is the same!
-
-## What's in this project?
-
-← `README.md`: That’s this file, where you can tell people what your cool website does and how you built it.
-
-← `public/style.css`: The styling rules for the pages in your site.
-
-← `server.js`: The **Node.js** server script for your new site. The JavaScript defines the endpoints in the site back-end, one to return the homepage and one to update with the submitted color. Each one sends data to a Handlebars template which builds these parameter values into the web page the visitor sees.
-
-← `package.json`: The NPM packages for your project's dependencies.
-
-← `src/`: This folder holds the site template along with some basic data files.
-
-← `src/pages/index.hbs`: This is the main page template for your site. The template receives parameters from the server script, which it includes in the page HTML. The page sends the user submitted color value in the body of a request, or as a query parameter to choose a random color.
-
-← `src/colors.json`: A collection of CSS color names. We use this in the server script to pick a random color, and to match searches against color names.
-
-← `src/seo.json`: When you're ready to share your new site or add a custom domain, change SEO/meta settings in here.
-
-## Try this next 🏗️
-
-Take a look in `TODO.md` for next steps you can try out in your new site!
-
-___Want a minimal version of this project to build your own Node.js app? Check out [Blank Node](https://glitch.com/edit/#!/remix/glitch-blank-node)!___
-
-![Glitch](https://cdn.glitch.com/a9975ea6-8949-4bab-addb-8a95021dc2da%2FLogo_Color.svg?v=1602781328576)
-
-## You built this with Glitch!
-
-[Glitch](https://glitch.com) is a friendly community where millions of people come together to build web apps and websites.
-
-- Need more help? [Check out our Help Center](https://help.glitch.com/) for answers to any common questions.
-- Ready to make it official? [Become a paid Glitch member](https://glitch.com/pricing) to boost your app with private sharing, more storage and memory, domains and more.
+# Discord.js v13 Music Bot
+This music bot project is an adapted version of the original project published on **github.com** specifically for the **glitch.com** site so that users can repo it conveniently.<br><br>
+<h1>Music Bot Installation Guide</h1><hr>
+<h1><a href="https://youtu.be/6WQIiojePQ8">VİDEO GUIDE</a></h1>
+<b>1 |</b> After repoing the project to your project on the website <b>glitch.com</b> via github, log in to the file <b>.env</b> in the project and write the token of your discord bot in the section that says <b>TOKEN</b>.<br><br>
+<b>2 |</b> Press the <b>Tools</b> button at the bottom left, press the <b>Logs</b> button there, and your project specific log will be opened.<br><br>
+<b>3 |</b> If everything is correct, you will see a message in your log saying that your bot is <b>logged in with name</b>. However, if there is a problem, you can see a message about this problem in your log.<br><br>
+<b>4 |</b> If everything went well and your bot is active, you can make some adjustments by browsing the file <b>config.js</b>.<br><br><br><hr><br>
+<h1>If your project on the glitch.com site does not receive a ping from a host, your bot will be offline. I will tell you how to keep your project active at all times.</h1><br>
+<b>1 |</b> Press the button <b>Show</b> on the top left of your project page, click on the <b>first box</b> in the tab that opens. It will take you to your project url, <b>copy this url.</b><br><br>
+<b>2 |</b> <a href="https://codeshare.xyz/uptime">Uptime</a> Paste the url you copied on the specified service and add it to the system.<br><hr><br>
+<h2>Good Luck to You with the Music Bot.</h2>
+<br>
+Umut Bayraktar Youtube: <a href="https://www.youtube.com/UmutBayraktarYT">Subscribe</a><br>
+Code Share Discord: <a href="https://discord.gg/6XGqdgE">Join</a><br>
+VİA: <a href="https://github.com/ZerioDev">ZerioDev</a>
