@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { Player } = require('discord-player');
 const { Client, Intents, Collection } = require('discord.js');
 const { readdirSync } = require('fs');
