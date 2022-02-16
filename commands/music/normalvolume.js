@@ -11,6 +11,6 @@ module.exports = {
 
 		queue.setVolume(100);
 
-        return message.channel.send(`Volume changed to normal volume (100) 🔊`) ;
+        return message.channel.send(`Volume changed to normal volume (**100**) 🔊`) ;
     },
 };
