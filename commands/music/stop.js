@@ -1,6 +1,6 @@
 module.exports = {
     name: 'stop',
-    aliases: ['st'],
+    aliases: ['st','die'],
     utilisation: '{prefix}stop',
     voiceChannel: true,
 
