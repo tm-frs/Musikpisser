@@ -2,7 +2,7 @@ const maxVol = require("../../config.js").opt.maxVol;
 
 module.exports = {
     name: 'volume',
-    aliases: ['vol'],
+    aliases: ['vol','v'],
     utilisation: `{prefix}volume [1-${maxVol}]`,
     voiceChannel: true,
 
