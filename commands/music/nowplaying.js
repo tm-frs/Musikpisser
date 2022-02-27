@@ -2,7 +2,7 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
 module.exports = {
     name: 'nowplaying',
-    aliases: ['np'],
+    aliases: ['np','save'],
     utilisation: '{prefix}nowplaying',
     voiceChannel: true,
 
