@@ -1,6 +1,6 @@
 module.exports = {
     name: 'progress',
-    aliases: ["time"],
+    aliases: ["time","t"],
     utilisation: '{prefix}progress',
     voiceChannel: true,
 
