@@ -1,3 +1,4 @@
+// Queue end: (discord-player module: "[REPO FOLDER]\Musikpisser\node_modules\discord-player\dist\Structures\Queue.js" [line 180-196]; bot: "[REPO FOLDER]\Musikpisser\main.js" [line 65-67])
 require('dotenv').config();
 const { Player } = require('discord-player');
 const { Client, Intents, Collection } = require('discord.js');
