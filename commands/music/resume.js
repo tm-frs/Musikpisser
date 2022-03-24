@@ -1,6 +1,6 @@
 module.exports = {
     name: 'resume',
-    aliases: [],
+    aliases: ['rs'],
     utilisation: '{prefix}resume',
     voiceChannel: true,
 
