@@ -1,6 +1,6 @@
 module.exports = {
     name: 'pause',
-    aliases: [],
+    aliases: ['ps'],
     utilisation: '{prefix}pause',
     voiceChannel: true,
 
