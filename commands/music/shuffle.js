@@ -2,7 +2,7 @@ const { QueueRepeatMode } = require('discord-player');
 
 module.exports = {
     name: 'shuffle',
-    aliases: ['sf'],
+    aliases: ['sh','sf'],
     utilisation: '{prefix}shuffle',
     voiceChannel: true,
 
