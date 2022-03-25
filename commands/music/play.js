@@ -7,7 +7,7 @@ module.exports = {
     voiceChannel: true,
 
     async execute(client, message, args) {
-if (!args[0]) return message.channel.send(`${message.author}, Write the name of the music you want to search. ❌`);
+if (!args[0]) return message.channel.send(`${message.author}, Write the name of the music you want to play. ❌`);
 
         const res = await client.player.search(args.join(' '), {
             requestedBy: message.member,
@@ -24,10 +24,10 @@ if (!args[0]) return message.channel.send(`${message.author}, Write the name of 
             if (!queue.connection) await queue.connect(message.member.voice.channel);
         } catch {
             await client.player.deleteQueue(message.guild.id);
-            return message.channel.send(`${message.author}, I can't join audio channel. ❌`);
+            return message.channel.send(`${message.author}, I can't join the audio channel. ❌`);
         }
 
-        await message.channel.send(`Your ${res.playlist ? 'Your Playlist' : 'Your Track'} Loading... 🎧`);
+        await message.channel.send(`Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧`);
 
         res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]);
 
