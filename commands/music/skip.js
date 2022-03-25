@@ -11,6 +11,6 @@ module.exports = {
 
         const success = queue.skip();
 
-        return message.channel.send(success ? `**${queue.current.title}**, Skipped song ✅` : `${message.author}, Something went wrong ❌`);
+        return message.channel.send(success ? `**${queue.current.title}**, the song currently playing, has been skipped ✅` : `${message.author}, Something went wrong ❌`);
     },
 };

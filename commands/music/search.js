@@ -16,7 +16,7 @@ if (!args[0]) return message.channel.send(`${message.author}, Please enter a val
             searchEngine: QueryType.AUTO
         });
 
-        if (!res || !res.tracks.length) return message.channel.send(`${message.author}, No search results found. ❌`);
+        if (!res || !res.tracks.length) return message.channel.send(`${message.author}, No search results were found. ❌`);
 
         const queue = await client.player.createQueue(message.guild, {
             metadata: message.channel
@@ -43,7 +43,7 @@ if (!args[0]) return message.channel.send(`${message.author}, Please enter a val
         });
 
        collector.on('collect', async (query) => {
-            if (query.content.toLowerCase() === 'cancel') return message.channel.send(`Call cancelled. ✅`) && collector.stop();
+            if (query.content.toLowerCase() === 'cancel') return message.channel.send(`Searching has been cancelled. ✅`) && collector.stop();
 
             const value = parseInt(query.content);
 
@@ -55,10 +55,10 @@ if (!args[0]) return message.channel.send(`${message.author}, Please enter a val
                 if (!queue.connection) await queue.connect(message.member.voice.channel);
             } catch {
                 await client.player.deleteQueue(message.guild.id);
-                return message.channel.send(`${message.author}, I can't join audio channel. ❌`);
+                return message.channel.send(`${message.author}, I can't join the audio channel. ❌`);
             }
 
-            await message.channel.send(`Loading your music call. 🎧`);
+            await message.channel.send(`Your choosen track is loading now... 🎧`);
 
             queue.addTrack(res.tracks[Number(query.content)-1]);
             if (!queue.playing) await queue.play();
