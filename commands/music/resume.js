@@ -11,6 +11,6 @@ module.exports = {
 
         const success = queue.setPaused(false);
 
-        return message.channel.send(success ? `**${queue.current.title}**, The song continues to play. ✅` : `${message.author}, Something went wrong. ❌`);
+        return message.channel.send(success ? `The current song, **${queue.current.title}**, isn't paused anymore and continues to play. ✅` : `${message.author}, Something went wrong. ❌`);
     },
 };
