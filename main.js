@@ -51,19 +51,19 @@ player.on('trackStart', (queue, track) => {
 });
 
 player.on('trackAdd', (queue, track) => {
-    queue.metadata.send(`**${track.title}** added to playlist. ✅`);
+    queue.metadata.send(`**${track.title}** has been added to playlist. ✅`);
 });
 
 player.on('botDisconnect', (queue) => {
-    queue.metadata.send('Someone from the audio channel Im connected to kicked me out, the whole playlist has been cleared! ❌');
+    queue.metadata.send(`Someone from the audio channel I'm connected to kicked me out, the whole queue has been cleared! ❌`);
 });
 
 player.on('channelEmpty', (queue) => {
-    queue.metadata.send('I left the audio channel because there is no one on my audio channel. ❌');
+    queue.metadata.send(`I left the audio channel because there is no one on my channel. ❌`);
 });
 
 player.on('queueEnd', (queue) => {
-    queue.metadata.send('All play queue finished, I think you can listen to some more music. ✅');
+    queue.metadata.send(`All tracks in queue are finished. ✅`);
 });
 
 const express = require("express");
@@ -79,8 +79,8 @@ setInterval(() => {
 
 if(process.env.TOKEN){
 client.login(process.env.TOKEN).catch(e => {
-console.log("The Bot Token You Entered Into Your Project Is Incorrect Or Your Bot's INTENTS Are OFF!")
+console.log(`The Bot Token You Entered Into Your Project Is Incorrect Or Your Bot's INTENTS Are OFF!`)
 })
 } else {
-console.log("Please Write Your Bot Token Opposite The Token In The .env File In Your Project!")
+console.log(`Please Write Your Bot Token Opposite The Token In The .env File In Your Project!`)
 }
