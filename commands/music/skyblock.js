@@ -8,7 +8,7 @@ module.exports = {
     voiceChannel: true,
 
     async execute(client, message, args) {
-        
+  
       // play
         const res = await client.player.search('https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV', {
             requestedBy: message.member,
@@ -34,22 +34,20 @@ module.exports = {
 
         if (!queue.playing) await queue.play();
       
-      // Warten für 10 Sekunden
+      // Warten für 4 Sekunden
           setTimeout(function() {
-
       // shuffle
-      if (queue || queue.playing) {
-
             const success = queue.shuffle();
-
             return message.channel.send(`Queue has been shuffled! ✅`);
-        
-        
+                }, 4000);
+      
+      // Warten für 5 Sekunden (1 Sekunde danach)
+          setTimeout(function() {
             // loop queue:
-            queue.setRepeatMode(queue.repeatMode === 0 ? QueueRepeatMode.QUEUE : QueueRepeatMode.OFF);
+            const success = queue.setRepeatMode(queue.repeatMode === 0 ? QueueRepeatMode.QUEUE : QueueRepeatMode.OFF);
 
             return message.channel.send(success ? `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, The whole sequence will repeat non-stop 🔁` : `${message.author}, Something went wrong. ❌`);
-        }
-                }, 10000);
+        
+                }, 5000);
     },
 };
