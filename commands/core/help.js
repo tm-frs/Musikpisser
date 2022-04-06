@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: 'help',
-    aliases: ['h',"yardım"],
+    aliases: ['h'],
     showHelp: false,
     utilisation: '{prefix}help',
 
