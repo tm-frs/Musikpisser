@@ -26,10 +26,14 @@ if (!args[0]) return message.channel.send(`${message.author}, Write the name of 
             await client.player.deleteQueue(message.guild.id);
             return message.channel.send(`${message.author}, I can't join the audio channel. ❌`);
         }
-
+      
         await message.channel.send(`Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧`);
-
-        res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]);
+//      console.log(`${res.tracks[0]}`); // info ausgabe der res (result) variable zum Filtern, nur Ergebnis 1
+        if ((res.tracks[0]!='grandson - Blood // Water (Official Audio) by grandson') && (res.tracks[0]!='grandson - Blood // Water (Official Audio) by GrandsonVEVO')) { // Filter (mehrere Filter sind nicht mit logischem ODER [||], sondern mit logischem UND [&&] zu verbinden)
+          res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
+        } else {
+        return message.channel.send(`${message.author}, Something went wrong :( ❌`); // "Fehlermeldung"
+        }
 
         if (!queue.playing) await queue.play();
     },
