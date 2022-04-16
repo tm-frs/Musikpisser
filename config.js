@@ -17,5 +17,6 @@ module.exports = {
             }
         }, // add your filter here (just the title of the forbidden song)
       blacklist: ['']
+      crashperms: '[USERNAME]#XXXX' // write the Username of the person that is allowed to crash the bot with the crash command here (only one user is allowed)
     }
 };
