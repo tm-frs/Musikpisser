@@ -6,7 +6,6 @@ module.exports = {
     aliases: ['ch'],
     utilisation: '{prefix}chill',
     voiceChannel: true,
-    showHelp: false,
 
     async execute(client, message, args) {
   
