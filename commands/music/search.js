@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { QueryType } = require('discord-player');
+const blacklist = require("../../config.js").opt.blacklist;
 
 module.exports = {
     name: 'search',
@@ -60,7 +61,17 @@ if (!args[0]) return message.channel.send(`${message.author}, Please enter a val
 
             await message.channel.send(`Your choosen track is loading now... 🎧`);
 
-            queue.addTrack(res.tracks[Number(query.content)-1]);
+         
+      const filter = res.tracks[Number(query.content)-1].title; // adds an variable that is used to check for the blacklist
+      
+//      console.log('RES TRACKS 0:\n'+filter); // info ausgabe der res (result) variable zum Filtern, gewähltes Ergebnis
+//      console.log('Blacklist detection:', blacklist.includes(filter)); // Test auf Blacklist mit Konsolenausgabe
+      
+        if (blacklist.includes(filter)) { // Filter
+          return message.channel.send(`${message.author}, Something went wrong :( ❌`); // "Fehlermeldung"
+        } else {
+          queue.addTrack(res.tracks[Number(query.content)-1]); // im Normalfall Musik hinzufügen
+        }
             if (!queue.playing) await queue.play();
            
         });
