@@ -19,6 +19,7 @@ client.player = new Player(client, client.config.opt.discordPlayer);
 client.commands = new Collection();
 const player = client.player
 
+
 const events = readdirSync('./events/').filter(file => file.endsWith('.js'));
 for (const file of events) {
     const event = require(`./events/${file}`);
@@ -26,16 +27,17 @@ for (const file of events) {
     client.on(file.split('.')[0], event.bind(null, client));
     delete require.cache[require.resolve(`./events/${file}`)];
 };
-console.log(`-> Loaded commands...`);
+console.log(`-> Loading commands...`);
 readdirSync('./commands/').forEach(dirs => {
     const commands = readdirSync(`./commands/${dirs}`).filter(files => files.endsWith('.js'));
     for (const file of commands) {
         const command = require(`./commands/${dirs}/${file}`);
-        console.log(`${command.name.toLowerCase()} Load Command!`);
+        console.log(`${command.name.toLowerCase()} Command loaded!`);
         client.commands.set(command.name.toLowerCase(), command);
         delete require.cache[require.resolve(`./commands/${dirs}/${file}`)];
     };
 });
+
 
 player.on('error', (queue, error) => {
     console.log(`There was a problem with the song queue => ${error.message}`);
