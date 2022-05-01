@@ -9,7 +9,6 @@ module.exports = {
       execute(client, message, args) {
         const messagecreator = (message.author.username+'#'+message.author.discriminator); // saves the name of the user executing this as a variable
         console.log('Crash command executed by: '+messagecreator); // will let you see in the logs who used the command 
-        return message.channel.send(`${message.author}, The bot is crashing now...`); // tells the user he executed the command
         if (adminperms.includes(messagecreator)) { // checks if user is allowed to let the bot crash
       dgdfhfhjgjh // just some random things that are just here to crash the bot if needed
         } else {
