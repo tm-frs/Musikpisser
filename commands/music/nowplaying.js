@@ -24,7 +24,7 @@ module.exports = {
         const timestamp = queue.getPlayerTimestamp();
 const trackDuration = timestamp.progress == 'Forever' ? 'Endless (Live)' : track.duration;
 
-        embed.setDescription(`Audio **%${queue.volume}**\nDuration **${trackDuration}**\nLoop Mode **${methods[queue.repeatMode]}**\n${track. requestedBy}`);
+        embed.setDescription(`Audio: **%${queue.volume}**\nDuration: **${trackDuration}**\nLoop Mode: **${methods[queue.repeatMode]}**\n URL: <${track.url}>\n${track. requestedBy}`);
 
         embed.setTimestamp();
         embed.setFooter('Edited by no one', message.author.avatarURL({ dynamic: true }));
