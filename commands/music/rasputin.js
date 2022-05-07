@@ -43,11 +43,11 @@ module.exports = {
         
                 }, 4000);
       
-      // Warten für 5 Sekunden (1 Sekunde danach)
+      // Warten für 4 Sekunden (0 Sekunden danach)
           setTimeout(function() {
       		queue.setVolume(250);
             
         return message.channel.send(`Volume changed to **250** (maximum is **${maxVol}**) 🔊`) ;
-                }, 5000);
+                }, 4001);
     },
 };
