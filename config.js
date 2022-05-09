@@ -1,6 +1,7 @@
+const prefix = '!'; // the prefix of the bot for every command
 module.exports = {
-        px: '!',
-        playing: 'Music Bot || !help for help',
+        px: prefix,
+        playing: 'Music Bot || "'+prefix+'help" for help',
 
     opt: {
         DJ: {
@@ -17,6 +18,6 @@ module.exports = {
             }
         }, // add your filter here (just the title of the forbidden song)
       blacklist: [''],
-      adminperms: ['[USERNAME]#XXXX'] // write the Username of the user(s) that is/are allowed to use admin commands (crash the bot with the crash command, for example)
+      adminperms: ['USERNAME#XXXX'] // write the Username of the user(s) that is/are allowed to use admin commands (crash the bot with the crash command, for example)
     }
 };
