@@ -16,7 +16,7 @@ module.exports = (client, message) => {
 
     const roleDJ = message.guild.roles.cache.find(x => x.name === DJ.roleName);
   
-    if (cmd && DJ.enabled) {      
+    if (cmd && DJ.enabled && !DJ.notAffected.includes(cmd.name)) {      
       if (!message.guild.roles.cache.some(x => x.name === DJ.roleName)) {
         message.guild.roles.create({name: DJ.roleName, color: "#C27C0E", mentionable: true, permissions:[]});
         
