@@ -3,8 +3,13 @@ module.exports = {
     name: 'filter',
     options: [ {
         name: 'filterinput',
-        description: "Type the filter you want to apply. (bassboost, 8D, nightcore) Leave ampty to remove.",
+        description: "Choose the filter you want to apply.",
         type: 'STRING',
+		choices: [
+		{value: 'bassboost', name: "Bassboost"},
+		{value: '8D', name: "8D"},
+		{value: 'nightcore', name: "Nightcore"}
+		],
         required: true
     }],
     voiceChannel: true,
