@@ -1,8 +1,6 @@
-// Queue end: (discord-player module: "[REPO FOLDER]\Musikpisser\node_modules\discord-player\dist\Structures\Queue.js" [line 180-196]; bot: "[REPO FOLDER]\Musikpisser\main.js" [line 65-67])
-require('dotenv').config();
 const { Player } = require('discord-player');
 const { Client, Intents, Collection } = require('discord.js');
-const { readdirSync } = require('fs');
+const fs = require('fs');
 
 let client = new Client({
     intents: [
@@ -14,58 +12,78 @@ let client = new Client({
     disableMentions: 'everyone',
 });
 
+client.db = require("orio.db")
+client.db.deleteAll()
 client.config = require('./config');
 client.player = new Player(client, client.config.opt.discordPlayer);
-client.commands = new Collection();
 const player = client.player
 
+const synchronizeSlashCommands = require('discord-sync-commands-v14');
 
-const events = readdirSync('./events/').filter(file => file.endsWith('.js'));
-for (const file of events) {
-    const event = require(`./events/${file}`);
-    console.log(`-> Loaded event ${file.split('.')[0]}`);
-    client.on(file.split('.')[0], event.bind(null, client));
-    delete require.cache[require.resolve(`./events/${file}`)];
-};
 console.log(`-> Loading commands...`);
-readdirSync('./commands/').forEach(dirs => {
-    const commands = readdirSync(`./commands/${dirs}`).filter(files => files.endsWith('.js'));
-    for (const file of commands) {
-        const command = require(`./commands/${dirs}/${file}`);
-        console.log(`${command.name.toLowerCase()} Command loaded!`);
-        client.commands.set(command.name.toLowerCase(), command);
-        delete require.cache[require.resolve(`./commands/${dirs}/${file}`)];
-    };
+client.commands = new Collection();
+fs.readdir("./commands/", (_err, files) => {
+    files.forEach((file) => {
+        if (!file.endsWith(".js")) return;
+        let props = require(`./commands/${file}`);
+        let commandName = file.split(".")[0];
+        client.commands.set(commandName, {
+            name: commandName,
+            ...props
+        });
+        console.log(`${commandName} Command loaded`);
+    });
+    synchronizeSlashCommands(client, client.commands.map((c) => ({
+        name: c.name,
+        description: c.description,
+        options: c.options,
+        type: 'CHAT_INPUT'
+    })), {
+        debug: false
+    });
+});
+
+console.log(`-> Loading events...`);
+fs.readdir("./events", (_err, files) => {
+  files.forEach((file) => {
+      if (!file.endsWith(".js")) return;
+      const event = require(`./events/${file}`);
+      let eventName = file.split(".")[0];
+      console.log(`${eventName} Event loaded`);
+      client.on(eventName, event.bind(null, client));
+      delete require.cache[require.resolve(`./events/${file}`)];
+  });
 });
 
 
 player.on('error', (queue, error) => {
-    console.log(`There was a problem with the song queue => ${error.message}`);
+    console.log({ content: `There was a problem with the song queue => ${error.message}` }).catch(e => { });
 });
 
 player.on('connectionError', (queue, error) => {
-    console.log(`I'm having trouble connecting => ${error.message}`);
+    console.log({ content: `I'm having trouble connecting => ${error.message}` }).catch(e => { });
 });
 
 player.on('trackStart', (queue, track) => {
     if (!client.config.opt.loopMessage && queue.repeatMode !== 0) return;
-    queue.metadata.send(`🎵 Music started playing: **${track.title}** -> Channel: **${queue.connection.channel.name}** 🎧`);
+    queue.metadata.send({ content: `🎵 Music started playing: **${track.title}** -> Channel: **${queue.connection.channel.name}** 🎧` }).catch(e => { });
 });
 
 player.on('trackAdd', (queue, track) => {
-    queue.metadata.send(`**${track.title}** has been added to playlist. ✅`);
-});
-
-player.on('botDisconnect', (queue) => {
-    queue.metadata.send(`Someone from the audio channel I'm connected to kicked me out, the whole queue has been cleared! ❌`);
+    queue.metadata.send({ content: `**${track.title}** has been added to playlist. ✅` }).catch(e => { });
 });
 
 player.on('channelEmpty', (queue) => {
-    queue.metadata.send(`I left the audio channel because there is no one on my channel. ❌`);
+    queue.metadata.send({ content: `I left the audio channel because there is no one on my channel. ❌` }).catch(e => { });
 });
 
 player.on('queueEnd', (queue) => {
-    queue.metadata.send(`All tracks in queue are finished. ✅`);
+    if(client.config.opt.voiceConfig.leaveOnTimer.status === true) {
+        setTimeout(() => {
+            if(queue.connection) queue.connection.disconnect();
+        }, client.config.opt.voiceConfig.leaveOnTimer.time);
+    }
+    queue.metadata.send({ content: `All tracks in queue are finished. ✅` }).catch(e => { });
 });
 
 const express = require("express");
@@ -74,15 +92,15 @@ const http = require("http");
 app.get("/", (request, response) => {
   response.sendStatus(200);
 });
-app.listen(process.env.PORT);
+app.listen('3001');
 setInterval(() => {
-  http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+  http.get(`http://127.0.0.1:3001/`);
 }, 60000);
 
-if(process.env.TOKEN){
-client.login(process.env.TOKEN).catch(e => {
-console.log(`The Bot Token You Entered Into Your Project Is Incorrect Or Your Bot's INTENTS Are OFF!`)
+if(client.config.TOKEN){
+client.login(client.config.TOKEN).catch(e => {
+console.log(`The Bot Token you entered into your bot's config.js-file is incorrect or your bot's INTENTS are OFF!`)
 })
 } else {
-console.log(`Please Write Your Bot Token Opposite The Token In The .env File In Your Project!`)
+console.log(`Please write your bot token into the TOKEN-field in the config.js-file of your bot!`)
 }
