@@ -10,13 +10,13 @@ module.exports = {
     voiceChannel: true,
 
     run: async (client, interaction) => {
-        const queue = client.player.getQueue(message.guild.id);
-/*
-   if (!queue || !queue.playing) return interaction.reply({ content: (`No music currently playing! ❌`, ephemeral: true }).catch(e => { });
+        const queue = client.player.getQueue(interaction.guild.id);
+
+   if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { });
    const filterinput = interaction.options.getString('filterinput')
         const actualFilter = queue.getFiltersEnabled()[0];
 
-        if (!filterinput) return interaction.reply({ content: (`Please enter a valid filter name. ❌\n\`bassboost, 8D, nightcore\``, ephemeral: true }).catch(e => { });
+        if (!filterinput) return interaction.reply({ content: `Please enter a valid filter name. ❌\n\`bassboost, 8D, nightcore\``, ephemeral: true }).catch(e => { });
 
         const filters = [];
         queue.getFiltersEnabled().map(x => filters.push(x));
@@ -24,7 +24,7 @@ module.exports = {
 
         const filter = filters.find((x) => x.toLowerCase() === filterinput.toLowerCase());
 
-        if (!filter) return interaction.reply({ content: (`I couldn't find a filter with your name. ❌\n\`bassboost, 8D, nightcore\``, ephemeral: true }).catch(e => { });
+        if (!filter) return interaction.reply({ content: `I couldn't find a filter with your name. ❌\n\`bassboost, 8D, nightcore\``, ephemeral: true }).catch(e => { });
 
         const filtersUpdated = {};
 
@@ -32,6 +32,6 @@ module.exports = {
 
         await queue.setFilters(filtersUpdated);
 
-        interaction.reply({ content: (`Applied: **${filter}**, Filter Status: **${queue.getFiltersEnabled().includes(filter) ? 'Active' : 'Inactive'}** ✅\n **Remember, if the music is long, the filter application time may be long.**` }).catch(e => { });*/
+        interaction.reply({ content: `Applied: **${filter}**, Filter Status: **${queue.getFiltersEnabled().includes(filter) ? 'Active' : 'Inactive'}** ✅\n **Remember, if the music is long, the filter application time may be long.**` }).catch(e => { });
     },
 };

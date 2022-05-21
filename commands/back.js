@@ -13,6 +13,6 @@ module.exports = {
 
         await queue.back();
 
-        interaction.reply({ content: `Previous music started playing... ✅`, ephemeral: true }).catch(e => { });
+        interaction.reply({ content: `Previous music started playing... ✅` }).catch(e => { });
     },
 };

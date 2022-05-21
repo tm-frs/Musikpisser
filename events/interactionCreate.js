@@ -14,11 +14,11 @@ if(!int.guild) return
 
     const DJ = client.config.opt.DJ;
 
-    const roleDJ = message.guild.roles.cache.find(x => x.name === DJ.roleName);
-  
+    const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
+
     if (cmd && DJ.enabled && !DJ.notAffected.includes(cmd.name)) {      
-      if (!message.guild.roles.cache.some(x => x.name === DJ.roleName)) {
-        message.guild.roles.create({name: DJ.roleName, color: "#C27C0E", mentionable: true, permissions:[]});
+      if (!int.guild.roles.cache.some(x => x.name === DJ.roleName)) {
+        int.guild.roles.create({name: DJ.roleName, color: "#C27C0E", mentionable: true, permissions:[]});
         
         setTimeout(function() {
           const roleDJ = message.guild.roles.cache.find(x => x.name === DJ.roleName);
@@ -36,7 +36,7 @@ if(!int.guild) return
         }, 1000);
         
         setTimeout(function() {
-          const messagecreatorhasrole = message.member.roles.cache.some(role => role.id === roleDJ.id);
+          const messagecreatorhasrole = int.member.roles.cache.some(role => role.id === roleDJ.id);
           if (!messagecreatorhasrole && !int.member.permissions.has("MANAGE_GUILD")) {
 				const embed = new MessageEmbed()
 				.setColor('BLUE')
@@ -46,13 +46,13 @@ if(!int.guild) return
 				.setTimestamp()
 				.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
 			
-			return int.reply({ content: `${message.author}`, embeds: [embed], ephemeral: true}).catch(e => { })
+			return int.reply({ content: `${int.author}`, embeds: [embed], ephemeral: true}).catch(e => { })
           }
         }, 2000);
         
       } else {
       
-      const messagecreatorhasrole = message.member.roles.cache.some(role => role.id === roleDJ.id);
+      const messagecreatorhasrole = int.member.roles.cache.some(role => role.id === roleDJ.id);
 //      console.log(messagecreatorhasrole);
 //      console.log(roleDJ.id);
         if (!messagecreatorhasrole && !int.member.permissions.has("MANAGE_GUILD")) {
@@ -64,7 +64,7 @@ if(!int.guild) return
 				.setTimestamp()
 				.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
 			
-			return int.reply({ content: `${message.author}`, embeds: [embed], ephemeral: true}).catch(e => { })
+			return int.reply({ content: `${int.author}`, embeds: [embed], ephemeral: true}).catch(e => { })
         }
       }
     } 

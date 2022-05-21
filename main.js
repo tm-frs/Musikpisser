@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { Player } = require('discord-player');
 const { Client, Intents, Collection } = require('discord.js');
 const fs = require('fs');
@@ -97,8 +98,8 @@ setInterval(() => {
   http.get(`http://127.0.0.1:3001/`);
 }, 60000);
 
-if(client.config.TOKEN){
-client.login(client.config.TOKEN).catch(e => {
+if(process.env.TOKEN){
+client.login(process.env.TOKEN).catch(e => {
 console.log(`The Bot Token you entered into your bot's config.js-file is incorrect or your bot's INTENTS are OFF!`)
 })
 } else {

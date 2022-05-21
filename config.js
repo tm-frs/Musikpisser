@@ -1,5 +1,4 @@
 module.exports = {
-        TOKEN: '', // paste your bot's token here
         playing: `Music Bot || "/help" for help`,
 
     opt: {
