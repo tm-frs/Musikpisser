@@ -7,6 +7,7 @@
     "start": "node main.js"
   },
   "dependencies": {
+    "@discord-player/extractor": "^3.0.2",
     "@discordjs/voice": "^0.8.0",
     "discord-player": "^5.2.0",
     "discord-sync-commands-v14": "^2.0.0",
@@ -17,7 +18,7 @@
     "ms": "^3.0.0-canary.1",
     "opusscript": "^0.0.8",
     "orio.db": "^3.1.1",
-	"ytdl-core": "^4.11.0"
+    "ytdl-core": "^4.11.0"
   },
   "engines": {
     "node": "16.x"

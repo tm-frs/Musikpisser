@@ -23,7 +23,7 @@ module.exports = {
                 quality: 'highestaudio', //Please don't touch
                 highWaterMark: 1 << 25 //Please don't touch
             }
-        }, // add your filter here (just the title of the forbidden song)
+        }, // add your filter here (just the title of the forbidden song):
       blacklist: [''],
       adminperms: ['USERNAME#XXXX'] // write the Username of the user(s) that is/are allowed to use admin commands (crash the bot with the crash command, for example)
     }

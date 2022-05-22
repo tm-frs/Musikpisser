@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const { QueueRepeatMode } = require('discord-player');
 
 module.exports = {
 
@@ -16,11 +17,12 @@ module.exports = {
         if (!queue.tracks[0]) return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch(e => { });
 
         const embed = new MessageEmbed();
-        const methods = ['(no loop mode)','🔂 (loop track)', '🔁 (loop queue)'];
+		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
+        const loopMode = options[queue.repeatMode];
 
         embed.setColor('BLUE');
         embed.setThumbnail(interaction.guild.iconURL({ size: 2048, dynamic: true }));
-        embed.setTitle(`Server Music List - ${interaction.guild.name} ${methods[queue.repeatMode]}`);
+        embed.setTitle(`Server Music List - ${interaction.guild.name} ${loopMode}`);
 
         const tracks = queue.tracks.map((track, i) => `**${i + 1}** - \`${track.title}\` | \`${track.author}\` (Started by <@${track. requestedBy.id}>)`);
 

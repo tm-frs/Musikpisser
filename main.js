@@ -1,3 +1,4 @@
+delete require.cache[require.resolve('discord-player/smoothVolume')] // I think it isn't working
 require('dotenv').config();
 const { Player } = require('discord-player');
 const { Client, Intents, Collection } = require('discord.js');

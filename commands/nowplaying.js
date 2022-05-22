@@ -1,4 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { QueueRepeatMode } = require('discord-player');
 
 module.exports = {
 	description: "Provides information about the music currently being played.",
@@ -19,12 +20,13 @@ module.exports = {
         embed.setThumbnail(track.thumbnail);
         embed.setTitle(track.title)
 
-        const methods = ['disabled', 'track', 'queue'];
+		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
+        const loopMode = options[queue.repeatMode];
 
         const timestamp = queue.getPlayerTimestamp();
 const trackDuration = timestamp.progress == 'Forever' ? 'Endless (Live)' : track.duration;
 
-        embed.setDescription(`Author: **${track.author}**\nAudio: **${queue.volume}%**\nDuration: **${trackDuration}**\nLoop Mode: **${methods[queue.repeatMode]}**\nURL: ${track.url}\nTrack added by: ${track. requestedBy}`);
+        embed.setDescription(`Author: **${track.author}**\nAudio: **${queue.volume}%**\nDuration: **${trackDuration}**\nLoop Mode: **${loopMode}**\nURL: ${track.url}\nTrack added by: ${track. requestedBy}`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
