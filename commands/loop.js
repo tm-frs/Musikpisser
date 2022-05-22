@@ -13,7 +13,8 @@ module.exports = {
 		{name: "Off", value: 'off'}, //OFF
 		{name: "Track", value: 'track'}, //TRACK
 		{name: "Queue", value: 'queue'}, //QUEUE
-		{name: "Autoplay", value: 'autoplay'} //AUTOPLAY
+		{name: "Autoplay", value: 'autoplay'}, //AUTOPLAY
+		{name: "Info", value: 'info'} //INFO
 		],
 		required: true
 	} ],
@@ -36,7 +37,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         embed.setThumbnail(client.user.displayAvatarURL());
         embed.setTitle('Loop Mode')
 
-        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}`);
+        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
@@ -53,7 +54,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         embed.setThumbnail(client.user.displayAvatarURL());
         embed.setTitle('Loop Mode')
 
-        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}`);
+        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
@@ -70,7 +71,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         embed.setThumbnail(client.user.displayAvatarURL());
         embed.setTitle('Loop Mode')
 
-        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}`);
+        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
@@ -87,12 +88,28 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         embed.setThumbnail(client.user.displayAvatarURL());
         embed.setTitle('Loop Mode')
 
-        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}`);
+        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 		
         interaction.reply(success ? { embeds: [embed] } : { content: 'Could not update loop mode! ❌' }).catch(e => { })
+		} else if (loopMode==='info') { //LOOP INFO ---------------------------------------------------------------------------------------------------------------------------------------------------
+		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
+        const mode = options[queue.repeatMode];
+		
+        const embed = new MessageEmbed();
+
+        embed.setColor('BLUE');
+        embed.setThumbnail(client.user.displayAvatarURL());
+        embed.setTitle('Loop Mode')
+
+        embed.setDescription(`**Loop mode:** ${mode}\n**Requested by:** ${interaction.member.user}\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
+
+        embed.setTimestamp();
+        embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+		
+        interaction.reply({ embeds: [embed] }).catch(e => { })
 		} //ENDE --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	},
 };
