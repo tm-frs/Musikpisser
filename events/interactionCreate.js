@@ -21,7 +21,7 @@ if(!int.guild) return
         int.guild.roles.create({name: DJ.roleName, color: "#C27C0E", mentionable: true, permissions:[]});
         
         setTimeout(function() {
-          const roleDJ = message.guild.roles.cache.find(x => x.name === DJ.roleName);
+          const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
           console.log('DJ-Role has been created because DJ-Mode is active and the role is not existing.');
 		  
 		    const embed = new MessageEmbed()
@@ -32,7 +32,7 @@ if(!int.guild) return
             .setTimestamp()
             .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
 			
-		return int.reply({ content: `@everyone`, embeds: [embed], ephemeral: true}).catch(e => { })
+		return int.reply({ content: `@everyone`, embeds: [embed] }).catch(e => { })
         }, 1000);
         
         setTimeout(function() {
@@ -46,7 +46,7 @@ if(!int.guild) return
 				.setTimestamp()
 				.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
 			
-			return int.reply({ content: `${int.author}`, embeds: [embed], ephemeral: true}).catch(e => { })
+			return int.reply({ embeds: [embed], ephemeral: true}).catch(e => { })
           }
         }, 2000);
         
@@ -64,7 +64,7 @@ if(!int.guild) return
 				.setTimestamp()
 				.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
 			
-			return int.reply({ content: `${int.author}`, embeds: [embed], ephemeral: true}).catch(e => { })
+			return int.reply({ embeds: [embed], ephemeral: true}).catch(e => { })
         }
       }
     } 
