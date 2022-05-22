@@ -4,8 +4,8 @@ module.exports = {
     opt: {
         DJ: {
             enabled: false, //IF YOU WANT ONLY DJS TO USE IT, set false to true. If you haven't, a role with the name you specified will be created. There should only be one role with this name.
-            roleName: 'Musikpisser-Permissions', //WRITE WHAT THE NAME OF THE DJ ROLE WILL BE, THEY CAN USE IT ON YOUR SERVER
-            notAffected: ['help','ping','crash','nowplaying','queue','time','url'] //This are commands everyone can run, even if they don't have the role
+            roleName: 'Musikpisser Permissions', //WRITE WHAT THE NAME OF THE DJ ROLE WILL BE, THEY CAN USE IT ON YOUR SERVER
+            notAffected: ['help','ping','crash','nowplaying','queue','time'] //This are commands everyone can run, even if they don't have the role
         },
         voiceConfig: {
             leaveOnEnd: true, //If this variable is "true", the bot will leave the channel when the music ends.
@@ -23,7 +23,7 @@ module.exports = {
                 quality: 'highestaudio', //Please don't touch
                 highWaterMark: 1 << 25 //Please don't touch
             }
-        }, // add your filter here (just the title of the forbidden song):
+        }, // add your filter here (just paste the title of the forbidden song(s) here):
       blacklist: [''],
       adminperms: ['USERNAME#XXXX'] // write the Username of the user(s) that is/are allowed to use admin commands (crash the bot with the crash command, for example)
     }
