@@ -1,6 +1,7 @@
-@echo Zum Vorbereiten in diesem Verzeichnis "npm install" ausführen.
-@echo Um den Musikpisser zu starten,
+@echo To prepare the bot, run "npm install" in this folder after you installed node.js!
+@echo To start this bot,
 @pause
+cls
 npm start PORT=3001
-@echo Fertig
+@echo Done!
 @pause
