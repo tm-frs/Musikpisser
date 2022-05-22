@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "discord.js": "^14.0.0-dev.1649505803-3c0bbac"
+  },
+  "name": "discord-sync-commands-v14",
+  "version": "2.0.0",
+  "description": "Synchronise commands across multiple Discord servers",
+  "main": "index.js",
+  "repository": "https://github.com/genericNight/discord-sync-commands-v14",
+  "author": "genericNight",
+  "license": "MIT"
+}
