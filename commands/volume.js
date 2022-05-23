@@ -17,11 +17,11 @@ module.exports = {
 
         const vol = parseInt(interaction.options.getInteger('volume'));
 
-        if (!vol) return interaction.reply({ content: `Current volume: **${queue.volume}%** 🔊\n**To change the volume, type a number between \`1\` and \`${maxVol}\`.**`, ephemeral: true }).catch(e => { })
+        if (!vol && vol !== 0) return interaction.reply({ content: `Current volume: **${queue.volume}%** 🔊\n**To change the volume, type a number between \`0\` and \`${maxVol}\`.**`, ephemeral: true }).catch(e => { })
 
         if (queue.volume === vol) return interaction.reply({ content: `The volume you want to change to is already the current volume ❌`, ephemeral: true }).catch(e => { })
 
-        if (vol < 0 || vol > maxVol) return interaction.reply({ content: `**Type a number from \`1\` to \`${maxVol}\` to change the volume .** ❌`, ephemeral: true }).catch(e => { })
+        if (vol < 0 || vol > maxVol) return interaction.reply({ content: `**Type a number from \`0\` to \`${maxVol}\` to change the volume .** ❌`, ephemeral: true }).catch(e => { })
 
         const success = queue.setVolume(vol);
 
