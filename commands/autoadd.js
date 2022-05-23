@@ -34,7 +34,9 @@ module.exports = {
         const queue = await client.player.createQueue(interaction.guild, {
 			leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
 			autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
-			metadata: interaction.channel
+			metadata: interaction.channel,
+			initialVolume: client.config.opt.discordPlayer.initialVolume,
+			volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
         });
       
         try {
