@@ -13,6 +13,6 @@ module.exports = {
 
 		queue.setVolume(maxVol);
 
-        return interaction.reply({ content: `Volume changed to max volume (**${maxVol}**) 🔊` }).catch(e => { }) ;
+        return interaction.reply({ content: `Volume changed to max volume (**${maxVol}%**) 🔊` }).catch(e => { }) ;
     },
 };
