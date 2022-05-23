@@ -1,5 +1,5 @@
 module.exports = {
-    description: "Changes the volume of the music to normal volume (100).",
+    description: "Changes the volume of the music to normal volume (100%).",
     name: 'normalvolume',
     options: [],
     voiceChannel: true,
@@ -11,6 +11,6 @@ module.exports = {
 
 		queue.setVolume(100);
 
-        return interaction.reply({ content: `Volume changed to normal volume (**100**) 🔊` }).catch(e => { }) ;
+        return interaction.reply({ content: `Volume changed to normal volume (**100%**) 🔊` }).catch(e => { }) ;
     },
 };
