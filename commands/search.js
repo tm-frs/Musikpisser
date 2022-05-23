@@ -22,12 +22,14 @@ if (!name) return interaction.reply({ content: `Please enter a valid song name. 
             searchEngine: QueryType.AUTO
         });
 
-        if (!res || !res.tracks.length) return interaction.reply({ content: `${message.author}, No search results were found. ❌`, ephemeral: true }).catch(e => { });
+        if (!res || !res.tracks.length) return interaction.reply({ content: `No search results were found. ❌`, ephemeral: true }).catch(e => { });
 
         const queue = await client.player.createQueue(interaction.guild, {
             leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
             autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
-            metadata: interaction.channel
+            metadata: interaction.channel,
+			initialVolume: client.config.opt.discordPlayer.initialVolume,
+			volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
         });
 
         const embed = new MessageEmbed();

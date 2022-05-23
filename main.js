@@ -1,4 +1,5 @@
-delete require.cache[require.resolve('discord-player/smoothVolume')] // I think it isn't working
+const configvolumeSmoothness = require("./config.js").opt.volumeSmoothness;
+const configinitialVolume = require("./config.js").opt.initialVolume;
 require('dotenv').config();
 const { Player } = require('discord-player');
 const { Client, Intents, Collection } = require('discord.js');
@@ -17,7 +18,7 @@ let client = new Client({
 client.db = require("orio.db")
 client.db.deleteAll()
 client.config = require('./config');
-client.player = new Player(client, client.config.opt.discordPlayer);
+client.player = new Player(client, client.config.opt.discordPlayer, {initialVolume:configinitialVolume, volumeSmoothness:configvolumeSmoothness});
 const player = client.player
 
 const synchronizeSlashCommands = require('discord-sync-commands-v14');
