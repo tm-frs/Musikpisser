@@ -10,23 +10,22 @@ module.exports = {
 		description: 'Loop type',
 		required: true,
 		choices: [
-		{name: "Off", value: 'off'}, //OFF
-		{name: "Track", value: 'track'}, //TRACK
-		{name: "Queue", value: 'queue'}, //QUEUE
-		{name: "Autoplay", value: 'autoplay'}, //AUTOPLAY
-		{name: "Info", value: 'info'} //INFO
+		{name: "Info", value: 'info'}, //INFO
+		{name: "📴 Off", value: 'off'}, //OFF
+		{name: "🔂 Track", value: 'track'}, //TRACK
+		{name: "🔁 Queue", value: 'queue'}, //QUEUE
+		{name: "▶ Autoplay", value: 'autoplay'} //AUTOPLAY
 		],
 		required: true
 	} ],
     voiceChannel: true,
 
     run: async (client, interaction) => {
-        const queue = client.player.getQueue(interaction.guild.id);
-if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })
-
 		const loopMode = interaction.options.getString('mode') 
 
 		if (loopMode==='off') { //LOOP OFF ------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const queue = client.player.getQueue(interaction.guild.id);
+if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })  
         const success = queue.setRepeatMode(QueueRepeatMode.OFF);
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const mode = options[0];
@@ -37,13 +36,15 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         embed.setThumbnail(client.user.displayAvatarURL());
         embed.setTitle('Loop Mode')
 
-        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
+        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 		
         interaction.reply(success ? { embeds: [embed] } : { content: 'Could not update loop mode! ❌' }).catch(e => { })
 		} else if (loopMode==='track') { //LOOP TRACK -------------------------------------------------------------------------------------------------------------------------------------------------
+        const queue = client.player.getQueue(interaction.guild.id);
+if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })  
         const success = queue.setRepeatMode(QueueRepeatMode.TRACK);
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const mode = options[1];
@@ -54,13 +55,15 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         embed.setThumbnail(client.user.displayAvatarURL());
         embed.setTitle('Loop Mode')
 
-        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
+        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 		
         interaction.reply(success ? { embeds: [embed] } : { content: 'Could not update loop mode! ❌' }).catch(e => { })
 		} else if (loopMode==='queue') { //LOOP QUEUE -------------------------------------------------------------------------------------------------------------------------------------------------
+        const queue = client.player.getQueue(interaction.guild.id);
+if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })  
         const success = queue.setRepeatMode(QueueRepeatMode.QUEUE);
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const mode = options[2];
@@ -71,13 +74,15 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         embed.setThumbnail(client.user.displayAvatarURL());
         embed.setTitle('Loop Mode')
 
-        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
+        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 		
         interaction.reply(success ? { embeds: [embed] } : { content: 'Could not update loop mode! ❌' }).catch(e => { })
 		} else if (loopMode==='autoplay') { //LOOP AUTOPLAY -------------------------------------------------------------------------------------------------------------------------------------------
+      const queue = client.player.getQueue(interaction.guild.id);
+if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })  
         const success = queue.setRepeatMode(QueueRepeatMode.AUTOPLAY);
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const mode = options[3];
@@ -88,15 +93,17 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         embed.setThumbnail(client.user.displayAvatarURL());
         embed.setTitle('Loop Mode')
 
-        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
+        embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 		
         interaction.reply(success ? { embeds: [embed] } : { content: 'Could not update loop mode! ❌' }).catch(e => { })
 		} else if (loopMode==='info') { //LOOP INFO ---------------------------------------------------------------------------------------------------------------------------------------------------
-		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
-        const mode = options[queue.repeatMode];
+        const queue = client.player.getQueue(interaction.guild.id);
+const noqueue = (!queue || !queue.playing)
+		  const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
+        const mode = noqueue ? '❌ _(No music currently playing!)_' : options[queue.repeatMode];
 		
         const embed = new MessageEmbed();
 
@@ -104,7 +111,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         embed.setThumbnail(client.user.displayAvatarURL());
         embed.setTitle('Loop Mode')
 
-        embed.setDescription(`**Loop mode:** ${mode}\n**Requested by:** ${interaction.member.user}\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
+        embed.setDescription(`**Loop mode:** ${mode}\n**Requested by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
