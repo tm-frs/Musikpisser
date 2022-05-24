@@ -46,7 +46,7 @@ if (!name) return interaction.reply({ content: `Write the name of the music you 
 //      console.log('Blacklist detection:', blacklist.includes(filter)); // Test auf Blacklist mit Konsolenausgabe
       
         if (blacklist.includes(filter)) { // Filter
-          return interaction.reply({ content: `Something went wrong :( ❌`, ephemeral: true }).catch(e => { }); // "Fehlermeldung"
+          return interaction.channel.send({ content: `${interaction.member.user}, Something went wrong :( ❌` }).catch(e => { }); // "Fehlermeldung"
         } else {
           res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
         }
