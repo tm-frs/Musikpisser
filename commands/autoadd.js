@@ -118,7 +118,7 @@ module.exports = {
 			setTimeout(function() {
 				// skip
 				const success = queue.skip();
-				queue.setVolume(100);
+				queue.setVolume(client.config.opt.discordPlayer.initialVolume);
 			}, 8000);
 
             // Warten für 9 Sekunden (1 Sekunde danach)
