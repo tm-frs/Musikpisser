@@ -1,4 +1,7 @@
 const { MessageEmbed } = require('discord.js');
+const { QueryType } = require('discord-player');
+const blacklist = require("../config.js").opt.blacklist;
+
 module.exports = (client, int) => {
 
 if(!int.guild) return
@@ -77,7 +80,7 @@ if(!int.guild) return
     cmd.run(client, int)
     }
 
-    if (int.isButton()){
+    if (int.isButton()) {
         const queue = client.player.getQueue(int.guildId);
     switch (int.customId) {
         case 'saveTrack': {
@@ -124,6 +127,113 @@ if(!int.guild) return
             int.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true}).catch(e => { })
         }
     }
+        break
+        case 'cancelButton': {
+    const name = ((int.message.embeds[0].title).substr(17,((int.message.embeds[0].title).length)-18))
+
+  	if (int.user.id === int.message.interaction.user.id) {
+		const createembed = async (name) => {
+      const res = await client.player.search(name, {
+          requestedBy: int.message.user,
+          searchEngine: QueryType.AUTO
+      });
+
+      const embed = new MessageEmbed();
+	
+	    embed.setColor('BLUE');
+  	  embed.setTitle(`Searched Music: "${name}"`);
+	
+    	const maxTracks = res.tracks.slice(0, 10);
+	
+	    embed.setDescription(`${maxTracks.map((track, i) => `**${i + 1}**. \`${track.title}\` | \`${track.author}\``).join('\n')}\n\nSelection cancelled because the cancel-button was pressed! ❌`);
+	
+	    embed.setTimestamp();
+	    embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
+      
+	    int.update({ embeds: [embed], components: [] }).catch(e => { })
+     }
+    createembed(name);
+	  } else {
+	  	int.reply({ content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
+	  }
+
+
     }
+    }
+}
+   if (int.isSelectMenu()){
+   switch (int.customId) {
+        case 'trackMenu': {
+          const chosenTrack = int.values[0]
+          console.log(chosenTrack)
+          const selection = chosenTrack=='t1' ? 0 : chosenTrack=='t2' ? 1 : chosenTrack=='t3' ? 2 : chosenTrack=='t4' ? 3 : chosenTrack=='t5' ? 4 : chosenTrack=='t6' ? 5 : chosenTrack=='t7' ? 6 : chosenTrack=='t8' ? 7 : chosenTrack=='t9' ? 8 : chosenTrack=='t10' ? 9 : 'error'
+          const name = ((int.message.embeds[0].title).substr(17,((int.message.embeds[0].title).length)-18))
+          
+          if (int.user.id === int.message.interaction.user.id) {
+          if (int.member.voice.channel) {
+          const addTrack = async (name, selection) => {
+            const queue = await client.player.createQueue(int.guild, {
+              leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
+              autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
+              metadata: int.channel,
+              initialVolume: client.config.opt.discordPlayer.initialVolume,
+              volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
+            });
+            const res = await client.player.search(name, {
+              requestedBy: int.message.user,
+              searchEngine: QueryType.AUTO
+            });
+            try {
+                if (!queue.connection) await queue.connect(int.member.voice.channel);
+            } catch {
+                await client.player.deleteQueue(int.guildId);
+                return int.channel.send({ content: `${int.user}, I can't join the audio channel. ❌` }).catch(e => { });
+            }
+
+            await int.channel.send({ content: `${int.user}, Your chosen track is loading now... 🎧` }).catch(e => { });
+
+         
+      const filter = res.tracks[selection].title; // adds an variable that is used to check for the blacklist
+      
+//      console.log('RES TRACKS 0:\n'+filter); // info ausgabe der res (result) variable zum Filtern, gewähltes Ergebnis
+//      console.log('Blacklist detection:', blacklist.includes(filter)); // Test auf Blacklist mit Konsolenausgabe
+      
+        if (blacklist.includes(filter)) { // Filter
+          return int.channel.send({ content: `${int.user}, Something went wrong :( ❌` }).catch(e => { }); // "Fehlermeldung"
+        } else {
+          queue.addTrack(res.tracks[selection]); // im Normalfall Musik hinzufügen
+        }
+            if (!queue.playing) await queue.play();
+          }
+          addTrack(name, selection);
+		const createembed = async (name, selection) => {
+      const res = await client.player.search(name, {
+          requestedBy: int.message.user,
+          searchEngine: QueryType.AUTO
+      });
+
+      const embed = new MessageEmbed();
+	
+	    embed.setColor('BLUE');
+  	  embed.setTitle(`Searched Music: "${name}"`);
+	
+    	const maxTracks = res.tracks.slice(0, 10);
+	
+	    embed.setDescription(`${maxTracks.map((track, i) => `**${i + 1}**. \`${track.title}\` | \`${track.author}\``).join('\n')}\n\nSelection stopped because track **${selection+1}** was selected. ✅`);
+	
+	    embed.setTimestamp();
+	    embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
+      
+	    int.update({ embeds: [embed], components: [] }).catch(e => { })
+     }
+    createembed(name, selection);
+    } else {
+      int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+    }
+	  } else {
+	  	int.reply({ content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
+	  }
+   }
+   }
 }
 };
