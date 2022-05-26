@@ -145,7 +145,7 @@ if(!int.guild) return
 	
     	const maxTracks = res.tracks.slice(0, 10);
 	
-      const description = ((int.message.embeds[0].description).substring(0, ((int.message.embeds[0].description).length)-182))+'Selection cancelled because the cancel-button was pressed! ❌'
+      const description = ((int.message.embeds[0].description).substring(0, ((int.message.embeds[0].description).length)-183))+'Selection cancelled because the cancel-button was pressed! ❌'
 	    embed.setDescription(description);
 
 	    embed.setTimestamp();
