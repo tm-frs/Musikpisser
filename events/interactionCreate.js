@@ -145,8 +145,9 @@ if(!int.guild) return
 	
     	const maxTracks = res.tracks.slice(0, 10);
 	
-	    embed.setDescription(`${maxTracks.map((track, i) => `**${i + 1}**. \`${track.title}\` | \`${track.author}\``).join('\n')}\n\nSelection cancelled because the cancel-button was pressed! ❌`);
-	
+      const description = ((int.message.embeds[0].description).substring(0, ((int.message.embeds[0].description).length)-182))+'Selection cancelled because the cancel-button was pressed! ❌'
+	    embed.setDescription(description);
+
 	    embed.setTimestamp();
 	    embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
       
@@ -165,13 +166,16 @@ if(!int.guild) return
    switch (int.customId) {
         case 'trackMenu': {
           const chosenTrack = int.values[0]
-          console.log(chosenTrack)
           const selection = chosenTrack=='t1' ? 0 : chosenTrack=='t2' ? 1 : chosenTrack=='t3' ? 2 : chosenTrack=='t4' ? 3 : chosenTrack=='t5' ? 4 : chosenTrack=='t6' ? 5 : chosenTrack=='t7' ? 6 : chosenTrack=='t8' ? 7 : chosenTrack=='t9' ? 8 : chosenTrack=='t10' ? 9 : 'error'
           const name = ((int.message.embeds[0].title).substr(17,((int.message.embeds[0].title).length)-18))
+          const resultArray = (int.message.embeds[0].description).split("\n")
+          const resultCount = (resultArray.length-2)/2
+          const resultTitles = resultCount===1 ? [(resultArray[0].substr(8,((resultArray[0]).length)-12))] : resultCount===2 ? [(resultArray[0].substr(8,((resultArray[0]).length)-12)),(resultArray[2].substr(8,((resultArray[2]).length)-12))] : resultCount===3 ? [(resultArray[0].substr(8,((resultArray[0]).length)-12)),(resultArray[2].substr(8,((resultArray[2]).length)-12)),(resultArray[4].substr(8,((resultArray[4]).length)-12))] : resultCount===4 ? [(resultArray[0].substr(8,((resultArray[0]).length)-12)),(resultArray[2].substr(8,((resultArray[2]).length)-12)),(resultArray[4].substr(8,((resultArray[4]).length)-12)),(resultArray[6].substr(8,((resultArray[6]).length)-12))] : resultCount===5 ? [(resultArray[0].substr(8,((resultArray[0]).length)-12)),(resultArray[2].substr(8,((resultArray[2]).length)-12)),(resultArray[4].substr(8,((resultArray[4]).length)-12)),(resultArray[6].substr(8,((resultArray[6]).length)-12)),(resultArray[8].substr(8,((resultArray[8]).length)-12))] : resultCount===6 ? [(resultArray[0].substr(8,((resultArray[0]).length)-12)),(resultArray[2].substr(8,((resultArray[2]).length)-12)),(resultArray[4].substr(8,((resultArray[4]).length)-12)),(resultArray[6].substr(8,((resultArray[6]).length)-12)),(resultArray[8].substr(8,((resultArray[8]).length)-12)),(resultArray[10].substr(8,((resultArray[10]).length)-12))] : resultCount===7 ? [(resultArray[0].substr(8,((resultArray[0]).length)-12)),(resultArray[2].substr(8,((resultArray[2]).length)-12)),(resultArray[4].substr(8,((resultArray[4]).length)-12)),(resultArray[6].substr(8,((resultArray[6]).length)-12)),(resultArray[8].substr(8,((resultArray[8]).length)-12)),(resultArray[10].substr(8,((resultArray[10]).length)-12)),(resultArray[12].substr(8,((resultArray[12]).length)-12))] : resultCount===8 ? [(resultArray[0].substr(8,((resultArray[0]).length)-12)),(resultArray[2].substr(8,((resultArray[2]).length)-12)),(resultArray[4].substr(8,((resultArray[4]).length)-12)),(resultArray[6].substr(8,((resultArray[6]).length)-12)),(resultArray[8].substr(8,((resultArray[8]).length)-12)),(resultArray[10].substr(8,((resultArray[10]).length)-12)),(resultArray[12].substr(8,((resultArray[12]).length)-12)),(resultArray[14].substr(8,((resultArray[14]).length)-12))] : resultCount===9 ? [(resultArray[0].substr(8,((resultArray[0]).length)-12)),(resultArray[2].substr(8,((resultArray[2]).length)-12)),(resultArray[4].substr(8,((resultArray[4]).length)-12)),(resultArray[6].substr(8,((resultArray[6]).length)-12)),(resultArray[8].substr(8,((resultArray[8]).length)-12)),(resultArray[10].substr(8,((resultArray[10]).length)-12)),(resultArray[12].substr(8,((resultArray[12]).length)-12)),(resultArray[14].substr(8,((resultArray[14]).length)-12)),(resultArray[16].substr(8,((resultArray[16]).length)-12))] : resultCount===10 ? [(resultArray[0].substr(8,((resultArray[0]).length)-12)),(resultArray[2].substr(8,((resultArray[2]).length)-12)),(resultArray[4].substr(8,((resultArray[4]).length)-12)),(resultArray[6].substr(8,((resultArray[6]).length)-12)),(resultArray[8].substr(8,((resultArray[8]).length)-12)),(resultArray[10].substr(8,((resultArray[10]).length)-12)),(resultArray[12].substr(8,((resultArray[12]).length)-12)),(resultArray[14].substr(8,((resultArray[14]).length)-12)),(resultArray[16].substr(8,((resultArray[16]).length)-12)),(resultArray[18].substr(9,((resultArray[18]).length)-13))] : []
+          const selectedResult = resultTitles[selection]
           
           if (int.user.id === int.message.interaction.user.id) {
           if (int.member.voice.channel) {
-          const addTrack = async (name, selection) => {
+          const addTrack = async (selectedResult) => {
             const queue = await client.player.createQueue(int.guild, {
               leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
               autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
@@ -179,7 +183,7 @@ if(!int.guild) return
               initialVolume: client.config.opt.discordPlayer.initialVolume,
               volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
             });
-            const res = await client.player.search(name, {
+            const res = await client.player.search(selectedResult, {
               requestedBy: int.message.user,
               searchEngine: QueryType.AUTO
             });
@@ -189,11 +193,11 @@ if(!int.guild) return
                 await client.player.deleteQueue(int.guildId);
                 return int.channel.send({ content: `${int.user}, I can't join the audio channel. ❌` }).catch(e => { });
             }
-
+            if (!res || !res.tracks.length) return int.channel.send({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.` }).catch(e => { });
             await int.channel.send({ content: `${int.user}, Your chosen track is loading now... 🎧` }).catch(e => { });
 
          
-      const filter = res.tracks[selection].title; // adds an variable that is used to check for the blacklist
+      const filter = res.tracks[0].title; // adds an variable that is used to check for the blacklist
       
 //      console.log('RES TRACKS 0:\n'+filter); // info ausgabe der res (result) variable zum Filtern, gewähltes Ergebnis
 //      console.log('Blacklist detection:', blacklist.includes(filter)); // Test auf Blacklist mit Konsolenausgabe
@@ -201,32 +205,31 @@ if(!int.guild) return
         if (blacklist.includes(filter)) { // Filter
           return int.channel.send({ content: `${int.user}, Something went wrong :( ❌` }).catch(e => { }); // "Fehlermeldung"
         } else {
-          queue.addTrack(res.tracks[selection]); // im Normalfall Musik hinzufügen
+          queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
         }
             if (!queue.playing) await queue.play();
           }
-          addTrack(name, selection);
-		const createembed = async (name, selection) => {
-      const res = await client.player.search(name, {
-          requestedBy: int.message.user,
-          searchEngine: QueryType.AUTO
+          addTrack(selectedResult);
+		const createembed = async (name, selection, selectedResult) => {
+      const res = await client.player.search(selectedResult, {
+        requestedBy: int.message.user,
+        searchEngine: QueryType.AUTO
       });
-
+      if (!res || !res.tracks.length) return
       const embed = new MessageEmbed();
 	
 	    embed.setColor('BLUE');
   	  embed.setTitle(`Searched Music: "${name}"`);
 	
-    	const maxTracks = res.tracks.slice(0, 10);
-	
-	    embed.setDescription(`${maxTracks.map((track, i) => `**${i + 1}**. \`${track.title}\` | \`${track.author}\``).join('\n')}\n\nSelection stopped because track **${selection+1}** was selected. ✅`);
+      const description = ((int.message.embeds[0].description).substring(0, ((int.message.embeds[0].description).length)-183))+`Selection stopped because track **${selection+1}** was selected. ✅`
+	    embed.setDescription(description);
 	
 	    embed.setTimestamp();
 	    embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
       
 	    int.update({ embeds: [embed], components: [] }).catch(e => { })
      }
-    createembed(name, selection);
+    createembed(name, selection, selectedResult);
     } else {
       int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
     }
