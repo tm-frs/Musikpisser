@@ -30,7 +30,7 @@ module.exports = {
         .setTitle(queue.current.title)
         .setThumbnail(client.user.displayAvatarURL())
         .setTimestamp()
-        .setDescription(`${progress} (**${timestamp.progress}**%)`)
+        .setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.`)
         .setFooter({ text: 'Music Bot - by CraftingShadowDE️', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
         interaction.reply({ embeds: [embed], components: [row]}).catch(e => { })
     },

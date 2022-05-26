@@ -121,7 +121,7 @@ if(!int.guild) return
             .setTitle(queue.current.title)
             .setThumbnail(client.user.displayAvatarURL())
             .setTimestamp()
-            .setDescription(`${progress} (**${timestamp.progress}%**)`)
+            .setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.`)
             .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
             int.message.edit({ embeds: [embed] }).catch(e => { })
             int.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true}).catch(e => { })
