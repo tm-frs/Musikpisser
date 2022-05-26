@@ -30,7 +30,7 @@ if (!name) return interaction.reply({ content: `Please enter a valid song name. 
 
         const maxTracks = res.tracks.slice(0, 10);
 
-        embed.setDescription(`${maxTracks.map((track, i) => `**${i + 1}**. \`${track.title}\` | \`${track.author}\``).join('\n')}\n\nChoose a song from **1** to **${maxTracks.length}** by selecting it in the menu or press the **Cancel**-button to cancel the selection.⬇️ _If you choose long after this was sent, the results may have changed and you will get something else._`);
+        embed.setDescription(`${maxTracks.map((track, i) => `**${i + 1}**. \`${track.title}\` | \n by \`${track.author}\``).join('\n')}\n\nChoose a song from **1** to **${maxTracks.length}** by selecting it in the menu or press the **Cancel**-button to cancel the selection.⬇️ _If you choose long after this was sent, this might not work._`);
 
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
