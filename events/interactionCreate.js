@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
 
@@ -160,6 +160,62 @@ if(!int.guild) return
 
 
     }
+        break
+        case 'addAgainButton': {
+    const selection = parseInt(((int.message.embeds[0].description).substr(-20, 2)).replace("*", ''))-1
+    const name = ((int.message.embeds[0].title).substr(17,((int.message.embeds[0].title).length)-18))
+    const resultArray = (int.message.embeds[0].description).split("\n")
+    const resultCount = (resultArray.length-2)/2
+    const resultURLs = resultCount===1 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33))] : resultCount===2 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33))] : resultCount===3 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33))] : resultCount===4 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33))] : resultCount===5 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33))] : resultCount===6 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33))] : resultCount===7 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33))] : resultCount===8 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33))] : resultCount===9 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33)),(resultArray[17].substr(31,((resultArray[17]).length)-33))] : resultCount===10 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33)),(resultArray[17].substr(31,((resultArray[17]).length)-33)),(resultArray[19].substr(31,((resultArray[19]).length)-33))] : []
+    const selectedResult = resultURLs[selection]
+    if (int.member.voice.channel) {
+          const addTrack = async (selectedResult) => {
+            const queue = await client.player.createQueue(int.guild, {
+              leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
+              autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
+              metadata: int.channel,
+              initialVolume: client.config.opt.discordPlayer.initialVolume,
+              volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
+            });
+            const res = await client.player.search(selectedResult, {
+              requestedBy: int.message.user,
+              searchEngine: QueryType.AUTO
+            });
+            try {
+                if (!queue.connection) await queue.connect(int.member.voice.channel);
+            } catch {
+                await client.player.deleteQueue(int.guildId);
+                return int.channel.send({ content: `${int.user}, I can't join the audio channel. ❌` }).catch(e => { });
+            }
+            if (!res || !res.tracks.length) return int.channel.send({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.` }).catch(e => { });
+            await int.channel.send({ content: `${int.user}, **Track ${selection+1}** is loading again... 🎧` }).catch(e => { });
+
+         
+      const filter = res.tracks[0].title; // adds an variable that is used to check for the blacklist
+      
+//      console.log('RES TRACKS 0:\n'+filter); // info ausgabe der res (result) variable zum Filtern, gewähltes Ergebnis
+//      console.log('Blacklist detection:', blacklist.includes(filter)); // Test auf Blacklist mit Konsolenausgabe
+      
+        if (blacklist.includes(filter)) { // Filter
+          return int.channel.send({ content: `${int.user}, Something went wrong :( ❌` }).catch(e => { }); // "Fehlermeldung"
+        } else {
+          queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
+        }
+            if (!queue.playing) await queue.play();
+          }
+          addTrack(selectedResult);
+
+    const ui_disabled = [ {type: 1, components: [{style: 3, label: `Add it again`, custom_id: `addAgainButton`, disabled: true, type: 2}]} ]
+    int.update({ components: ui_disabled}).catch(e => { })
+      
+    setTimeout(function() {
+      const ui_enabled = [ {type: 1, components: [{style: 3, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2}]} ]
+      int.editReply({ components: ui_enabled}).catch(e => { })
+    }, 30000);
+    } else {
+      int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+    }
+    }
     }
 }
    if (int.isSelectMenu()){
@@ -226,8 +282,8 @@ if(!int.guild) return
 	
 	    embed.setTimestamp();
 	    embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
-      
-	    int.update({ embeds: [embed], components: [] }).catch(e => { })
+      const ui = [ {type: 1, components: [{style: 3, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2}]} ]
+	    int.update({ embeds: [embed], components: ui }).catch(e => { })
      }
     createembed(name, selection, selectedResult);
     } else {
