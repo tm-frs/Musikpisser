@@ -30,7 +30,7 @@ if(!int.guild) return
 		    const embed = new MessageEmbed()
             .setColor('RED')
             .setTitle('ANNOUNCEMENT')
-            .setThumbnail(client.user.displayAvatarURL())
+            .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
             .setDescription(`A DJ-role has been created because DJ-mode is active and the role was not existing yet. The role is ${roleDJ} and everyone needs it to use the bot. (Some commands can still be used by everyone.)`)
             .setTimestamp()
             .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
@@ -44,7 +44,7 @@ if(!int.guild) return
 				const embed = new MessageEmbed()
 				.setColor('BLUE')
 				.setTitle(client.user.username)
-				.setThumbnail(client.user.displayAvatarURL())
+				.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
 				.setDescription(`You can't use this command because only those with the ${roleDJ} role can. ❌`)
 				.setTimestamp()
 				.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
@@ -62,7 +62,7 @@ if(!int.guild) return
 				const embed = new MessageEmbed()
 				.setColor('BLUE')
 				.setTitle(client.user.username)
-				.setThumbnail(client.user.displayAvatarURL())
+				.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
 				.setDescription(`You can't use this command because only those with the ${roleDJ} role can. ❌`)
 				.setTimestamp()
 				.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
@@ -90,7 +90,7 @@ if(!int.guild) return
           const embed = new MessageEmbed()
           .setColor('GREEN')
           .setTitle(client.user.username + " - Saved Track")
-          .setThumbnail(client.user.displayAvatarURL())
+          .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
           .addField(`**Title:** `, `\`${queue.current.title}\``)
           .addField(`**Author:** `, `\`${queue.current.author}\``)
           .addField(`**URL:** `, `${queue.current.url}`)
@@ -119,7 +119,7 @@ if(!int.guild) return
             const embed = new MessageEmbed()
             .setColor('BLUE')
             .setTitle(queue.current.title)
-            .setThumbnail(client.user.displayAvatarURL())
+            .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
             .setTimestamp()
             .setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.`)
             .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
