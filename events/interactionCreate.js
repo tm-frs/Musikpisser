@@ -84,18 +84,12 @@ if(!int.guild) return
         const queue = client.player.getQueue(int.guildId);
     switch (int.customId) {
         case 'saveTrack': {
-       if (!queue || !queue.playing){
-       return int.reply({ content: `No music currently playing. ❌`, ephemeral: true, components: [] });
-       } else {
+          const description = int.message.embeds[0].description+"\n**Saved at this server:** \`"+int.guild.name+"\`"
           const embed = new MessageEmbed()
           .setColor('GREEN')
           .setTitle(client.user.username + " - Saved Track")
           .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
-          .addField(`**Title:** `, `\`${queue.current.title}\``)
-          .addField(`**Author:** `, `\`${queue.current.author}\``)
-          .addField(`**URL:** `, `${queue.current.url}`)
-          .addField(`**Duration:** `, `\`${queue.current.duration}\``)
-          .addField(`**Saved Server:**`, `\`${int.guild.name}\``)
+          .setDescription(description)
           .setTimestamp()
           .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
           int.member.send({ embeds: [embed] }).then(() => {
@@ -103,7 +97,6 @@ if(!int.guild) return
             }).catch(error => {
                 return int.reply({ content: `I can't send you a private message. ❌`, ephemeral: true}).catch(e => { })
             });
-        }
     }
         break
         case 'time': {
@@ -134,7 +127,7 @@ if(!int.guild) return
   	if (int.user.id === int.message.interaction.user.id) {
 		const createembed = async (name) => {
       const res = await client.player.search(name, {
-          requestedBy: int.message.user,
+          requestedBy: int.user,
           searchEngine: QueryType.AUTO
       });
 
@@ -178,7 +171,7 @@ if(!int.guild) return
               volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
             });
             const res = await client.player.search(selectedResult, {
-              requestedBy: int.message.user,
+              requestedBy: int.user,
               searchEngine: QueryType.AUTO
             });
             try {
@@ -240,7 +233,7 @@ if(!int.guild) return
               volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
             });
             const res = await client.player.search(selectedResult, {
-              requestedBy: int.message.user,
+              requestedBy: int.user,
               searchEngine: QueryType.AUTO
             });
             try {
@@ -268,7 +261,7 @@ if(!int.guild) return
           addTrack(selectedResult);
 		const createembed = async (name, selection, selectedResult) => {
       const res = await client.player.search(selectedResult, {
-        requestedBy: int.message.user,
+        requestedBy: int.user,
         searchEngine: QueryType.AUTO
       });
       if (!res || !res.tracks.length) return
