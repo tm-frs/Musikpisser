@@ -185,10 +185,10 @@ if(!int.guild) return
                 if (!queue.connection) await queue.connect(int.member.voice.channel);
             } catch {
                 await client.player.deleteQueue(int.guildId);
-                return int.channel.send({ content: `${int.user}, I can't join the audio channel. ❌` }).catch(e => { });
+                return int.message.reply({ content: `${int.user}, I can't join the audio channel. ❌` }).catch(e => { });
             }
-            if (!res || !res.tracks.length) return int.channel.send({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.` }).catch(e => { });
-            await int.channel.send({ content: `${int.user}, **Track ${selection+1}** is loading again... 🎧` }).catch(e => { });
+            if (!res || !res.tracks.length) return int.message.reply({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.` }).catch(e => { });
+            await int.message.reply({ content: `${int.user}, **Track ${selection+1}** is loading again... 🎧` }).catch(e => { });
 
          
       const filter = res.tracks[0].title; // adds an variable that is used to check for the blacklist
@@ -197,7 +197,7 @@ if(!int.guild) return
 //      console.log('Blacklist detection:', blacklist.includes(filter)); // Test auf Blacklist mit Konsolenausgabe
       
         if (blacklist.includes(filter)) { // Filter
-          return int.channel.send({ content: `${int.user}, Something went wrong :( ❌` }).catch(e => { }); // "Fehlermeldung"
+          return int.message.reply({ content: `${int.user}, Something went wrong :( ❌` }).catch(e => { }); // "Fehlermeldung"
         } else {
           queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
         }
@@ -247,10 +247,10 @@ if(!int.guild) return
                 if (!queue.connection) await queue.connect(int.member.voice.channel);
             } catch {
                 await client.player.deleteQueue(int.guildId);
-                return int.channel.send({ content: `${int.user}, I can't join the audio channel. ❌` }).catch(e => { });
+                return int.message.reply({ content: `${int.user}, I can't join the audio channel. ❌` }).catch(e => { });
             }
-            if (!res || !res.tracks.length) return int.channel.send({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.` }).catch(e => { });
-            await int.channel.send({ content: `${int.user}, Your chosen track is loading now... 🎧` }).catch(e => { });
+            if (!res || !res.tracks.length) return int.message.reply({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.` }).catch(e => { });
+            await int.message.reply({ content: `${int.user}, Your chosen track is loading now... 🎧` }).catch(e => { });
 
          
       const filter = res.tracks[0].title; // adds an variable that is used to check for the blacklist
@@ -259,7 +259,7 @@ if(!int.guild) return
 //      console.log('Blacklist detection:', blacklist.includes(filter)); // Test auf Blacklist mit Konsolenausgabe
       
         if (blacklist.includes(filter)) { // Filter
-          return int.channel.send({ content: `${int.user}, Something went wrong :( ❌` }).catch(e => { }); // "Fehlermeldung"
+          return int.message.reply({ content: `${int.user}, Something went wrong :( ❌` }).catch(e => { }); // "Fehlermeldung"
         } else {
           queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
         }
