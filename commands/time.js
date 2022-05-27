@@ -28,7 +28,7 @@ module.exports = {
         const embed = new MessageEmbed()
         .setColor('BLUE')
         .setTitle(queue.current.title)
-        .setThumbnail(client.user.displayAvatarURL())
+        .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
         .setTimestamp()
         .setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.`)
         .setFooter({ text: 'Music Bot - by CraftingShadowDE️', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });

@@ -12,7 +12,7 @@ module.exports = {
             const embed = new Discord.MessageEmbed()
                 .setColor('BLUE')
                 .setTitle(client.user.username + " - Pong!")
-                .setThumbnail(client.user.displayAvatarURL())
+                .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
                 .addField(`Message Ping`, `\`${Date.now() - start}ms\` 🛰️`)
                 .addField(`Message Latency`, `\`${last - start}ms\` 🛰️`)
                 .addField(`API Latency`, `\`${Math.round(client.ws.ping)}ms\` 🛰️`)
