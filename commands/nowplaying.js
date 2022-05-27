@@ -18,7 +18,7 @@ module.exports = {
 
         embed.setColor('BLUE');
         embed.setThumbnail(track.thumbnail);
-        embed.setTitle(track.title)
+        embed.setTitle(`Currently playing track:`)
 
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const loopMode = options[queue.repeatMode];
@@ -26,8 +26,9 @@ module.exports = {
         const timestamp = queue.getPlayerTimestamp();
 const trackDuration = timestamp.progress == 'Forever' ? 'Endless (Live)' : track.duration;
 
-        embed.setDescription(`Author: **${track.author}**\nAudio: **${queue.volume}%**\nDuration: **${trackDuration}**\nLoop Mode: **${loopMode}**\nURL: ${track.url}\nTrack added by: ${track. requestedBy}`);
-
+        embed.setDescription(`**Title:** \`${track.title}\`\n**Author:** \`${track.author}\`\n**URL:** ${track.url}\n**Duration:** \`${trackDuration}\`\n**Loop Mode:** \`${loopMode}\`\n**Audio:** \`${queue.volume}%\`\n**Track added by:** ${track.requestedBy}`);
+console.log(track)
+      console.log(track.requestedBy)
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
