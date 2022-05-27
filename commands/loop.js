@@ -18,7 +18,6 @@ module.exports = {
 		],
 		required: true
 	} ],
-    voiceChannel: true,
 
     run: async (client, interaction) => {
 		const loopMode = interaction.options.getString('mode') 
@@ -33,7 +32,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         const embed = new MessageEmbed();
 
         embed.setColor('BLUE');
-        embed.setThumbnail(client.user.displayAvatarURL());
+        embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
         embed.setTitle('Loop Mode')
 
         embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
@@ -52,7 +51,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         const embed = new MessageEmbed();
 
         embed.setColor('BLUE');
-        embed.setThumbnail(client.user.displayAvatarURL());
+        embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
         embed.setTitle('Loop Mode')
 
         embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
@@ -71,7 +70,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         const embed = new MessageEmbed();
 
         embed.setColor('BLUE');
-        embed.setThumbnail(client.user.displayAvatarURL());
+        embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
         embed.setTitle('Loop Mode')
 
         embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
@@ -90,7 +89,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
         const embed = new MessageEmbed();
 
         embed.setColor('BLUE');
-        embed.setThumbnail(client.user.displayAvatarURL());
+        embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
         embed.setTitle('Loop Mode')
 
         embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
@@ -108,7 +107,7 @@ const noqueue = (!queue || !queue.playing)
         const embed = new MessageEmbed();
 
         embed.setColor('BLUE');
-        embed.setThumbnail(client.user.displayAvatarURL());
+        embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
         embed.setTitle('Loop Mode')
 
         embed.setDescription(`**Loop mode:** ${mode}\n**Requested by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
