@@ -21,15 +21,15 @@ module.exports = {
         const loopMode = options[queue.repeatMode];
 
         embed.setColor('BLUE');
-        embed.setThumbnail(interaction.guild.iconURL({ size: 2048, format: 'png', dynamic: true }));
+        embed.setThumbnail(interaction.guild.iconURL({ size: 4096, format: 'png', dynamic: true }));
         embed.setTitle(`Server Music List - ${interaction.guild.name} ${loopMode}`);
 
-        const tracks = queue.tracks.map((track, i) => `**${i + 1}** - \`${track.title}\` | \`${track.author}\` (Started by <@${track. requestedBy.id}>)`);
+        const tracks = queue.tracks.map((track, i) => `**${i + 1}** - \`${track.title}\` | \`${track.author}\` (requested by <@${track. requestedBy.id}>)`);
 
         const songs = queue.tracks.length;
         const nextSongs = songs > 5 ? `And **${songs - 5}** Other Song...` : `There are **${songs}** Songs in the List.`;
 
-        embed.setDescription(`Currently Playing: \`${queue.current.title}\` by \`${queue.current.author}\` requested by <@${queue.current.requestedBy.id}>\n\n${tracks.slice(0, 5).join('\n')}\n\n${nextSongs }`);
+        embed.setDescription(`Currently Playing: \`${queue.current.title}\` by \`${queue.current.author}\` (requested by <@${queue.current.requestedBy.id}>)\n\n${tracks.slice(0, 5).join('\n')}\n\n${nextSongs }`);
 
         embed.setTimestamp();
         embed.setFooter({text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
