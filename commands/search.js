@@ -10,7 +10,6 @@ module.exports = {
         type: 'STRING',
         required: true
     }],
-    voiceChannel: true,
 
     run: async (client, interaction) => {
       const name = interaction.options.getString('name')
