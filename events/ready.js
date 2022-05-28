@@ -1,6 +1,9 @@
 module.exports = async (client) => {
-    console.log(`${client.user.username} Login!`);
-    client.user.setActivity(client.config.playing+` || Online on ${client.guilds.cache.size} servers`, {
+    const unixReadyAt = Math.floor(new Date(client.readyAt).getTime() / 1000);
+    const jsReadyAt = new Date(unixReadyAt * 1000);
+    console.log(`------------------------LOGIN-INFORMATION------------------------\n${client.user.username} Login! Login at: \n${jsReadyAt}\n-----------------------------------------------------------------`);
+    client.user.accentColor = '#18191C';
+    client.user.setActivity(client.config.playing+` || Online on ${client.guilds.cache.size} servers || Logged in: ${jsReadyAt.toUTCString()}`, {
         type: "PLAYING"
       })
       setInterval(() => {
