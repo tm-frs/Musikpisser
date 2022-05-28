@@ -1,6 +1,6 @@
 var fs = require('fs');
 var util = require('util');
-var logFile = fs.createWriteStream('logins.txt', { flags: 'as' });
+var logFile = fs.createWriteStream('logins.txt', { flags: 'as+' });
 
 const writefile = function () {
   logFile.write(util.format.apply(null, arguments) + '\n');
