@@ -14,7 +14,7 @@ module.exports = {
         .setColor('BLUE')
         .setTitle('Bot information')
         .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
-        .setDescription('Musikpisser Bot Commands:')
+        .setDescription(`${client.user.username} Bot Commands:`)
         .addField(`Available - ${commands.size} Commands`, commands.map(x => `\`/${x.name}\``).join(' | '))
 //		.addField(`**DJ mode active:** `, DJ.enabled)
 //		.addField(`**Available for everyone:** `, DJ.notAffected)
