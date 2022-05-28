@@ -1,6 +1,7 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
+const wait = require('node:timers/promises').setTimeout;
 
 module.exports = (client, int) => {
 
@@ -222,6 +223,13 @@ if(!int.guild) return
           const resultURLs = resultCount===1 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33))] : resultCount===2 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33))] : resultCount===3 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33))] : resultCount===4 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33))] : resultCount===5 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33))] : resultCount===6 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33))] : resultCount===7 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33))] : resultCount===8 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33))] : resultCount===9 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33)),(resultArray[17].substr(31,((resultArray[17]).length)-33))] : resultCount===10 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33)),(resultArray[17].substr(31,((resultArray[17]).length)-33)),(resultArray[19].substr(31,((resultArray[19]).length)-33))] : []
           const selectedResult = resultURLs[selection]
           
+          const interactionComponents = int.message.components
+          
+          const resetMenu = async () => {
+            await int.message.edit({ components: [] });
+            await int.message.edit({ components: interactionComponents });
+          }
+          
           if (int.user.id === int.message.interaction.user.id) {
           if (int.member.voice.channel) {
           const addTrack = async (selectedResult) => {
@@ -281,9 +289,11 @@ if(!int.guild) return
     createembed(name, selection, selectedResult);
     } else {
       int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+      resetMenu(); 
     }
 	  } else {
 	  	int.reply({ content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
+      resetMenu(); 
 	  }
    }
    }
