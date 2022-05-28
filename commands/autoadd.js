@@ -1,6 +1,7 @@
 const { QueryType } = require('discord-player');
 const { QueueRepeatMode } = require('discord-player');
 const maxVol = require("../config.js").opt.maxVol;
+const wait = require('node:timers/promises').setTimeout;
 
 module.exports = {
     description: "Adds a song/playlist that has been added to the bot's code.",
@@ -61,71 +62,59 @@ module.exports = {
         if (!queue.playing) await queue.play();
       
 		if (target==='https://www.youtube.com/watch?v=KT85z_tGZro') { //rasputin ----------------------------------------------------------------------------------------------------------------------
-            // Warten für 4 Sekunden
-			setTimeout(function() {
+      const rasputinprep = async () => {
+      await wait(4000); //Wait for 4 seconds
             // loop track:
 				const success = queue.setRepeatMode(QueueRepeatMode.TRACK);
-            
-				return interaction.channel.send({ content: success ? `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, Current track will be repeated non-stop 🔂` : `${interaction.member.user}, Could not update loop mode! ❌` }).catch(e => {});
-        
-            }, 4000);
+        interaction.channel.send({ content: success ? `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, Current track will be repeated non-stop 🔂` : `${interaction.member.user}, Could not update loop mode! ❌` }).catch(e => {});
       
-			// Warten für 4 Sekunden (0 Sekunden danach)
-			setTimeout(function() {
+			  await wait(1); // Wait for 0.001 seconds
+            // volume:
 				queue.setVolume(250);
-            
-				return interaction.channel.send({ content: `Volume changed to **250%** (maximum is **${maxVol}%**) 🔊` }).catch(e => {});
-            }, 4001);
+				interaction.channel.send({ content: `Volume changed to **250%** (maximum is **${maxVol}%**) 🔊` }).catch(e => {});
+      }
+      rasputinprep();
 		} else if (target==='https://www.youtube.com/watch?v=RHRKu5mStNk') { //widepuin ---------------------------------------------------------------------------------------------------------------
-            // Warten für 4 Sekunden
-			setTimeout(function() {
+			const wideputinprep = async () => {
+        await wait(4000); // Wait for 4 seconds
             // loop track:
-				const success = queue.setRepeatMode(QueueRepeatMode.TRACK);
-            
-				return interaction.channel.send({ content: success ? `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, Current track will be repeated non-stop 🔂` : `${interaction.member.user}, Could not update loop mode! ❌` }).catch(e => {});
-        
-			}, 4000);
-      
-			// Warten für 4 Sekunden (0 Sekunden danach)
-			setTimeout(function() {
-				queue.setVolume(200);
-            
-			return interaction.channel.send({ content: `Volume changed to **200%** (maximum is **${maxVol}%**) 🔊` }).catch(e => {});
-			}, 4001);
+				const success = queue.setRepeatMode(QueueRepeatMode.TRACK);    
+				interaction.channel.send({ content: success ? `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, Current track will be repeated non-stop 🔂` : `${interaction.member.user}, Could not update loop mode! ❌` }).catch(e => {});
+
+			  await wait(1); // Wait for 0.001 seconds
+            // volume:
+				queue.setVolume(200);    
+			  interaction.channel.send({ content: `Volume changed to **200%** (maximum is **${maxVol}%**) 🔊` }).catch(e => {});
+			}
+      wideputinprep();
 		} else if (playlists.includes(target)) { //Playlists ------------------------------------------------------------------------------------------------------------------------------------------
-			// Warten für 4 Sekunden
-			setTimeout(function() {
-				// shuffle
-				const success = queue.shuffle();
-				return interaction.channel.send({ content: `Queue has been shuffled! ✅` }).catch(e => {});
-			}, 4000);
-      
+			const playlistprep = async () => {
+        await wait(4000); // Wait for 4 seconds
+				// shuffle:
+				queue.shuffle();
+				interaction.channel.send({ content: `Queue has been shuffled! ✅` }).catch(e => {});
+        
 			// Warten für 4 Sekunden (0 Sekunden danach)
-			setTimeout(function() {
+			  await wait(1); // Wait for 0.001 seconds
 				// loop queue:
 				const success = queue.setRepeatMode(QueueRepeatMode.QUEUE);
-
-				return interaction.channel.send({ content: success ? `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, The whole sequence will repeat non-stop 🔁` : `${interaction.member.user}, Something went wrong. ❌` }).catch(e => {});
-        
-			}, 4001);
+				interaction.channel.send({ content: success ? `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, The whole sequence will repeat non-stop 🔁` : `${interaction.member.user}, Something went wrong. ❌` }).catch(e => {});
       
-			// Warten für 4 Sekunden (0 Sekunden danach)
-			setTimeout(function() {
-				// skip
-				const success = queue.skip();
-			}, 4002);
-            // Warten für 8 Sekunden (4 Sekunden danach)
-			setTimeout(function() {
-				// skip
-				const success = queue.skip();
-				queue.setVolume(client.config.opt.discordPlayer.initialVolume);
-			}, 8000);
+			  await wait(1); // Wait for 0.001 seconds
+				// skip:
+				queue.skip();
 
-            // Warten für 9 Sekunden (1 Sekunde danach)
-			setTimeout(function() {
-				// shuffle
-				const success = queue.shuffle();
-			}, 9000);
+        await wait(3998); // Wait for 3.998 seconds
+				// skip:
+				queue.skip();
+        // volume:
+				queue.setVolume(client.config.opt.discordPlayer.initialVolume);
+
+        await wait(1000) // Wait for 1 second
+				// shuffle:
+				queue.shuffle();
+    }
+    playlistprep();
 		}
     }
 };
