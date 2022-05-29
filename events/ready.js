@@ -8,9 +8,10 @@ const writefile = function () {
 
 module.exports = async (client) => {
     const unixReadyAt = Math.floor(new Date(client.readyAt).getTime() / 1000);
-    const jsReadyAt = new Date(unixReadyAt * 1000);
-    const activityText = `${client.config.playing} || Online on ${client.guilds.cache.size} servers || Logged in: ${jsReadyAt.toUTCString()}`;
-    const loginText = `------------------------LOGIN-INFORMATION------------------------\n${client.user.username} Login! Login at: \n${jsReadyAt}\n-----------------------------------------------------------------`;
+    const jsReadyAtShort = ((new Date(unixReadyAt * 1000)).toUTCString()).replace("GMT", "(UTC+0)");
+    const jsReadyAtLong = ((new Date(unixReadyAt * 1000)).toUTCString()).replace("GMT", "UTC+0000 (Coordinated Universal Time)");
+    const activityText = `${client.config.playing} || Online on ${client.guilds.cache.size} servers || Logged in: ${jsReadyAtShort}`;
+    const loginText = `------------------------LOGIN-INFORMATION------------------------\n${client.user.username} Login! Login at: \n${jsReadyAtLong}\n-----------------------------------------------------------------`;
     writefile(`\n${loginText}\n`);
     console.log(loginText);
     client.user.accentColor = '#18191C';
