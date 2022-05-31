@@ -5,7 +5,6 @@ module.exports = {
 	description: "Provides information about the music currently being played.",
     name: 'nowplaying',
     options: [],
-    voiceChannel: true,
 
     run: async (client, interaction) => {
         const queue = client.player.getQueue(interaction.guild.id);
