@@ -278,7 +278,7 @@ if(!int.guild) return
 	    embed.setColor('BLUE');
   	  embed.setTitle(`Searched Music: "${name}"`);
 	
-      const description = ((int.message.embeds[0].description).substring(0, ((int.message.embeds[0].description).length)-183))+`Selection stopped because track **${selection+1}** was selected. ✅`
+      const description = resultCount===10 ? (((int.message.embeds[0].description).substring(0, ((int.message.embeds[0].description).length)-183))+`Selection stopped because track **${selection+1}** was selected. ✅`) : (((int.message.embeds[0].description).substring(0, ((int.message.embeds[0].description).length)-182))+`Selection stopped because track **${selection+1}** was selected. ✅`)
 	    embed.setDescription(description);
 	
 	    embed.setTimestamp();
