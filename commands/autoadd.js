@@ -15,16 +15,26 @@ module.exports = {
 		{name: "Song for Denise (Maxi Version) bass boosted 1 hour", value: 'https://www.youtube.com/watch?v=RHRKu5mStNk'}, //widepuin
 		{name: "Undertale OST playlist (only boss fights)", value: 'https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V'}, //undertale
 		{name: "Hypixel Skyblock OST", value: 'https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV'}, //skyblock
-		{name: "Chill Music (\"Poké & Chill\", \"Zelda & Chill\", \"Zelda & Chill 2\", ...)", value: 'https://www.youtube.com/playlist?list=PL7NAts7dexLtnzzdQ7DE22D1EX7ZQW81H'} //chill
+		{name: "Chill Music (\"Poké & Chill\", \"Zelda & Chill\", \"Zelda & Chill 2\", ...)", value: 'chill'} //chill
 		],
 		required: true
 	} ],
     voiceChannel: true,
 
     run: async (client, interaction) => {
-		const playlists = ['https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V','https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV','https://www.youtube.com/playlist?list=PL7NAts7dexLtnzzdQ7DE22D1EX7ZQW81H'] // undertale, skyblock, chill
-		const target = interaction.options.getString('target') 
+		const playlists = ['https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V','https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV','chill'] // undertale, skyblock, chill
+		const chillplaylists = ['https://open.spotify.com/album/3oNO1P0Qlr4oSlMA2MIj67','https://open.spotify.com/album/0N0noai9OQs1rYEaS47vJw','https://open.spotify.com/album/4lBMa9JEuCSIs3NkPEIwvN'] // ['Zelda & Chill 1','Zelda & Chill 2','Poké & Chill']
+    const target = interaction.options.getString('target') 
 		
+    const queue = await client.player.createQueue(interaction.guild, {
+			leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
+			autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
+			metadata: interaction.channel,
+			initialVolume: client.config.opt.discordPlayer.initialVolume,
+			volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
+    });
+    
+    const addnotchill = async () => {
         const res = await client.player.search(target, {
             requestedBy: interaction.member,
             searchEngine: QueryType.AUTO
@@ -32,13 +42,33 @@ module.exports = {
 
         if (!res || !res.tracks.length) return interaction.reply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
 
-        const queue = await client.player.createQueue(interaction.guild, {
-			leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
-			autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
-			metadata: interaction.channel,
-			initialVolume: client.config.opt.discordPlayer.initialVolume,
-			volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
+        try {
+            if (!queue.connection) await queue.connect(interaction.member.voice.channel);
+        } catch {
+            await client.player.deleteQueue(interaction.guild.id);
+            return interaction.reply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+        }
+
+        await interaction.reply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
+
+        res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]);
+
+		if (playlists.includes(target)) { // prüfen auf playlist
+			queue.setVolume(0); // volume auf 0, wenn playlist ausgewählt wurde
+		}
+
+//		console.log(playlists)
+//		console.log(target)
+//		console.log(playlists.includes(target))
+    }
+    
+      const addchill = async (target) => {
+        const res = await client.player.search(target, {
+            requestedBy: interaction.member,
+            searchEngine: QueryType.AUTO
         });
+
+        if (!res || !res.tracks.length) return interaction.reply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
       
         try {
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);
@@ -58,6 +88,15 @@ module.exports = {
 //		console.log(playlists)
 //		console.log(target)
 //		console.log(playlists.includes(target))
+    await wait(100);
+    }  
+  
+    if (target !== 'chill') await addnotchill();
+    if (target === 'chill') {
+      for (var i = 0; i < (chillplaylists.length); i++) {
+        await addchill(chillplaylists[i]);
+      }
+    }
 
         if (!queue.playing) await queue.play();
       
