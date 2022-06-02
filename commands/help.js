@@ -17,7 +17,7 @@ module.exports = {
         .setColor('BLUE')
         .setTitle('Bot information')
         .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
-        .setDescription(`${client.user.username} Bot Commands:\nBot logged in: ${discordReadyAt}\n_(Current sessions login time, this might be outdated!)_\n\nThe bot has joined **${servers} servers** so far.`) // with **${members} members**
+        .setDescription(`${client.user.username} Bot Commands:\nBot logged in: ${discordReadyAt}\n_(Current sessions login time, this might be outdated!)_\nThe bot has joined **${servers} servers** so far.\n `) // with **${members} members**
         .addField(`Available - ${commands.size} Commands`, commands.map(x => `\`/${x.name}\``).join(' | '))
 //		.addField(`**DJ mode active:** `, DJ.enabled)
 //		.addField(`**Available for everyone:** `, DJ.notAffected)
