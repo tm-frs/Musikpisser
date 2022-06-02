@@ -14,9 +14,11 @@ module.exports = async (client) => {
     writefile(`\n${loginText}\n`);
     console.log(loginText);
     client.user.accentColor = '#18191C';
+  
     const status = 'online' // the status of the bot (options: "online", "idle", "dnd" (do not desturb), "invisible")
     const activityText = `${client.config.playing} || Online on ${client.guilds.cache.size} servers || Logged in: ${jsReadyAtShort}`; //the text of the activity
     const activityType = 'PLAYING' // the type of the activity (options: "PLAYING", "LISTENING", "WATCHING", "COMPETING", "STREAMING")
+    
     client.user.setPresence({
       status: status,
     })
