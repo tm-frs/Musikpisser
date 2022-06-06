@@ -99,7 +99,7 @@ class GuildChannelManager extends CachedManager {
   /**
    * Options used to create a new channel in a guild.
    * @typedef {CategoryCreateChannelOptions} GuildChannelCreateOptions
-   * @property {CategoryChannelResolvable} [parent] Parent of the new channel
+   * @property {?CategoryChannelResolvable} [parent] Parent of the new channel
    */
 
   /**
@@ -137,6 +137,7 @@ class GuildChannelManager extends CachedManager {
       position,
       rateLimitPerUser,
       rtcRegion,
+      videoQualityMode,
       reason,
     } = {},
   ) {
@@ -156,6 +157,7 @@ class GuildChannelManager extends CachedManager {
         permission_overwrites: permissionOverwrites,
         rate_limit_per_user: rateLimitPerUser,
         rtc_region: rtcRegion,
+        video_quality_mode: videoQualityMode,
       },
       reason,
     });
@@ -199,7 +201,7 @@ class GuildChannelManager extends CachedManager {
    * @property {string} [name] The name of the channel
    * @property {ChannelType} [type] The type of the channel (only conversion between text and news is supported)
    * @property {number} [position] The position of the channel
-   * @property {string} [topic] The topic of the text channel
+   * @property {?string} [topic] The topic of the text channel
    * @property {boolean} [nsfw] Whether the channel is NSFW
    * @property {number} [bitrate] The bitrate of the voice channel
    * @property {number} [userLimit] The user limit of the voice channel
