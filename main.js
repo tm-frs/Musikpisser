@@ -14,7 +14,7 @@ let client = new Client({
     ],
     disableMentions: 'everyone',
 });
-//test
+
 client.db = require("orio.db")
 client.db.deleteAll()
 client.config = require('./config');
