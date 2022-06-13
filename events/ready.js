@@ -7,6 +7,7 @@ const writefile = function () {
 }
 
 module.exports = async (client) => {
+    const serverCount = client.guilds.cache.size;
     const unixReadyAt = Math.floor(new Date(client.readyAt).getTime() / 1000);
     const jsReadyAtShort = ((new Date(unixReadyAt * 1000)).toUTCString()).replace("GMT", "(UTC+0)");
     const jsReadyAtLong = ((new Date(unixReadyAt * 1000)).toUTCString()).replace("GMT", "UTC+0000 (Coordinated Universal Time)");
@@ -15,10 +16,10 @@ module.exports = async (client) => {
     console.log(loginText);
     client.user.accentColor = '#18191C';
   
-    const status = 'online' // the status of the bot (options: "online", "idle", "dnd" (do not desturb), "invisible")
-    const activityText = `${client.config.playing} || Online on ${client.guilds.cache.size} servers || Logged in: ${jsReadyAtShort}`; //the text of the activity
-    const activityType = 'PLAYING' // the type of the activity (options: "PLAYING", "LISTENING", "WATCHING", "COMPETING", "STREAMING")
-    
+    const status = require("../config.js").onlineStatus;
+    const activityType = require("../config.js").activityType;
+    const activityText = ((require("../config.js").activityText).replace("REPLACE-WITH_SERVER-COUNT",serverCount)).replace("REPLACE-WITH_LOGIN-AT",jsReadyAtShort);
+  
     client.user.setPresence({
       status: status,
     })
@@ -32,5 +33,5 @@ module.exports = async (client) => {
         client.user.setActivity(activityText, {
           type: activityType
         })
-      }, 600000)
+      }, 60000)
 };
