@@ -1,4 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { SnowflakeUtil } = require('discord.js');
 
 module.exports = {
     description: "Shows you how long the current track is and how much time is remaining.",
@@ -14,6 +15,8 @@ module.exports = {
 
         const progress = queue.createProgressBar();
         const timestamp = queue.getPlayerTimestamp();
+        const unixPlayingSince = parseInt((SnowflakeUtil.deconstruct(queue.id).timestamp)/1000);
+        const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`
 
         if (timestamp.progress == 'Infinity') return interaction.reply({ content: `This song is live streaming, no duration data to display. 🎧`, ephemeral: true }).catch(e => { })
 
@@ -30,7 +33,7 @@ module.exports = {
         .setTitle(queue.current.title)
         .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
         .setTimestamp()
-        .setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.`)
+        .setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nThe bot is playing since: *${discordPlayingSince}*.`)
         .setFooter({ text: 'Music Bot - by CraftingShadowDE️', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
         interaction.reply({ embeds: [embed], components: [row]}).catch(e => { })
     },
