@@ -1,4 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { SnowflakeUtil } = require('discord.js');
 const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
 const wait = require('node:timers/promises').setTimeout;
@@ -107,6 +108,8 @@ if(!int.guild) return
 
             const progress = queue.createProgressBar();
             const timestamp = queue.getPlayerTimestamp();
+            const unixPlayingSince = parseInt((SnowflakeUtil.deconstruct(queue.id).timestamp)/1000);
+            const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`
     
             if (timestamp.progress == 'Infinity') return int.message.edit({ content: `This song is live streaming, no duration data to display. 🎧` }).catch(e => { })
     
@@ -115,7 +118,7 @@ if(!int.guild) return
             .setTitle(queue.current.title)
             .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
             .setTimestamp()
-            .setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.`)
+            .setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nThe bot is playing since: *${discordPlayingSince}*.`)
             .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
             int.message.edit({ embeds: [embed] }).catch(e => { })
             int.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true}).catch(e => { })
