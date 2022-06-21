@@ -60,11 +60,11 @@ fs.readdir("./events", (_err, files) => {
 
 
 player.on('error', (queue, error) => {
-    console.log({ content: `There was a problem with the song queue => ${error.message}` }).catch(e => { });
+    queue.metadata.send({ content: `There was a problem with the song queue => ${error.message}` }).catch(e => { });
 });
 
 player.on('connectionError', (queue, error) => {
-    console.log({ content: `I'm having trouble connecting => ${error.message}` }).catch(e => { });
+    queue.metadata.send({ content: `I'm having trouble connecting => ${error.message}` }).catch(e => { });
 });
 
 player.on('trackStart', (queue, track) => {
