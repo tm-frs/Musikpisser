@@ -105,5 +105,5 @@ client.login(process.env.TOKEN).catch(e => {
 console.log(`The Bot Token you entered into your bot's config.js-file is incorrect or your bot's INTENTS are OFF!`)
 })
 } else {
-console.log(`Please write your bot token into the TOKEN-field in the config.js-file of your bot!`)
+console.log(`Please write your bot token into the TOKEN-field in the .env-file of your bot!`)
 }
