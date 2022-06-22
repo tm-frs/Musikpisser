@@ -60,11 +60,15 @@ fs.readdir("./events", (_err, files) => {
 
 
 player.on('error', (queue, error) => {
-    queue.metadata.send({ content: `There was a problem with the song queue => ${error.message}` }).catch(e => { });
+    queue.metadata.send({ content: `⚠️ There was a problem with the song queue! => Error: **${error.message}**` }).catch(e => { });
+    const timestamp = ((new Date(Date.now())).toUTCString()).replace("GMT", "UTC+0000 (Coordinated Universal Time)");
+    console.log(`ERROR: ⚠️ There was a problem with the song queue! => Error: "${error.message}" (time: ${timestamp})`);
 });
 
 player.on('connectionError', (queue, error) => {
-    queue.metadata.send({ content: `I'm having trouble connecting => ${error.message}` }).catch(e => { });
+    queue.metadata.send({ content: `⚠️ There was a problem with the connection! => Error: **${error.message}**` }).catch(e => { });
+    const timestamp = ((new Date(Date.now())).toUTCString()).replace("GMT", "UTC+0000 (Coordinated Universal Time)");
+    console.log(`ERROR: ⚠️ There was a problem with the connection! => Error: "${error.message}" (time: ${timestamp})`);
 });
 
 player.on('trackStart', (queue, track) => {
