@@ -2,6 +2,6 @@
 @echo To start this bot,
 @pause
 cls
-npm start PORT=3001
+npm start
 @echo Done!
 @pause

@@ -4,7 +4,7 @@
   "author": "CraftingShadowDE",
   "description": "Discord.js V13 Compatible || CraftingShadowDE's Music Bot Shared on GitHub!",
   "scripts": {
-    "start": "node main.js"
+    "start": "node main.js PORT=3001"
   },
   "dependencies": {
     "@discord-player/extractor": "^3.0.2",
