@@ -26,8 +26,7 @@ module.exports = {
 const trackDuration = timestamp.progress == 'Forever' ? 'Endless (Live)' : track.duration;
 
         embed.setDescription(`**Title:** \`${track.title}\`\n**Author:** \`${track.author}\`\n**URL:** ${track.url}\n**Duration:** \`${trackDuration}\`\n**Loop Mode:** \`${loopMode}\`\n**Audio:** \`${queue.volume}%\`\n**Track added by:** ${track.requestedBy}`);
-console.log(track)
-      console.log(track.requestedBy)
+
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
