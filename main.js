@@ -108,7 +108,7 @@ console.log(`App running on: ${AppIp}`)
 
 if(process.env.TOKEN){
 client.login(process.env.TOKEN).catch(e => {
-console.log(`The Bot Token you entered into your bot's config.js-file is incorrect or your bot's INTENTS are OFF!`)
+console.log(`The Bot Token you entered into your bot's .env-file is incorrect or your bot's INTENTS are OFF!`)
 })
 } else {
 console.log(`Please write your bot token into the TOKEN-field in the .env-file of your bot!`)
