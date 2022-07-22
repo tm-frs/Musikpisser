@@ -46,6 +46,6 @@ module.exports = {
         embed.setTimestamp();
         embed.setFooter({text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-        interaction.reply({ embeds: [embed] }).catch(e => { })
+        interaction.reply({ embeds: [embed], components: [row]}).catch(e => { })
     },
 };
