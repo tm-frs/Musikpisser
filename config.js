@@ -6,9 +6,10 @@ module.exports = {
     opt: {
         DJ: {
             enabled: false, //IF YOU WANT ONLY DJS TO USE IT, set false to true. If you haven't, a role with the name you specified will be created. There should only be one role with this name.
+            alwaysAllowAdmins: true, //If this is set to true, everyone with the "Manage Guild"-permission can use it without the role
             roleName: 'Musikpisser Permissions', //WRITE WHAT THE NAME OF THE DJ ROLE WILL BE, THEY CAN USE IT ON YOUR SERVER
             notAffected: ['help','ping','crash','nowplaying','queue','time'], //This are commands everyone can run, even if they don't have the role
-            affectedButtonsAndMenus: ['cancelButton','addAgainButton','trackMenu']
+            affectedButtonsAndMenus: ['cancelButton','addAgainButton','trackMenu'] //These buttons/menus can't be used without the role
         },
         voiceConfig: {
             leaveOnEnd: true, //If this variable is "true", the bot will leave the channel when the music ends.
