@@ -56,17 +56,17 @@ if(!int.guild) return
         setTimeout(function() {
 
           const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
-          const messagecreatorhasrole = int.guild.roles.cache.some(x => x.name === DJ.roleName) ? int.member.roles.cache.some(role => role.id === roleDJ.id) : DJ.alwaysAllowAdmins ? int.member.permissions.has("MANAGE_GUILD") : false;
+          const messagecreatorhasrole = (int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) ? true : (DJ.alwaysAllowAdmins && int.member.permissions.has("MANAGE_GUILD")) ? true : false;
 //          console.log("Rolle existent:\n"+int.guild.roles.cache.some(x => x.name === DJ.roleName)+"\nNutzer hat Rolle:\n"+int.member.roles.cache.some(role => role.id === roleDJ.id)+"\nAdmins haben Berechtigung:\n"+DJ.alwaysAllowAdmins+"\nNutzer ist Admin:\n"+int.member.permissions.has("MANAGE_GUILD")+"\nBefund:\n"+messagecreatorhasrole)
           if (!messagecreatorhasrole) {
-      replyNotAllowed(client, int, DJ);
+      return replyNotAllowed(client, int, DJ);
           }
         }, 1001);
         
       } else {
       
       const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
-      const messagecreatorhasrole = int.guild.roles.cache.some(x => x.name === DJ.roleName) ? int.member.roles.cache.some(role => role.id === roleDJ.id) : DJ.alwaysAllowAdmins ? int.member.permissions.has("MANAGE_GUILD") : false;
+      const messagecreatorhasrole = (int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) ? true : (DJ.alwaysAllowAdmins && int.member.permissions.has("MANAGE_GUILD")) ? true : false;
 //      console.log(messagecreatorhasrole);
 //      console.log(roleDJ.id);
         if (!messagecreatorhasrole) {
@@ -80,13 +80,17 @@ if(!int.guild) return
         if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
     }
 
-    cmd.run(client, int)
+    const roleDJ = DJ.enabled ? int.guild.roles.cache.find(x => x.name === DJ.roleName) : null;
+    const DJonAndAffectedAndPermission = ((DJ.enabled && !DJ.notAffected.includes(cmd.name)) && ((int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) || (DJ.alwaysAllowAdmins && int.member.permissions.has("MANAGE_GUILD"))))
+    const DJonAndNotAffected = (DJ.enabled && DJ.notAffected.includes(cmd.name))
+    const DJoff = (!DJ.enabled)
+    if (DJonAndAffectedAndPermission || DJonAndNotAffected || DJoff) cmd.run(client, int)
     }
 
     if (int.isButton() || int.isSelectMenu()) {
       const DJ = client.config.opt.DJ;
       const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
-    const userIsAllowed = !DJ.enabled ? true : !DJ.affectedButtonsAndMenus.includes(int.customId) ? true : int.guild.roles.cache.some(x => x.name === DJ.roleName) ? int.member.roles.cache.some(role => role.id === roleDJ.id) : DJ.alwaysAllowAdmins ? int.member.permissions.has("MANAGE_GUILD") : false;
+    const userIsAllowed = !DJ.enabled ? true : !DJ.affectedButtonsAndMenus.includes(int.customId) ? true : (int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) ? true : (DJ.alwaysAllowAdmins && int.member.permissions.has("MANAGE_GUILD")) ? true : false;
     if (!int.guild.roles.cache.some(x => x.name === DJ.roleName) && DJ.enabled) createrole(client, int, DJ);
     if (!userIsAllowed) {
       replyNotAllowed(client, int, DJ);
@@ -140,7 +144,7 @@ if(!int.guild) return
             return int.reply({ content: `No music currently playing. ❌`, ephemeral: true, components: [] });
         } else {
         if (!queue.tracks[0]) {
-            return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch(e => { });
+            return int.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch(e => { });
         } else {
 
         const unixPlayingSince = parseInt((SnowflakeUtil.deconstruct(queue.id).timestamp)/1000);
@@ -151,8 +155,8 @@ if(!int.guild) return
         const loopMode = options[queue.repeatMode];
   
         embed.setColor('BLUE');
-        embed.setThumbnail(interaction.guild.iconURL({ size: 4096, format: 'png', dynamic: true }));
-        embed.setTitle(`Server Music List - ${interaction.guild.name} ${loopMode}`);
+        embed.setThumbnail(int.guild.iconURL({ size: 4096, format: 'png', dynamic: true }));
+        embed.setTitle(`Server Music List - ${int.guild.name} ${loopMode}`);
   
         const tracks = queue.tracks.map((track, i) => `**${i + 1}** - \`${track.title}\` | \`${track.author}\` (requested by <@${track. requestedBy.id}>)`);
   
@@ -162,7 +166,7 @@ if(!int.guild) return
         embed.setDescription(`The bot is playing since: *${discordPlayingSince}*.\n\n**Currently Playing:** \`${queue.current.title}\` by \`${queue.current.author}\` (requested by <@${queue.current.requestedBy.id}>)\n\n${tracks.slice(0, 5).join('\n')}\n\n${nextSongs }`);
   
         embed.setTimestamp();
-        embed.setFooter({text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+        embed.setFooter({text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
         int.message.edit({ embeds: [embed] }).catch(e => { })
         int.reply({ content: `**Success:** Queue data updated. ✅`, ephemeral: true}).catch(e => { })
     }
