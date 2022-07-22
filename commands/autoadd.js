@@ -15,14 +15,15 @@ module.exports = {
 		{name: "Song for Denise (Maxi Version) bass boosted 1 hour", value: 'https://www.youtube.com/watch?v=RHRKu5mStNk'}, //widepuin
 		{name: "Undertale OST playlist (only boss fights)", value: 'https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V'}, //undertale
 		{name: "Hypixel Skyblock OST", value: 'https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV'}, //skyblock
-		{name: "Chill Music (\"Poké & Chill\", \"Zelda & Chill\", \"Zelda & Chill 2\", ...)", value: 'chill'} //chill
+		{name: "Chill Music (\"Poké & Chill\", \"Zelda & Chill\", \"Zelda & Chill 2\", ...)", value: 'chill'}, //chill
+    {name: "Paper Mario 2 OST", value: 'https://youtube.com/playlist?list=PLZODI99P5wP9Qh_t4VNf4iRFEETG37Dhy'}, //papermario2
 		],
 		required: true
 	} ],
     voiceChannel: true,
 
     run: async (client, interaction) => {
-		const playlists = ['https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V','https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV','chill'] // undertale, skyblock, chill
+		const playlists = ['https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V','https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV','chill','https://youtube.com/playlist?list=PLZODI99P5wP9Qh_t4VNf4iRFEETG37Dhy'] // undertale, skyblock, chill, papermario2
 		const chillplaylists = ['https://open.spotify.com/album/3oNO1P0Qlr4oSlMA2MIj67','https://open.spotify.com/album/0N0noai9OQs1rYEaS47vJw','https://open.spotify.com/album/4lBMa9JEuCSIs3NkPEIwvN'] // ['Zelda & Chill 1','Zelda & Chill 2','Poké & Chill']
     const target = interaction.options.getString('target') 
 		
