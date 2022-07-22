@@ -51,38 +51,14 @@ if(!int.guild) return
 
     if (cmd && DJ.enabled && !DJ.notAffected.includes(cmd.name)) {      
       if (!int.guild.roles.cache.some(x => x.name === DJ.roleName)) {
-    //     int.guild.roles.create({name: DJ.roleName, color: "#C27C0E", mentionable: true, permissions:[]});
-        
-    //     setTimeout(function() {
-    //       const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
-    //       console.log('DJ-Role has been created because DJ-Mode is active and the role is not existing.');
-		  
-		//     const embed = new MessageEmbed()
-    //         .setColor('RED')
-    //         .setTitle('ANNOUNCEMENT')
-    //         .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
-    //         .setDescription(`A DJ-role has been created because DJ-mode is active and the role was not existing yet. The role is ${roleDJ} and everyone needs it to use the bot. (Some commands can still be used by everyone.)`)
-    //         .setTimestamp()
-    //         .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
-			
-		// return int.reply({ content: `@everyone`, embeds: [embed] }).catch(e => { })
-    //     }, 1000);
     createrole(client, int, DJ);
         
         setTimeout(function() {
 
           const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
           const messagecreatorhasrole = int.guild.roles.cache.some(x => x.name === DJ.roleName) ? int.member.roles.cache.some(role => role.id === roleDJ.id) : DJ.alwaysAllowAdmins ? int.member.permissions.has("MANAGE_GUILD") : false;
+//          console.log("Rolle existent:\n"+int.guild.roles.cache.some(x => x.name === DJ.roleName)+"\nNutzer hat Rolle:\n"+int.member.roles.cache.some(role => role.id === roleDJ.id)+"\nAdmins haben Berechtigung:\n"+DJ.alwaysAllowAdmins+"\nNutzer ist Admin:\n"+int.member.permissions.has("MANAGE_GUILD")+"\nBefund:\n"+messagecreatorhasrole)
           if (!messagecreatorhasrole) {
-			// 	const embed = new MessageEmbed()
-			// 	.setColor('BLUE')
-			// 	.setTitle(client.user.username)
-			// 	.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
-			// 	.setDescription(`You can't use this command because only those with the ${roleDJ} role can. ❌`)
-			// 	.setTimestamp()
-			// 	.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
-			
-			// return int.reply({ embeds: [embed], ephemeral: true}).catch(e => { })
       replyNotAllowed(client, int, DJ);
           }
         }, 1001);
@@ -94,15 +70,6 @@ if(!int.guild) return
 //      console.log(messagecreatorhasrole);
 //      console.log(roleDJ.id);
         if (!messagecreatorhasrole) {
-			// 	const embed = new MessageEmbed()
-			// 	.setColor('BLUE')
-			// 	.setTitle(client.user.username)
-			// 	.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
-			// 	.setDescription(`You can't use this command because only those with the ${roleDJ} role can. ❌`)
-			// 	.setTimestamp()
-			// 	.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
-			
-			// return int.reply({ embeds: [embed], ephemeral: true}).catch(e => { })
       replyNotAllowed(client, int, DJ);
         }
       }
