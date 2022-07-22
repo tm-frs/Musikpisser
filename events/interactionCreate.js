@@ -3,6 +3,36 @@ const { SnowflakeUtil } = require('discord.js');
 const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
 const wait = require('node:timers/promises').setTimeout;
+const createrole = async () => {
+  const DJ = await client.config.opt.DJ;
+  int.guild.roles.create({name: DJ.roleName, color: "#C27C0E", mentionable: true, permissions:[]});
+        
+  await wait (1000)
+
+    const roleDJ = await int.guild.roles.cache.find(x => x.name === DJ.roleName);
+    console.log('DJ-Role has been created because DJ-Mode is active and the role is not existing.');
+
+  const embed = new MessageEmbed()
+      .setColor('RED')
+      .setTitle('ANNOUNCEMENT')
+      .setThumbnail(await client.user.displayAvatarURL({ format: 'png', size: 4096 }))
+      .setDescription(`A DJ-role has been created because DJ-mode is active and the role was not existing yet. The role is ${roleDJ} and everyone needs it to use the bot. (Some commands can still be used by everyone.)`)
+      .setTimestamp()
+      .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: await int.user.displayAvatarURL({ dynamic: true }) });
+
+return int.channel.send({ content: `@everyone`, embeds: [embed] }).catch(e => { })
+};
+const replyNotAllowed = async () => {
+  const embed = new MessageEmbed()
+  .setColor('BLUE')
+  .setTitle(await client.user.username)
+  .setThumbnail(await client.user.displayAvatarURL({ format: 'png', size: 4096 }))
+  .setDescription(`You can't use this command because only those with the ${roleDJ} role can. ❌`)
+  .setTimestamp()
+  .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: await int.user.displayAvatarURL({ dynamic: true }) });
+
+  return int.reply({ embeds: [embed], ephemeral: true}).catch(e => { })
+}
 
 module.exports = (client, int) => {
 
@@ -23,40 +53,42 @@ if(!int.guild) return
 
     if (cmd && DJ.enabled && !DJ.notAffected.includes(cmd.name)) {      
       if (!int.guild.roles.cache.some(x => x.name === DJ.roleName)) {
-        int.guild.roles.create({name: DJ.roleName, color: "#C27C0E", mentionable: true, permissions:[]});
+    //     int.guild.roles.create({name: DJ.roleName, color: "#C27C0E", mentionable: true, permissions:[]});
         
-        setTimeout(function() {
-          const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
-          console.log('DJ-Role has been created because DJ-Mode is active and the role is not existing.');
+    //     setTimeout(function() {
+    //       const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
+    //       console.log('DJ-Role has been created because DJ-Mode is active and the role is not existing.');
 		  
-		    const embed = new MessageEmbed()
-            .setColor('RED')
-            .setTitle('ANNOUNCEMENT')
-            .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
-            .setDescription(`A DJ-role has been created because DJ-mode is active and the role was not existing yet. The role is ${roleDJ} and everyone needs it to use the bot. (Some commands can still be used by everyone.)`)
-            .setTimestamp()
-            .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
+		//     const embed = new MessageEmbed()
+    //         .setColor('RED')
+    //         .setTitle('ANNOUNCEMENT')
+    //         .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
+    //         .setDescription(`A DJ-role has been created because DJ-mode is active and the role was not existing yet. The role is ${roleDJ} and everyone needs it to use the bot. (Some commands can still be used by everyone.)`)
+    //         .setTimestamp()
+    //         .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
 			
-		return int.reply({ content: `@everyone`, embeds: [embed] }).catch(e => { })
-        }, 1000);
+		// return int.reply({ content: `@everyone`, embeds: [embed] }).catch(e => { })
+    //     }, 1000);
+    createrole();
         
         setTimeout(function() {
           const messagecreatorhasrole = int.member.roles.cache.some(role => role.id === roleDJ.id);
           if (!messagecreatorhasrole && !int.member.permissions.has("MANAGE_GUILD")) {
-				const embed = new MessageEmbed()
-				.setColor('BLUE')
-				.setTitle(client.user.username)
-				.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
-				.setDescription(`You can't use this command because only those with the ${roleDJ} role can. ❌`)
-				.setTimestamp()
-				.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
+			// 	const embed = new MessageEmbed()
+			// 	.setColor('BLUE')
+			// 	.setTitle(client.user.username)
+			// 	.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
+			// 	.setDescription(`You can't use this command because only those with the ${roleDJ} role can. ❌`)
+			// 	.setTimestamp()
+			// 	.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:int.user.displayAvatarURL({ dynamic: true }) });
 			
-			return int.reply({ embeds: [embed], ephemeral: true}).catch(e => { })
+			// return int.reply({ embeds: [embed], ephemeral: true}).catch(e => { })
+      replyNotAllowed();
           }
         }, 2000);
         
       } else {
-      
+        
       const messagecreatorhasrole = int.member.roles.cache.some(role => role.id === roleDJ.id);
 //      console.log(messagecreatorhasrole);
 //      console.log(roleDJ.id);
@@ -81,6 +113,15 @@ if(!int.guild) return
 
     cmd.run(client, int)
     }
+
+    if (int.isButton() || int.isSelectMenu()) {
+      const DJ = client.config.opt.DJ;
+      const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
+    const userIsAllowed = !DJ.enabled ? true : !DJ.affectedButtonsAndMenus.includes(int.customId) ? true : int.guild.roles.cache.some(x => x.name === DJ.roleName) ? int.member.roles.cache.some(role => role.id === roleDJ.id) : int.member.permissions.has("MANAGE_GUILD") ? true : false;
+    if (!int.guild.roles.cache.some(x => x.name === DJ.roleName)) createrole();
+    if (!userIsAllowed) {
+      replyNotAllowed();
+    } else {
 
     if (int.isButton()) {
         const queue = client.player.getQueue(int.guildId);
@@ -334,5 +375,7 @@ if(!int.guild) return
 	  }
    }
    }
+}
+}
 }
 };
