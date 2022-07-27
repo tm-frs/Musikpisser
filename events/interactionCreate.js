@@ -12,7 +12,7 @@ const createrole = async (client, int, DJ) => {
     console.log('DJ-Role has been created because DJ-Mode is active and the role is not existing.');
 
   const embed = new EmbedBuilder()
-      .setColor('RED')
+      .setColor(0xED4245) // (red)
       .setTitle('ANNOUNCEMENT')
       .setThumbnail(await client.user.displayAvatarURL({ format: 'png', size: 4096 }))
       .setDescription(`A DJ-role has been created because DJ-mode is active and the role was not existing yet. The role is ${roleDJ} and everyone needs it to use the bot. (Some commands can still be used by everyone.)`)
@@ -24,7 +24,7 @@ return int.channel.send({ content: `@everyone`, embeds: [embed] }).catch(e => { 
 const replyNotAllowed = async (client, int, DJ) => {
   const roleDJ = await int.guild.roles.cache.find(x => x.name === DJ.roleName);
   const embed = new EmbedBuilder()
-  .setColor('BLUE')
+  .setColor(0x3498DB) // (blue)
   .setTitle(await client.user.username)
   .setThumbnail(await client.user.displayAvatarURL({ format: 'png', size: 4096 }))
   .setDescription(`You can't use this command because only those with the ${roleDJ} role can. ❌`)
@@ -108,7 +108,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
         case 'saveTrack': {
           const description = int.message.embeds[0].description+"\n**Saved at this server:** \`"+int.guild.name+"\`"
           const embed = new EmbedBuilder()
-          .setColor('GREEN')
+          .setColor(0x57F288) // (green)
           .setTitle(client.user.username + " - Saved Track")
           .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
           .setDescription(description)
@@ -134,7 +134,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
             if (timestamp.progress == 'Infinity') return int.message.edit({ content: `This song is live streaming, no duration data to display. 🎧` }).catch(e => { })
     
             const embed = new EmbedBuilder()
-            .setColor('BLUE')
+            .setColor(0x3498DB) // (blue)
             .setTitle(queue.current.title)
             .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
             .setTimestamp()
@@ -160,7 +160,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
       const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const loopMode = options[queue.repeatMode];
   
-        embed.setColor('BLUE');
+        embed.setColor(0x3498DB); // (blue)
         embed.setThumbnail(int.guild.iconURL({ size: 4096, format: 'png', dynamic: true }));
         embed.setTitle(`Server Music List - ${int.guild.name} ${loopMode}`);
   
@@ -191,7 +191,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
 
       const embed = new EmbedBuilder();
 	
-	    embed.setColor('BLUE');
+	    embed.setColor(0x3498DB); // (blue)
   	  embed.setTitle(`Searched Music: "${name}"`);
 	
     	const maxTracks = res.tracks.slice(0, 10);
@@ -335,7 +335,7 @@ if (othervoicechannel) return int.reply({ content: `You are not on the same audi
       if (!res || !res.tracks.length) return
       const embed = new EmbedBuilder();
 	
-	    embed.setColor('BLUE');
+	    embed.setColor(0x3498DB); // (blue)
   	  embed.setTitle(`Searched Music: "${name}"`);
 	
       const description = resultCount===10 ? (((int.message.embeds[0].description).substring(0, ((int.message.embeds[0].description).length)-183))+`Selection stopped because track **${selection+1}** was selected. ✅`) : (((int.message.embeds[0].description).substring(0, ((int.message.embeds[0].description).length)-182))+`Selection stopped because track **${selection+1}** was selected. ✅`)
