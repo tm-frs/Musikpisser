@@ -1,3 +1,4 @@
+const { ApplicationCommandOptionType } = require('discord.js');
 const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
 const { QueryType } = require('discord-player');
 
@@ -7,7 +8,7 @@ module.exports = {
     options: [{
         name: 'name',
         description: 'The name of the track you want to search for.',
-        type: 'STRING',
+        type: ApplicationCommandOptionType.String,
         required: true
     }],
 

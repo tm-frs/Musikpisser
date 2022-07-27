@@ -1,3 +1,4 @@
+const { ApplicationCommandOptionType } = require('discord.js');
 const maxVol = require("../config.js").opt.maxVol;
 
 module.exports = {
@@ -6,7 +7,7 @@ module.exports = {
     options: [{
         name: 'volume',
         description: 'Type a number to adjust the volume (normal volume is 100).',
-        type: 'INTEGER',
+        type: ApplicationCommandOptionType.Integer,
         required: true
     }],
     voiceChannel: true,

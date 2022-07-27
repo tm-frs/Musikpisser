@@ -1,3 +1,4 @@
+const { ApplicationCommandOptionType } = require('discord.js');
 const { QueueRepeatMode } = require('discord-player');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 
@@ -6,7 +7,7 @@ module.exports = {
     name: 'loop',
     options: [ {
 		name: 'mode',
-		type: 'STRING',
+		type: ApplicationCommandOptionType.String,
 		description: 'Loop type',
 		required: true,
 		choices: [

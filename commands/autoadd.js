@@ -1,3 +1,4 @@
+const { ApplicationCommandOptionType } = require('discord.js');
 const { QueryType } = require('discord-player');
 const { QueueRepeatMode } = require('discord-player');
 const maxVol = require("../config.js").opt.maxVol;
@@ -7,7 +8,7 @@ module.exports = {
     description: "Adds a song/playlist that has been added to the bot's code.",
     name: 'autoadd',
 	options: [ {
-		type: 'STRING',
+		type: ApplicationCommandOptionType.String,
 		name: 'target',
 		description: "What song/playlist should be added?",
 		choices: [
