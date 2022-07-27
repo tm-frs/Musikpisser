@@ -1,6 +1,6 @@
 module.exports = {
     onlineStatus: `dnd`, // the status of the bot (options: "online", "idle", "dnd" (do not desturb), "invisible")
-    activityType: `PLAYING`, // the type of the activity (options: "PLAYING", "LISTENING", "WATCHING", "COMPETING", "STREAMING")
+    activityType: `PLAYING`, // the type of the activity (options: "PLAYING", "LISTENING", "WATCHING", "COMPETING", "STREAMING" [if set to something else, 'PLAYING' will be used.])
     activityText: `Music Bot || "/help" for help  || Online on REPLACE-WITH_SERVER-COUNT servers || Logged in: REPLACE-WITH_LOGIN-AT`, //the text of the activity; 'REPLACE-WITH_SERVER-COUNT' will be replaced with the amount of servers the bot has joined and 'REPLACE-WITH_LOGIN-AT' will be replaced with a timestamp of the bot's login time
 
     opt: {
