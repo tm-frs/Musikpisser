@@ -1,10 +1,12 @@
+const { ApplicationCommandOptionType } = require('discord.js');
+
 module.exports = {
     description: "Adds audio filter to ongoing music.",
     name: 'filter',
     options: [{
     name: 'filter-list_1',
     description: "The first part of the list of all available filters. Only choose one from one of the lists!",
-    type: 'STRING',
+    type: ApplicationCommandOptionType.String,
 	choices: [
     {name: "Bassboost low (+15dB)", value: 'bassboost_low'},
 	{name: "Bassboost normal (+20dB)", value: 'bassboost'},
@@ -36,7 +38,7 @@ module.exports = {
     },{
     name: 'filter-list_2',
     description: "The second part of the list of all available filters. Only choose one from one of the lists!",
-    type: 'STRING',
+    type: ApplicationCommandOptionType.String,
 	choices: [
     {name: "Expander", value: 'expander'},
     {name: "Softlimiter", value: 'softlimiter'},
