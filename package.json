@@ -1,10 +1,18 @@
 {
-  "name": "Musikpisser",
+  "name": "musikpisser",
   "main": "main.js",
   "author": "CraftingShadowDE",
-  "description": "Discord.js V13 Compatible || CraftingShadowDE's Music Bot Shared on GitHub!",
+  "description": "Discord.js V14 Compatible || CraftingShadowDE's Music Bot Shared on GitHub!",
   "scripts": {
     "start": "node main.js PORT=3001"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CraftingShadowDE/Musikpisser.git"
+  },
+  "homepage": "https://github.com/CraftingShadowDE/Musikpisser#readme",
+  "bugs": {
+    "url": "https://github.com/CraftingShadowDE/Musikpisser/issues"
   },
   "dependencies": {
     "@discord-player/extractor": "^3.0.2",
