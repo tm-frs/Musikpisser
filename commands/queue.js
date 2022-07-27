@@ -1,4 +1,5 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { ButtonStyle } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const { SnowflakeUtil } = require('discord.js');
 const { QueueRepeatMode } = require('discord-player');
 
@@ -20,15 +21,15 @@ module.exports = {
         const unixPlayingSince = parseInt((SnowflakeUtil.deconstruct(queue.id).timestamp)/1000);
         const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`
 
-        const saveButton = new MessageButton();
+        const saveButton = new ButtonBuilder();
 
         saveButton.setLabel('Update');
         saveButton.setCustomId('queue');
-        saveButton.setStyle('SUCCESS');
+        saveButton.setStyle(ButtonStyle.Success);
 
-        const row = new MessageActionRow().addComponents(saveButton);
+        const row = new ActionRowBuilder().addComponents(saveButton);
 
-        const embed = new MessageEmbed();
+        const embed = new EmbedBuilder();
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const loopMode = options[queue.repeatMode];
 

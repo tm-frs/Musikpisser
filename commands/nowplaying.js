@@ -1,4 +1,5 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { ButtonStyle } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const { QueueRepeatMode } = require('discord-player');
 
 module.exports = {
@@ -13,7 +14,7 @@ module.exports = {
 
         const track = queue.current;
 
-        const embed = new MessageEmbed();
+        const embed = new EmbedBuilder();
 
         embed.setColor('BLUE');
         embed.setThumbnail(track.thumbnail);
@@ -30,13 +31,13 @@ const trackDuration = timestamp.progress == 'Forever' ? 'Endless (Live)' : track
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-        const saveButton = new MessageButton();
+        const saveButton = new ButtonBuilder();
 
         saveButton.setLabel('Save Song');
         saveButton.setCustomId('saveTrack');
-        saveButton.setStyle('SUCCESS');
+        saveButton.setStyle(ButtonStyle.Success);
 
-        const row = new MessageActionRow().addComponents(saveButton);
+        const row = new ActionRowBuilder().addComponents(saveButton);
 
         interaction.reply({ embeds: [embed], components: [row] }).catch(e => { })
     },

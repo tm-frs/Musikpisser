@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const DJ = require("../config.js").opt.DJ;
 
 module.exports = {
@@ -13,14 +13,14 @@ module.exports = {
           const discordReadyAt = `<t:${unixReadyAt}:R> (<t:${unixReadyAt}:d>, <t:${unixReadyAt}:T>)`
         const servers = client.guilds.cache.size
         // const members = client.users.cache.size // get member count
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
         .setColor('BLUE')
         .setTitle('Bot information')
         .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
         .setDescription(`Bot logged in: ${discordReadyAt}\n_(Current sessions login time, this might be outdated!)_\nThe bot has joined **${servers} servers** so far.\n __**${client.user.username} Bot Commands:**__\n`) // with **${members} members**
-        .addField(`Available - ${commands.size} Commands`, commands.map(x => `\`/${x.name}\``).join(' | '))
-//		.addField(`**DJ mode active:** `, DJ.enabled)
-//		.addField(`**Available for everyone:** `, DJ.notAffected)
+        .addFields([{ name: `Available - ${commands.size} Commands`, value: commands.map(x => `\`/${x.name}\``).join(' | ') }])
+//		.addField(`**DJ mode active:** `, DJ.enabled) //if reactivated, convert to addFields
+//		.addField(`**Available for everyone:** `, DJ.notAffected) //if reactivated, convert to addFields
         .setTimestamp()
         .setFooter({ text: 'Music Bot - by ️CraftingShadowDE', iconURL:interaction.user.displayAvatarURL({ dynamic: true }) })
         interaction.reply({ embeds: [embed] }).catch(e => { })
