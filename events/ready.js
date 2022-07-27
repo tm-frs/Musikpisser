@@ -7,6 +7,7 @@ const writefile = function () {
 }
 
 module.exports = async (client) => {
+    const logPresenceUpdates = require("../config.js").logPresenceUpdates;
     const unixReadyAt = Math.floor(new Date(client.readyAt).getTime() / 1000);
     const jsReadyAtShort = ((new Date(unixReadyAt * 1000)).toUTCString()).replace("GMT", "(UTC+0)");
     const jsReadyAtLong = ((new Date(unixReadyAt * 1000)).toUTCString()).replace("GMT", "UTC+0000 (Coordinated Universal Time)");
@@ -29,7 +30,7 @@ module.exports = async (client) => {
         }]
       });
       const presenceUpdateTimestring = (new Date(Date.now()).toUTCString().replace("GMT", "(UTC+0)"));
-      console.log(`The prensence was updated. (${presenceUpdateTimestring})`);
+      if (logPresenceUpdates) console.log(`The prensence was updated. (${presenceUpdateTimestring})`);
     };
 
     updatePresence();
