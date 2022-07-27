@@ -16,9 +16,9 @@ module.exports = async (client) => {
     console.log(loginText);
     client.user.accentColor = '#18191C';
   
-    const statusConfig = require("../config.js").onlineStatus;
-    const status = (statusConfig==='PLAYING') ? 0 : (statusConfig==='STREAMING') ? 1 : (statusConfig==='LISTENING') ? 2 : (statusConfig==='WATCHING') ? 3 : (statusConfig==='COMPETING') ? 5 : 0
-    const activityType = require("../config.js").activityType;
+    const status = require("../config.js").onlineStatus;
+    const activityTypeConfig = require("../config.js").activityType;
+    const activityType = (activityTypeConfig==='PLAYING') ? 0 : (activityTypeConfig==='STREAMING') ? 1 : (activityTypeConfig==='LISTENING') ? 2 : (activityTypeConfig==='WATCHING') ? 3 : (activityTypeConfig==='COMPETING') ? 5 : 0
     const activityText = ((require("../config.js").activityText).replace("REPLACE-WITH_SERVER-COUNT",serverCount)).replace("REPLACE-WITH_LOGIN-AT",jsReadyAtShort);
   
     client.user.setPresence({
