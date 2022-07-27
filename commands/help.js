@@ -14,7 +14,7 @@ module.exports = {
         const servers = client.guilds.cache.size
         // const members = client.users.cache.size // get member count
         const embed = new EmbedBuilder()
-        .setColor('BLUE')
+        .setColor(0x3498DB) // (blue)
         .setTitle('Bot information')
         .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
         .setDescription(`Bot logged in: ${discordReadyAt}\n_(Current sessions login time, this might be outdated!)_\nThe bot has joined **${servers} servers** so far.\n __**${client.user.username} Bot Commands:**__\n`) // with **${members} members**

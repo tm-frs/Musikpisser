@@ -16,7 +16,7 @@ module.exports = {
 
         const embed = new EmbedBuilder();
 
-        embed.setColor('BLUE');
+        embed.setColor(0x3498DB); // (blue)
         embed.setThumbnail(track.thumbnail);
         embed.setTitle(`Currently playing track:`)
 
