@@ -128,7 +128,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
 
             const progress = queue.createProgressBar();
             const timestamp = queue.getPlayerTimestamp();
-            const unixPlayingSince = parseInt((SnowflakeUtil.deconstruct(queue.id).timestamp)/1000);
+            const unixPlayingSince = parseInt((parseInt(SnowflakeUtil.deconstruct(queue.id).timestamp))/1000);
             const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`
     
             if (timestamp.progress == 'Infinity') return int.message.edit({ content: `This song is live streaming, no duration data to display. 🎧` }).catch(e => { })
@@ -153,7 +153,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
             return int.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch(e => { });
         } else {
 
-        const unixPlayingSince = parseInt((SnowflakeUtil.deconstruct(queue.id).timestamp)/1000);
+        const unixPlayingSince = parseInt((parseInt(SnowflakeUtil.deconstruct(queue.id).timestamp))/1000);
         const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`
   
         const embed = new EmbedBuilder();
