@@ -20,18 +20,32 @@ module.exports = async (client) => {
     const activityType = require("../config.js").activityType;
     const activityText = ((require("../config.js").activityText).replace("REPLACE-WITH_SERVER-COUNT",serverCount)).replace("REPLACE-WITH_LOGIN-AT",jsReadyAtShort);
   
+    // client.user.setPresence({
+    //   status: status,
+    // })
+    // client.user.setActivity(activityText, {
+    //   type: activityType
+    // })
     client.user.setPresence({
       status: status,
-    })
-    client.user.setActivity(activityText, {
-      type: activityType
-    })
+      activity: {
+          name: activityText,
+          type: activityType
+      }
+    });
       setInterval(() => {
+        // client.user.setPresence({
+        //   status: status,
+        // })
+        // client.user.setActivity(activityText, {
+        //   type: activityType
+        // })
         client.user.setPresence({
           status: status,
-        })
-        client.user.setActivity(activityText, {
-          type: activityType
-        })
+          activity: {
+              name: activityText,
+              type: activityType
+          }
+        });
       }, 60000)
 };
