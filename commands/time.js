@@ -30,7 +30,7 @@ module.exports = {
         const row = new ActionRowBuilder().addComponents(saveButton);
 
         const embed = new EmbedBuilder()
-        .setColor('BLUE')
+        .setColor(0x3498DB) // (blue)
         .setTitle(queue.current.title)
         .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
         .setTimestamp()
