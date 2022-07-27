@@ -38,6 +38,9 @@ module.exports = (client, int) => {
 
 if(!int.guild) return
 
+const botvoicechannel = int.guild.members.cache.find(user => user.id === client.user.id).voice.channel
+const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== botvoicechannel.id)
+
     if (int.type === InteractionType.ApplicationCommand){
 
     const cmd = client.commands.get(int.commandName);
@@ -79,10 +82,9 @@ if(!int.guild) return
 
     if (cmd && cmd.voiceChannel) {
         if (!int.member.voice.channel) return int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true});
-        const botvoicechannel = int.guild.members.cache.find(user => user.id === client.user.id).voice.channel
 //        console.log(client.user.id)
 //        console.log(botvoicechannel)
-        if (botvoicechannel && int.member.voice.channel.id !== botvoicechannel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+        if (othervoicechannel) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
 //old version:        if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
     }
 
@@ -211,6 +213,9 @@ if(!int.guild) return
     }
         break
         case 'addAgainButton': {
+
+if (othervoicechannel) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+
     const selection = parseInt(((int.message.embeds[0].description).substr(-20, 2)).replace("*", ''))-1
     const name = ((int.message.embeds[0].title).substr(17,((int.message.embeds[0].title).length)-18))
     const resultArray = (int.message.embeds[0].description).split("\n")
@@ -267,6 +272,9 @@ if(!int.guild) return
     }
         break
         case 'trackMenu': {
+
+if (othervoicechannel) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+
           const chosenTrack = int.values[0]
           const selection = chosenTrack=='t1' ? 0 : chosenTrack=='t2' ? 1 : chosenTrack=='t3' ? 2 : chosenTrack=='t4' ? 3 : chosenTrack=='t5' ? 4 : chosenTrack=='t6' ? 5 : chosenTrack=='t7' ? 6 : chosenTrack=='t8' ? 7 : chosenTrack=='t9' ? 8 : chosenTrack=='t10' ? 9 : 'error'
           const name = ((int.message.embeds[0].title).substr(17,((int.message.embeds[0].title).length)-18))
