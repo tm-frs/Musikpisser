@@ -32,7 +32,7 @@ module.exports = {
         const embed = new EmbedBuilder()
         .setColor(0x3498DB) // (blue)
         .setTitle(queue.current.title)
-        .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
+        .setThumbnail(queue.current.thumbnail)
         .setTimestamp()
         .setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nThe bot is playing since: *${discordPlayingSince}*.`)
         .setFooter({ text: 'Music Bot - by CraftingShadowDE️', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
