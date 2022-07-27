@@ -1,3 +1,4 @@
+const { InteractionType } = require('discord.js');
 const { ButtonStyle } = require('discord.js');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const { SnowflakeUtil } = require('discord.js');
@@ -37,7 +38,7 @@ module.exports = (client, int) => {
 
 if(!int.guild) return
 
-    if (int.type === InteractionType.ApplicationCommand()){
+    if (int.type === InteractionType.ApplicationCommand){
 
     const cmd = client.commands.get(int.commandName);
 
@@ -78,7 +79,11 @@ if(!int.guild) return
 
     if (cmd && cmd.voiceChannel) {
         if (!int.member.voice.channel) return int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true});
-        if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+        const botvoicechannel = int.guild.members.cache.find(user => user.id === client.user.id).voice.channel
+//        console.log(client.user.id)
+//        console.log(botvoicechannel)
+        if (botvoicechannel && int.member.voice.channel.id !== botvoicechannel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+//old version:        if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
     }
 
     const roleDJ = DJ.enabled ? int.guild.roles.cache.find(x => x.name === DJ.roleName) : null;
