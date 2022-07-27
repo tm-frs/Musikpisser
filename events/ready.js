@@ -7,7 +7,6 @@ const writefile = function () {
 }
 
 module.exports = async (client) => {
-    const serverCount = client.guilds.cache.size;
     const unixReadyAt = Math.floor(new Date(client.readyAt).getTime() / 1000);
     const jsReadyAtShort = ((new Date(unixReadyAt * 1000)).toUTCString()).replace("GMT", "(UTC+0)");
     const jsReadyAtLong = ((new Date(unixReadyAt * 1000)).toUTCString()).replace("GMT", "UTC+0000 (Coordinated Universal Time)");
@@ -16,22 +15,25 @@ module.exports = async (client) => {
     console.log(loginText);
     client.user.accentColor = '#18191C';
   
-    const status = require("../config.js").onlineStatus;
-    const activityType = require("../config.js").activityType;
-    const activityText = ((require("../config.js").activityText).replace("REPLACE-WITH_SERVER-COUNT",serverCount)).replace("REPLACE-WITH_LOGIN-AT",jsReadyAtShort);
-  
-    client.user.setPresence({
-      status: status,
-    })
-    client.user.setActivity(activityText, {
-      type: activityType
-    })
+    const updatePresence = async () => {
+      const serverCount = client.guilds.cache.size;
+      const status = require("../config.js").onlineStatus;
+      const activityTypeConfig = require("../config.js").activityType;
+      const activityType = (activityTypeConfig==='PLAYING') ? 0 : (activityTypeConfig==='STREAMING') ? 1 : (activityTypeConfig==='LISTENING') ? 2 : (activityTypeConfig==='WATCHING') ? 3 : (activityTypeConfig==='COMPETING') ? 5 : 0
+      const activityText = ((require("../config.js").activityText).replace("REPLACE-WITH_SERVER-COUNT",serverCount)).replace("REPLACE-WITH_LOGIN-AT",jsReadyAtShort);
+      client.user.setPresence({
+        status: status,
+        activities: [{
+            name: activityText,
+            type: activityType
+        }]
+      });
+      const presenceUpdateTimestring = (new Date(Date.now()).toUTCString().replace("GMT", "(UTC+0)"));
+      console.log(`The prensence was updated. (${presenceUpdateTimestring})`);
+    };
+
+    updatePresence();
       setInterval(() => {
-        client.user.setPresence({
-          status: status,
-        })
-        client.user.setActivity(activityText, {
-          type: activityType
-        })
+        updatePresence();
       }, 60000)
 };

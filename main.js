@@ -2,15 +2,15 @@ const configvolumeSmoothness = require("./config.js").opt.volumeSmoothness;
 const configinitialVolume = require("./config.js").opt.initialVolume;
 require('dotenv').config();
 const { Player } = require('discord-player');
-const { Client, Intents, Collection } = require('discord.js');
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
 
 let client = new Client({
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_VOICE_STATES
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildVoiceStates
     ],
     disableMentions: 'everyone',
 });
@@ -22,6 +22,7 @@ client.player = new Player(client, client.config.opt.discordPlayer, {initialVolu
 const player = client.player
 
 const synchronizeSlashCommands = require('discord-sync-commands-v14');
+const { ApplicationCommandType } = require('discord.js');
 
 console.log(`-> Loading commands...`);
 client.commands = new Collection();
@@ -40,7 +41,7 @@ fs.readdir("./commands/", (_err, files) => {
         name: c.name,
         description: c.description,
         options: c.options,
-        type: 'CHAT_INPUT'
+        type: ApplicationCommandType.ChatInput
     })), {
         debug: false
     });
