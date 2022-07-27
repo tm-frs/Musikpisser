@@ -1,3 +1,4 @@
+const { ApplicationCommandOptionType } = require('discord.js');
 const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
 
@@ -7,7 +8,7 @@ module.exports = {
     options: [{
         name: 'target',
         description: "Enter the name or the URL of the track/playlist you want to add.",
-        type: 'STRING',
+        type: ApplicationCommandOptionType.String,
         required: true
     }],
     voiceChannel: true,

@@ -1,12 +1,13 @@
+const { ApplicationCommandOptionType } = require('discord.js');
 const { QueueRepeatMode } = require('discord-player');
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 
 module.exports = {
     description: "Turns the music loop mode on or off.",
     name: 'loop',
     options: [ {
 		name: 'mode',
-		type: 'STRING',
+		type: ApplicationCommandOptionType.String,
 		description: 'Loop type',
 		required: true,
 		choices: [
@@ -32,7 +33,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const mode = options[0];
 		
-        const embed = new MessageEmbed();
+        const embed = new EmbedBuilder();
 
         embed.setColor('BLUE');
         embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
@@ -54,7 +55,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const mode = options[1];
 		
-        const embed = new MessageEmbed();
+        const embed = new EmbedBuilder();
 
         embed.setColor('BLUE');
         embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
@@ -76,7 +77,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const mode = options[2];
 		
-        const embed = new MessageEmbed();
+        const embed = new EmbedBuilder();
 
         embed.setColor('BLUE');
         embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
@@ -98,7 +99,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const mode = options[3];
 		
-        const embed = new MessageEmbed();
+        const embed = new EmbedBuilder();
 
         embed.setColor('BLUE');
         embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
@@ -116,7 +117,7 @@ const noqueue = (!queue || !queue.playing)
 		  const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const mode = noqueue ? '❌ _(No music currently playing!)_' : options[queue.repeatMode];
 		
-        const embed = new MessageEmbed();
+        const embed = new EmbedBuilder();
 
         embed.setColor('BLUE');
         embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));

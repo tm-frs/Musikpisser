@@ -1,4 +1,6 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { InteractionType } = require('discord.js');
+const { ButtonStyle } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const { SnowflakeUtil } = require('discord.js');
 const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
@@ -9,7 +11,7 @@ const createrole = async (client, int, DJ) => {
     const roleDJ = await int.guild.roles.cache.find(x => x.name === DJ.roleName);
     console.log('DJ-Role has been created because DJ-Mode is active and the role is not existing.');
 
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
       .setColor('RED')
       .setTitle('ANNOUNCEMENT')
       .setThumbnail(await client.user.displayAvatarURL({ format: 'png', size: 4096 }))
@@ -21,7 +23,7 @@ return int.channel.send({ content: `@everyone`, embeds: [embed] }).catch(e => { 
 };
 const replyNotAllowed = async (client, int, DJ) => {
   const roleDJ = await int.guild.roles.cache.find(x => x.name === DJ.roleName);
-  const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
   .setColor('BLUE')
   .setTitle(await client.user.username)
   .setThumbnail(await client.user.displayAvatarURL({ format: 'png', size: 4096 }))
@@ -36,7 +38,10 @@ module.exports = (client, int) => {
 
 if(!int.guild) return
 
-    if (int.isCommand()){
+const botvoicechannel = int.guild.members.cache.find(user => user.id === client.user.id).voice.channel
+const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== botvoicechannel.id)
+
+    if (int.type === InteractionType.ApplicationCommand){
 
     const cmd = client.commands.get(int.commandName);
 
@@ -77,7 +82,10 @@ if(!int.guild) return
 
     if (cmd && cmd.voiceChannel) {
         if (!int.member.voice.channel) return int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true});
-        if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+//        console.log(client.user.id)
+//        console.log(botvoicechannel)
+        if (othervoicechannel) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+//old version:        if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
     }
 
     const roleDJ = DJ.enabled ? int.guild.roles.cache.find(x => x.name === DJ.roleName) : null;
@@ -87,7 +95,7 @@ if(!int.guild) return
     if (DJonAndAffectedAndPermission || DJonAndNotAffected || DJoff) cmd.run(client, int)
     }
 
-    if (int.isButton() || int.isSelectMenu()) {
+    if (int.type === InteractionType.MessageComponent) {
       const DJ = client.config.opt.DJ;
       const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
     const userIsAllowed = !DJ.enabled ? true : !DJ.affectedButtonsAndMenus.includes(int.customId) ? true : (int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) ? true : (DJ.alwaysAllowAdmins && int.member.permissions.has("MANAGE_GUILD")) ? true : false;
@@ -95,13 +103,11 @@ if(!int.guild) return
     if (!userIsAllowed) {
       replyNotAllowed(client, int, DJ);
     } else {
-
-    if (int.isButton()) {
         const queue = client.player.getQueue(int.guildId);
     switch (int.customId) {
         case 'saveTrack': {
           const description = int.message.embeds[0].description+"\n**Saved at this server:** \`"+int.guild.name+"\`"
-          const embed = new MessageEmbed()
+          const embed = new EmbedBuilder()
           .setColor('GREEN')
           .setTitle(client.user.username + " - Saved Track")
           .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
@@ -127,7 +133,7 @@ if(!int.guild) return
     
             if (timestamp.progress == 'Infinity') return int.message.edit({ content: `This song is live streaming, no duration data to display. 🎧` }).catch(e => { })
     
-            const embed = new MessageEmbed()
+            const embed = new EmbedBuilder()
             .setColor('BLUE')
             .setTitle(queue.current.title)
             .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
@@ -150,7 +156,7 @@ if(!int.guild) return
         const unixPlayingSince = parseInt((SnowflakeUtil.deconstruct(queue.id).timestamp)/1000);
         const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`
   
-        const embed = new MessageEmbed();
+        const embed = new EmbedBuilder();
       const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const loopMode = options[queue.repeatMode];
   
@@ -183,7 +189,7 @@ if(!int.guild) return
           searchEngine: QueryType.AUTO
       });
 
-      const embed = new MessageEmbed();
+      const embed = new EmbedBuilder();
 	
 	    embed.setColor('BLUE');
   	  embed.setTitle(`Searched Music: "${name}"`);
@@ -207,6 +213,9 @@ if(!int.guild) return
     }
         break
         case 'addAgainButton': {
+
+if (othervoicechannel) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+
     const selection = parseInt(((int.message.embeds[0].description).substr(-20, 2)).replace("*", ''))-1
     const name = ((int.message.embeds[0].title).substr(17,((int.message.embeds[0].title).length)-18))
     const resultArray = (int.message.embeds[0].description).split("\n")
@@ -250,22 +259,22 @@ if(!int.guild) return
           }
           addTrack(selectedResult);
 
-    const ui_disabled = [ {type: 1, components: [{style: 3, label: `Add it again`, custom_id: `addAgainButton`, disabled: true, type: 2}]} ]
+    const ui_disabled = [ {type: 1, components: [{style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: true, type: 2}]} ]
     int.update({ components: ui_disabled}).catch(e => { })
       
     setTimeout(function() {
-      const ui_enabled = [ {type: 1, components: [{style: 3, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2}]} ]
+      const ui_enabled = [ {type: 1, components: [{style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2}]} ]
       int.editReply({ components: ui_enabled}).catch(e => { })
     }, 30000);
     } else {
       int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
     }
     }
-    }
-}
-   if (int.isSelectMenu()){
-   switch (int.customId) {
+        break
         case 'trackMenu': {
+
+if (othervoicechannel) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+
           const chosenTrack = int.values[0]
           const selection = chosenTrack=='t1' ? 0 : chosenTrack=='t2' ? 1 : chosenTrack=='t3' ? 2 : chosenTrack=='t4' ? 3 : chosenTrack=='t5' ? 4 : chosenTrack=='t6' ? 5 : chosenTrack=='t7' ? 6 : chosenTrack=='t8' ? 7 : chosenTrack=='t9' ? 8 : chosenTrack=='t10' ? 9 : 'error'
           const name = ((int.message.embeds[0].title).substr(17,((int.message.embeds[0].title).length)-18))
@@ -324,7 +333,7 @@ if(!int.guild) return
         searchEngine: QueryType.AUTO
       });
       if (!res || !res.tracks.length) return
-      const embed = new MessageEmbed();
+      const embed = new EmbedBuilder();
 	
 	    embed.setColor('BLUE');
   	  embed.setTitle(`Searched Music: "${name}"`);
@@ -334,7 +343,7 @@ if(!int.guild) return
 	
 	    embed.setTimestamp();
 	    embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
-      const ui = [ {type: 1, components: [{style: 3, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2}]} ]
+      const ui = [ {type: 1, components: [{style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2}]} ]
 	    int.update({ embeds: [embed], components: ui }).catch(e => { })
      }
     createembed(name, selection, selectedResult);
@@ -348,7 +357,6 @@ if(!int.guild) return
 	  }
    }
    }
-}
 }
 }
 };

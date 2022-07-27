@@ -1,4 +1,5 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { ButtonStyle } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const { SnowflakeUtil } = require('discord.js');
 
 module.exports = {
@@ -20,15 +21,15 @@ module.exports = {
 
         if (timestamp.progress == 'Infinity') return interaction.reply({ content: `This song is live streaming, no duration data to display. 🎧`, ephemeral: true }).catch(e => { })
 
-        const saveButton = new MessageButton();
+        const saveButton = new ButtonBuilder();
 
         saveButton.setLabel('Update');
         saveButton.setCustomId('time');
-        saveButton.setStyle('SUCCESS');
+        saveButton.setStyle(ButtonStyle.Success);
 
-        const row = new MessageActionRow().addComponents(saveButton);
+        const row = new ActionRowBuilder().addComponents(saveButton);
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
         .setColor('BLUE')
         .setTitle(queue.current.title)
         .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
