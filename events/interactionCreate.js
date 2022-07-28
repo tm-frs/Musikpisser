@@ -36,7 +36,7 @@ const replyNotAllowed = async (client, int, DJ) => {
 
 module.exports = (client, int) => {
 
-if(!int.guild) return
+if(!int.guild) return int.reply({ content: `You only can use commands on servers. ❌`, ephemeral: true});
 
 const botvoicechannel = int.guild.members.cache.find(user => user.id === client.user.id).voice.channel
 const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== botvoicechannel.id)
