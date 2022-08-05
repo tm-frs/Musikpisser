@@ -15,7 +15,7 @@ updates:
       # Prefix all commit messages with "npm"
       prefix: "npm"
       include: "scope"
-    # Specify labels for npm pull requests
+    # Specify labels for npm pull requests: 'npm' and 'dependencies' label
     labels:
       - "npm"
       - "dependencies"
