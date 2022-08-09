@@ -145,9 +145,7 @@ module.exports = {
 				// skip:
 				queue.skip();
 
-        await wait(3998); // Wait for 3.998 seconds
-				// skip:
-				queue.skip();
+        await wait(998); // Wait for 0.998 seconds
         // volume:
 				queue.setVolume(client.config.opt.discordPlayer.initialVolume);
 
