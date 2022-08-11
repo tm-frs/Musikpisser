@@ -38,7 +38,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		
         const embed = new EmbedBuilder();
 
-        embed.setColor(0x3498DB); // (blue)
+        embed.setColor(Colors.Blue); // blue = 0x3498DB
         embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
         embed.setTitle('Loop Mode')
 
@@ -60,7 +60,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		
         const embed = new EmbedBuilder();
 
-        embed.setColor(0x3498DB); // (blue)
+        embed.setColor(Colors.Blue); // blue = 0x3498DB
         embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
         embed.setTitle('Loop Mode')
 
@@ -82,7 +82,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		
         const embed = new EmbedBuilder();
 
-        embed.setColor(0x3498DB); // (blue)
+        embed.setColor(Colors.Blue); // blue = 0x3498DB
         embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
         embed.setTitle('Loop Mode')
 
@@ -104,7 +104,7 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		
         const embed = new EmbedBuilder();
 
-        embed.setColor(0x3498DB); // (blue)
+        embed.setColor(Colors.Blue); // blue = 0x3498DB
         embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
         embed.setTitle('Loop Mode')
 
@@ -122,7 +122,7 @@ const noqueue = (!queue || !queue.playing)
 		
         const embed = new EmbedBuilder();
 
-        embed.setColor(0x3498DB); // (blue)
+        embed.setColor(Colors.Blue); // blue = 0x3498DB
         embed.setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }));
         embed.setTitle('Loop Mode')
 
