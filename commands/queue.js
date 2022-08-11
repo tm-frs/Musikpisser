@@ -1,3 +1,4 @@
+const { Colors } = require('discord.js');
 const { ButtonStyle } = require('discord.js');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const { SnowflakeUtil } = require('discord.js');
