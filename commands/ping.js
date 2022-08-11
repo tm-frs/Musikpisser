@@ -10,7 +10,7 @@ module.exports = {
         interaction.reply('Please wait...').then(async() => {
         let last = Date.now();
             const embed = new Discord.EmbedBuilder()
-                .setColor(0x3498DB) // (blue)
+                .setColor(Colors.Blue) // blue = 0x3498DB
                 .setTitle(client.user.username + " - Current Ping")
                 .setThumbnail(client.user.displayAvatarURL({ format: 'png', size: 4096 }))
                 .addFields([{ name: `Message Latency (time till a message arrives):`, value: `\`${last - start}ms\` 🛰️` },
