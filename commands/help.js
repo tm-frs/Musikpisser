@@ -1,3 +1,4 @@
+const { Colors } = require('discord.js');
 const { EmbedBuilder } = require('discord.js');
 const DJ = require("../config.js").opt.DJ;
 

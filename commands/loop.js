@@ -1,3 +1,4 @@
+const { Colors } = require('discord.js');
 const { ApplicationCommandOptionType } = require('discord.js');
 const { QueueRepeatMode } = require('discord-player');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
