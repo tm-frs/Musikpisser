@@ -1,3 +1,4 @@
+const { Colors } = require('discord.js');
 const { ButtonStyle } = require('discord.js');
 const { ApplicationCommandOptionType } = require('discord.js');
 const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder, ButtonBuilder } = require('discord.js');
