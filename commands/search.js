@@ -26,7 +26,7 @@ if (!name) return interaction.reply({ content: `Please enter a valid song name. 
 
         const embed = new EmbedBuilder();
 
-        embed.setColor(0x3498DB); // (blue)
+        embed.setColor(Colors.Blue); // blue = 0x3498DB
         embed.setTitle(`Searched Music: "${name}"`);
 
         const maxTracks = res.tracks.slice(0, 10);

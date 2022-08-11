@@ -33,7 +33,7 @@ module.exports = {
 		const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
         const loopMode = options[queue.repeatMode];
 
-        embed.setColor(0x3498DB); // (blue)
+        embed.setColor(Colors.Blue); // blue = 0x3498DB
         embed.setThumbnail(interaction.guild.iconURL({ size: 4096, format: 'png', dynamic: true }));
         embed.setTitle(`Server Music List - ${interaction.guild.name} ${loopMode}`);
 
