@@ -18,20 +18,26 @@ if (!client.config.opt.playDl.replaceYtdl) {
       initialVolume: client.config.opt.discordPlayer.initialVolume,
       volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness,
       async onBeforeCreateStream(track, source, _queue) {
-        // only trap youtube source
-        if (source === "youtube") {
-            // track here would be youtube track
+        // play-dl only supports youtube and soundcloud (which I don't understand so it's not implemented)
+        if (source === "youtube" && track.raw.source !== "spotify") {
             return (await playdl.stream(track.url, { discordPlayerCompatibility : true })).stream;
-            // we must return readable stream or void (returning void means telling discord-player to look for default extractor)
+		/*} else if (source === "soundcloud") {
+            playdl.getFreeClientID().then((clientID) => playdl.setToken({
+				 soundcloud : {
+					 client_id : clientID
+				 }
+			}))
+			playdl.authorization();
+
+			return (await playdl.stream(track.url, { discordPlayerCompatibility : true })).stream;*/
         } else {
-            return undefined;
+            return null;
         }
       },
-      spotifyBridge: !client.config.opt.playDl.disableSpotifyBridge
+      spotifyBridge: true
     });
     return queue;
 }
-
 }
 module.exports = {
     createQueue
