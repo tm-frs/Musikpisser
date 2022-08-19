@@ -25,9 +25,14 @@ module.exports = {
 
     run: async (client, interaction) => {
 		const playlists = ['https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V','https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV','chill','https://youtube.com/playlist?list=PLZODI99P5wP9Qh_t4VNf4iRFEETG37Dhy'] // undertale, skyblock, chill, papermario2
-		const chillplaylists = ['https://open.spotify.com/album/3oNO1P0Qlr4oSlMA2MIj67','https://open.spotify.com/album/0N0noai9OQs1rYEaS47vJw','https://open.spotify.com/album/4lBMa9JEuCSIs3NkPEIwvN'] // ['Zelda & Chill 1','Zelda & Chill 2','Poké & Chill']
     const target = interaction.options.getString('target') 
-		
+
+    const UrlMap = new Map();
+    UrlMap.set('chill', ['https://open.spotify.com/album/3oNO1P0Qlr4oSlMA2MIj67','https://open.spotify.com/album/0N0noai9OQs1rYEaS47vJw','https://open.spotify.com/album/4lBMa9JEuCSIs3NkPEIwvN']); // ['Zelda & Chill 1','Zelda & Chill 2','Poké & Chill']
+
+    const isMultipleTargets = UrlMap.has(target);
+		const targetArray = isMultipleTargets ? UrlMap.get(target) : [];
+
     const queue = await client.player.createQueue(interaction.guild, {
 			leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
 			autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
@@ -36,7 +41,7 @@ module.exports = {
 			volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
     });
     
-    const addnotchill = async () => {
+    const addSingle = async () => {
         const res = await client.player.search(target, {
             requestedBy: interaction.member,
             searchEngine: QueryType.AUTO
@@ -64,7 +69,7 @@ module.exports = {
 //		console.log(playlists.includes(target))
     }
     
-      const addchill = async (target) => {
+      const addMultiple = async (target) => {
         const res = await client.player.search(target, {
             requestedBy: interaction.member,
             searchEngine: QueryType.AUTO
@@ -93,10 +98,10 @@ module.exports = {
     await wait(100);
     }  
   
-    if (target !== 'chill') await addnotchill();
-    if (target === 'chill') {
-      for (var i = 0; i < (chillplaylists.length); i++) {
-        await addchill(chillplaylists[i]);
+    if (!isMultipleTargets) await addSingle();
+    if (isMultipleTargets) {
+      for (var i = 0; i < (targetArray.length); i++) {
+        await addMultiple(targetArray[i]);
       }
     }
 
