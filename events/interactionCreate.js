@@ -1,3 +1,4 @@
+const createQueue = require("../queue.js").createQueue;
 const { Colors } = require('discord.js');
 const { InteractionType } = require('discord.js');
 const { ButtonStyle } = require('discord.js');
@@ -225,13 +226,7 @@ if (othervoicechannel) return int.reply({ content: `You are not on the same audi
     const selectedResult = resultURLs[selection]
     if (int.member.voice.channel) {
           const addTrack = async (selectedResult) => {
-            const queue = await client.player.createQueue(int.guild, {
-              leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
-              autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
-              metadata: int.channel,
-              initialVolume: client.config.opt.discordPlayer.initialVolume,
-              volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
-            });
+            const queue = await createQueue(client, int);
             const res = await client.player.search(selectedResult, {
               requestedBy: int.user,
               searchEngine: QueryType.AUTO
@@ -294,13 +289,7 @@ if (othervoicechannel) return int.reply({ content: `You are not on the same audi
           if (int.user.id === int.message.interaction.user.id) {
           if (int.member.voice.channel) {
           const addTrack = async (selectedResult) => {
-            const queue = await client.player.createQueue(int.guild, {
-              leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
-              autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
-              metadata: int.channel,
-              initialVolume: client.config.opt.discordPlayer.initialVolume,
-              volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
-            });
+            const queue = await createQueue(client, int);
             const res = await client.player.search(selectedResult, {
               requestedBy: int.user,
               searchEngine: QueryType.AUTO

@@ -5,6 +5,10 @@ module.exports = {
     logPresenceUpdates: false, // whether or not to show the presence updates in the logs
 
     opt: {
+        playDl: {
+            replaceYtdl: false, // if you have problems with the bot, try to enable this (default: false)
+            disableSpotifyBridge: true // only used if you have replaceYtdl enabled. If you have issues with replaceYtdl enabled, try to enable this too (default: true)
+        },
         DJ: {
             enabled: false, //IF YOU WANT ONLY DJS TO USE IT, set false to true. If you haven't, a role with the name you specified will be created. There should only be one role with this name.
             alwaysAllowAdmins: true, //If this is set to true, everyone with the "Manage Guild"-permission can use it without the role

@@ -1,9 +1,10 @@
+const createQueue = require("../queue.js").createQueue;
 const { ApplicationCommandOptionType } = require('discord.js');
 const { QueryType } = require('discord-player');
 const { QueueRepeatMode } = require('discord-player');
 const maxVol = require("../config.js").opt.maxVol;
 const wait = require('node:timers/promises').setTimeout;
-
+// https://github.com/Androz2091/discord-player/issues/892 https://discord-player.js.org/docs/main/master/extractors/create_stream https://discord-player.js.org/docs/main/master/typedef/PlayerOptions
   /*
   * NEUEN TRACK/PLAYLIST ADDEN
   * ---------------------------
@@ -50,13 +51,7 @@ module.exports = {
     const isMultipleTargets = UrlMap.has(target);
 		const targetArray = isMultipleTargets ? UrlMap.get(target) : [];
 
-    const queue = await client.player.createQueue(interaction.guild, {
-			leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
-			autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
-			metadata: interaction.channel,
-			initialVolume: client.config.opt.discordPlayer.initialVolume,
-			volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
-    });
+    const queue = await createQueue(client, interaction);
     
     const addSingle = async () => {
         const res = await client.player.search(target, {

@@ -1,3 +1,4 @@
+const createQueue = require("../queue.js").createQueue;
 const { ApplicationCommandOptionType } = require('discord.js');
 const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
@@ -24,13 +25,7 @@ if (!name) return interaction.reply({ content: `Write the name of the music you 
 
         if (!res || !res.tracks.length) return interaction.reply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
 
-        const queue = await client.player.createQueue(interaction.guild, {
-			leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
-			autoSelfDeaf: client.config.opt.voiceConfig.autoSelfDeaf,
-			metadata: interaction.channel,
-			initialVolume: client.config.opt.discordPlayer.initialVolume,
-			volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
-        });
+        const queue = await createQueue(client, interaction);
 
         try {
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);
