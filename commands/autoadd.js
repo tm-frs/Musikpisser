@@ -4,6 +4,23 @@ const { QueueRepeatMode } = require('discord-player');
 const maxVol = require("../config.js").opt.maxVol;
 const wait = require('node:timers/promises').setTimeout;
 
+  /*
+  * NEUEN TRACK/PLAYLIST ADDEN
+  * ---------------------------
+  * 1. Einfacher Track, keine Playlist
+  * - neue Choice hinzufügen mit Name als name und URL als value
+  * - Wenn gewollt, unten eine weitere Option (LoopMode, volume, ...) hinzufügen bzw. neuen Track irgendwo eingliedern mit logischem ODER
+  * 
+  * 2. Playlist bestehend aus einer URL
+  * - neue Choice hinzufügen mit Name als name und URL als value
+  * - im playlists-Array die URL hinzufügen
+  * 
+  * 3. Playlist/Tracks bestehend aus mehreren URLs
+  * - neue Choice hinzufügen mit Name als name und internem Namen (nur Kleinbuchstaben) als value
+  * - in der UrlMap-Map hinzufügen (mit "UrlMap.set([interner Name], [Array mit URLs (sie werden nach dieser Reihenfolge hinzugefügt)]);")
+  * - Wenn gewollt, internen Namen zum playlists-Array hinzufügen oder unten eine eigene Option (LoopMode, volume, ...) hinzufügen bzw. irgendwo eingliedern mit logischem ODER
+  */
+
 module.exports = {
     description: "Adds a song/playlist that has been added to the bot's code.",
     name: 'autoadd',
