@@ -261,11 +261,11 @@ if (othervoicechannel) return int.editReply({ content: `You are not on the same 
           addTrack(selectedResult);
 
     const ui_disabled = [ {type: 1, components: [{style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: true, type: 2}]} ]
-    int.update({ components: ui_disabled}).catch(e => { })
+    int.message.edit({ components: ui_disabled}).catch(e => { })
       
     setTimeout(function() {
       const ui_enabled = [ {type: 1, components: [{style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2}]} ]
-      int.editReply({ components: ui_enabled}).catch(e => { })
+      int.message.edit({ components: ui_enabled}).catch(e => { })
     }, 30000);
     }
         break
@@ -341,7 +341,7 @@ if (othervoicechannel) return int.editReply({ content: `You are not on the same 
 	    embed.setTimestamp();
 	    embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
       const ui = [ {type: 1, components: [{style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2}]} ]
-	    int.update({ embeds: [embed], components: ui }).catch(e => { })
+	    int.message.edit({ embeds: [embed], components: ui }).catch(e => { })
      }
     createembed(name, selection, selectedResult);
     } else {
