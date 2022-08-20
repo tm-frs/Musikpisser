@@ -55,7 +55,7 @@ module.exports = {
 
     const queue = await createQueue(client, interaction);
     
-    const addSingle = async () => {
+    const addSingle = async (target) => {
         const res = await client.player.search(target, {
             requestedBy: interaction.member,
             searchEngine: QueryType.AUTO
@@ -83,26 +83,28 @@ module.exports = {
 //		console.log(playlists.includes(target))
     }
     
-      const addMultiple = async (target) => {
+      const addMultiple = async (target, targetInput, i) => {
         const res = await client.player.search(target, {
             requestedBy: interaction.member,
             searchEngine: QueryType.AUTO
         });
 
-        if (!res || !res.tracks.length) return interaction.editReply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
+        if (!res || !res.tracks.length) if (i===0) return interaction.editReply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
+        if (!res || !res.tracks.length) if (i!==0) return interaction.followUp({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
       
         try {
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);
         } catch {
             await client.player.deleteQueue(interaction.guild.id);
-            return interaction.editReply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+            if (i===0) return interaction.editReply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+            if (i!==0) return interaction.followUp({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
         }
 
-        await interaction.editReply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
+        if (i===0) await interaction.editReply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
 
         res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]);
 
-		if (playlists.includes(target)) { // prüfen auf playlist
+		if (playlists.includes(targetInput)) { // prüfen auf playlist
 			queue.setVolume(0); // volume auf 0, wenn playlist ausgewählt wurde
 		}
 
@@ -112,10 +114,10 @@ module.exports = {
     await wait(100);
     }  
   
-    if (!isMultipleTargets) await addSingle();
+    if (!isMultipleTargets) await addSingle(target);
     if (isMultipleTargets) {
       for (var i = 0; i < (targetArray.length); i++) {
-        await addMultiple(targetArray[i]);
+        await addMultiple(targetArray[i], target, i);
       }
     }
 
@@ -126,12 +128,14 @@ module.exports = {
       await wait(4000); //Wait for 4 seconds
             // loop track:
 				const success = queue.setRepeatMode(QueueRepeatMode.TRACK);
-        interaction.channel.send({ content: success ? `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, Current track will be repeated non-stop 🔂` : `${interaction.member.user}, Could not update loop mode! ❌` }).catch(e => {});
+        success ? interaction.followUp({ content: `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, Current track will be repeated non-stop 🔂` }).catch(e => {}) :
+        interaction.followUp({ content: `${interaction.member.user}, Could not update loop mode! ❌`, ephemeral: true }).catch(e => {});
+        
       
 			  await wait(1); // Wait for 0.001 seconds
             // volume:
 				queue.setVolume(250);
-				interaction.channel.send({ content: `Volume changed to **250%** (maximum is **${maxVol}%**) 🔊` }).catch(e => {});
+				interaction.followUp({ content: `Volume changed to **250%** (maximum is **${maxVol}%**) 🔊` }).catch(e => {});
       }
       rasputinprep();
 		} else if (target==='https://www.youtube.com/watch?v=RHRKu5mStNk') { //widepuin ---------------------------------------------------------------------------------------------------------------
@@ -139,12 +143,13 @@ module.exports = {
         await wait(4000); // Wait for 4 seconds
             // loop track:
 				const success = queue.setRepeatMode(QueueRepeatMode.TRACK);    
-				interaction.channel.send({ content: success ? `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, Current track will be repeated non-stop 🔂` : `${interaction.member.user}, Could not update loop mode! ❌` }).catch(e => {});
+				success ? interaction.followUp({ content: `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, Current track will be repeated non-stop 🔂` }).catch(e => {}) :
+        interaction.followUp({ content: `${interaction.member.user}, Could not update loop mode! ❌`, ephemeral: true }).catch(e => {});
 
 			  await wait(1); // Wait for 0.001 seconds
             // volume:
 				queue.setVolume(200);    
-			  interaction.channel.send({ content: `Volume changed to **200%** (maximum is **${maxVol}%**) 🔊` }).catch(e => {});
+			  interaction.followUp({ content: `Volume changed to **200%** (maximum is **${maxVol}%**) 🔊` }).catch(e => {});
 			}
       wideputinprep();
 		} else if (playlists.includes(target)) { //Playlists ------------------------------------------------------------------------------------------------------------------------------------------
@@ -152,13 +157,14 @@ module.exports = {
         await wait(4000); // Wait for 4 seconds
 				// shuffle:
 				queue.shuffle();
-				interaction.channel.send({ content: `Queue has been shuffled! ✅` }).catch(e => {});
+				interaction.followUp({ content: `Queue has been shuffled! ✅` }).catch(e => {});
         
 			// Warten für 4 Sekunden (0 Sekunden danach)
 			  await wait(1); // Wait for 0.001 seconds
 				// loop queue:
 				const success = queue.setRepeatMode(QueueRepeatMode.QUEUE);
-				interaction.channel.send({ content: success ? `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, The whole sequence will repeat non-stop 🔁` : `${interaction.member.user}, Something went wrong. ❌` }).catch(e => {});
+        success ? interaction.followUp({ content: `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, The whole sequence will repeat non-stop 🔁` }).catch(e => {}) :
+        interaction.followUp({ content: `${interaction.member.user}, Could not update loop mode! ❌`, ephemeral: true }).catch(e => {});
       
 			  await wait(1); // Wait for 0.001 seconds
 				// skip:
