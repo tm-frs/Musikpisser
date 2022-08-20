@@ -51,6 +51,8 @@ module.exports = {
     const isMultipleTargets = UrlMap.has(target);
 		const targetArray = isMultipleTargets ? UrlMap.get(target) : [];
 
+    await interaction.deferReply();
+
     const queue = await createQueue(client, interaction);
     
     const addSingle = async () => {
@@ -59,16 +61,16 @@ module.exports = {
             searchEngine: QueryType.AUTO
         });
 
-        if (!res || !res.tracks.length) return interaction.reply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
+        if (!res || !res.tracks.length) return interaction.editReply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
 
         try {
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);
         } catch {
             await client.player.deleteQueue(interaction.guild.id);
-            return interaction.reply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+            return interaction.editReply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
         }
 
-        await interaction.reply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
+        await interaction.editReply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
 
         res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]);
 
@@ -87,16 +89,16 @@ module.exports = {
             searchEngine: QueryType.AUTO
         });
 
-        if (!res || !res.tracks.length) return interaction.reply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
+        if (!res || !res.tracks.length) return interaction.editReply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
       
         try {
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);
         } catch {
             await client.player.deleteQueue(interaction.guild.id);
-            return interaction.reply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+            return interaction.editReply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
         }
 
-        await interaction.reply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
+        await interaction.editReply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
 
         res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]);
 
