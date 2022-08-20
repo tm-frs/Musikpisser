@@ -216,7 +216,9 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
         break
         case 'addAgainButton': {
 
-if (othervoicechannel) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+    await int.deferReply();
+
+if (othervoicechannel) return int.editReply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
 
     const selection = parseInt(((int.message.embeds[0].description).substr(-20, 2)).replace("*", ''))-1
     const name = ((int.message.embeds[0].title).substr(17,((int.message.embeds[0].title).length)-18))
@@ -224,7 +226,7 @@ if (othervoicechannel) return int.reply({ content: `You are not on the same audi
     const resultCount = (resultArray.length-2)/2
     const resultURLs = resultCount===1 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33))] : resultCount===2 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33))] : resultCount===3 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33))] : resultCount===4 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33))] : resultCount===5 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33))] : resultCount===6 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33))] : resultCount===7 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33))] : resultCount===8 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33))] : resultCount===9 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33)),(resultArray[17].substr(31,((resultArray[17]).length)-33))] : resultCount===10 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33)),(resultArray[17].substr(31,((resultArray[17]).length)-33)),(resultArray[19].substr(31,((resultArray[19]).length)-33))] : []
     const selectedResult = resultURLs[selection]
-    if (int.member.voice.channel) {
+    if (!int.member.voice.channel) return int.editReply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
           const addTrack = async (selectedResult) => {
             const queue = await createQueue(client, int);
             const res = await client.player.search(selectedResult, {
@@ -235,10 +237,10 @@ if (othervoicechannel) return int.reply({ content: `You are not on the same audi
                 if (!queue.connection) await queue.connect(int.member.voice.channel);
             } catch {
                 await client.player.deleteQueue(int.guildId);
-                return int.message.reply({ content: `${int.user}, I can't join the audio channel. ❌` }).catch(e => { });
+                return int.editReply({ content: `${int.user}, I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
             }
-            if (!res || !res.tracks.length) return int.message.reply({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.` }).catch(e => { });
-            await int.message.reply({ content: `${int.user}, **Track ${selection+1}** is loading again... 🎧` }).catch(e => { });
+            if (!res || !res.tracks.length) return int.editReply({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true }).catch(e => { });
+            await int.editReply({ content: `${int.user}, **Track ${selection+1}** is loading again... 🎧` }).catch(e => { });
 
          
       const filter = res.tracks[0].title; // adds an variable that is used to check for the blacklist
@@ -247,7 +249,7 @@ if (othervoicechannel) return int.reply({ content: `You are not on the same audi
 //      console.log('Blacklist detection:', blacklist.includes(filter)); // Test auf Blacklist mit Konsolenausgabe
       
         if (blacklist.includes(filter)) { // Filter
-          return int.message.reply({ content: `${int.user}, Something went wrong :( ❌` }).catch(e => { }); // "Fehlermeldung"
+          return int.followUp({ content: `${int.user}, Something went wrong :( ❌`, ephemeral: true }).catch(e => { }); // "Fehlermeldung"
         } else {
           queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
         }
@@ -262,14 +264,13 @@ if (othervoicechannel) return int.reply({ content: `You are not on the same audi
       const ui_enabled = [ {type: 1, components: [{style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2}]} ]
       int.editReply({ components: ui_enabled}).catch(e => { })
     }, 30000);
-    } else {
-      int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
-    }
     }
         break
         case 'trackMenu': {
 
-if (othervoicechannel) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+          await int.deferReply();
+
+if (othervoicechannel) return int.editReply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
 
           const chosenTrack = int.values[0]
           const selection = chosenTrack=='t1' ? 0 : chosenTrack=='t2' ? 1 : chosenTrack=='t3' ? 2 : chosenTrack=='t4' ? 3 : chosenTrack=='t5' ? 4 : chosenTrack=='t6' ? 5 : chosenTrack=='t7' ? 6 : chosenTrack=='t8' ? 7 : chosenTrack=='t9' ? 8 : chosenTrack=='t10' ? 9 : 'error'
@@ -298,10 +299,10 @@ if (othervoicechannel) return int.reply({ content: `You are not on the same audi
                 if (!queue.connection) await queue.connect(int.member.voice.channel);
             } catch {
                 await client.player.deleteQueue(int.guildId);
-                return int.message.reply({ content: `${int.user}, I can't join the audio channel. ❌` }).catch(e => { });
+                return int.editReply({ content: `${int.user}, I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
             }
-            if (!res || !res.tracks.length) return int.message.reply({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.` }).catch(e => { });
-            await int.message.reply({ content: `${int.user}, Your chosen track is loading now... 🎧` }).catch(e => { });
+            if (!res || !res.tracks.length) return int.editReply({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true }).catch(e => { });
+            await int.editReply({ content: `${int.user}, Your chosen track is loading now... 🎧` }).catch(e => { });
 
          
       const filter = res.tracks[0].title; // adds an variable that is used to check for the blacklist
@@ -310,7 +311,7 @@ if (othervoicechannel) return int.reply({ content: `You are not on the same audi
 //      console.log('Blacklist detection:', blacklist.includes(filter)); // Test auf Blacklist mit Konsolenausgabe
       
         if (blacklist.includes(filter)) { // Filter
-          return int.message.reply({ content: `${int.user}, Something went wrong :( ❌` }).catch(e => { }); // "Fehlermeldung"
+          return int.followUp({ content: `${int.user}, Something went wrong :( ❌`, ephemeral: true }).catch(e => { }); // "Fehlermeldung"
         } else {
           queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
         }
@@ -338,11 +339,11 @@ if (othervoicechannel) return int.reply({ content: `You are not on the same audi
      }
     createembed(name, selection, selectedResult);
     } else {
-      int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+      int.editReply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
       resetMenu(); 
     }
 	  } else {
-	  	int.reply({ content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
+	  	int.editReply({ content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
       resetMenu(); 
 	  }
    }
