@@ -97,18 +97,19 @@ player.on('queueEnd', (queue) => {
 const express = require("express");
 const app = express();
 const http = require("http");
-const AppIp = (`http://127.0.0.1:`+(process.env.PORT || 3001)+`/`)
+const AppIp = (`http://127.0.0.1:`+(process.env['PORT'] || 3001)+`/`)
 app.get("/", (request, response) => {
   response.sendStatus(200);
 });
-app.listen(process.env.PORT || 3001);
+app.listen(process.env['PORT'] || 3001);
 setInterval(() => {
   http.get(AppIp);
 }, 60000);
 console.log(`App running on: ${AppIp}`)
 
-if(process.env.TOKEN){
-client.login(process.env.TOKEN).catch(e => {
+const botToken = process.env['TOKEN'];
+if(botToken){
+client.login(botToken).catch(e => {
 console.log(`The Bot Token you entered into your bot's .env-file is incorrect or your bot's INTENTS are OFF!`)
 })
 } else {
