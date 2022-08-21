@@ -6,7 +6,7 @@ module.exports = {
 
     opt: {
         playDl: {
-            replaceYtdl: true // if you have problems with the bot, try to enable this (default: true)
+            replaceYtdl: true // this will block the option to skip in youtube tracks. if you have problems with the bot lagging and this is disabled, try to enable this (default: true)
         },
         DJ: {
             enabled: false, //IF YOU WANT ONLY DJS TO USE IT, set false to true. If you haven't, a role with the name you specified will be created. There should only be one role with this name.
