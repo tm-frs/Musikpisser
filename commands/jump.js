@@ -73,9 +73,9 @@ module.exports = {
         const secondsJumpTo = (secondsInput + ((minutesInput + (hoursInput * 60)) * 60));
         const jumpToString = await convertSecondsToString(secondsJumpTo);
 
-        const trackDuration = await queue.current.duration;
-        const trackDurationArray = trackDuration.split(':');
+        const trackDurationArray = (await queue.current.duration).split(':');
         const currentTrackDuration = (trackDurationArray.length===1) ? (+trackDurationArray[0]) : (trackDurationArray.length===2) ? ((+trackDurationArray[0]) * 60 + (+trackDurationArray[1])) : (trackDurationArray.length===3) ? (((+trackDurationArray[0]) * 60 + (+trackDurationArray[1])) * 60 + (+trackDurationArray[2])) : (trackDurationArray.length===4) ? ((((+trackDurationArray[0]) * 24 + (+trackDurationArray[1])) * 60 + (+trackDurationArray[2])) * 60 + (+trackDurationArray[3])) : 0
+        const trackDuration = await convertSecondsToString(currentTrackDuration);
 
         if (!secondsInput && !minutesInput && !hoursInput) return interaction.editReply({ content: `You need to specify where you want to jump to. ❌`, ephemeral: true }).catch(e => { })
         if ((secondsInput < 0) || (minutesInput < 0) || (hoursInput < 0)) return interaction.editReply({ content: `You can't jump to a negative time! ❌`, ephemeral: true }).catch(e => { })
