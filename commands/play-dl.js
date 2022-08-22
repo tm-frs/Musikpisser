@@ -55,7 +55,7 @@ module.exports = {
           console.log('Toggle play-dl command executed by: '+messagecreator); // will let you see in the logs who used the command 
           if (adminperms.includes(messagecreator)) { // checks if user is allowed to toggle play-dl
             const newSetting = await togglePlayDl(client);
-            interaction.reply({ content: `play-dl was switched **from ${!newSetting ? 'enabled' : 'disabled'} to ${newSetting ? 'enabled' : 'disabled'}** ✅\n*(to apply changes, wait for the sond to finish or skip the track)*` }).catch(e => { });
+            interaction.reply({ content: `play-dl was switched **from ${!newSetting ? 'enabled' : 'disabled'} to ${newSetting ? 'enabled' : 'disabled'}** ✅\n*(to apply changes, wait for the song to finish or skip the track)*` }).catch(e => { });
           } else {
             console.log('Toggle play-dl command not executed because '+messagecreator+' has no permission. \nThe following user(s) is/are allowed to crash the bot:\n'+adminperms); // writes in logs if command failed because there are no permissions
             return interaction.reply({ content: `You are not allowed to do this! ❌`, ephemeral: true }).catch(e => { }); // tells the user he is not allowed to toggle play-dl
