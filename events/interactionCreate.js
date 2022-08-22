@@ -7,6 +7,31 @@ const { SnowflakeUtil } = require('discord.js');
 const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
 const wait = require('node:timers/promises').setTimeout;
+const configPlayDl = require("../config.js").opt.playDl.replaceYtdl;
+
+var fs = require('fs');
+const streamToString = async (readable) => {
+  let result = '';
+  for await (const chunk of readable) {
+    result += chunk;
+  }
+  return result;
+}
+const updatePlayDl = async () => {
+  try {
+    var playDlFile = fs.createReadStream('play-dl_override.txt', { flags: 'r' });
+    const fileOutputString = await streamToString(playDlFile);
+    const fileOutputBoolean = (fileOutputString==='true') ? true : (fileOutputString==='false') ? false : configPlayDl;
+    return fileOutputBoolean;
+  } catch (error) {
+    if (error.code==='ENOENT') {
+      return configPlayDl;
+    } else {
+      throw error;
+    }
+  }
+}
+
 const createrole = async (client, int, DJ) => {
   await int.guild.roles.create({name: DJ.roleName, color: "#C27C0E", mentionable: true, permissions:[]});
 
@@ -36,7 +61,9 @@ const replyNotAllowed = async (client, int, DJ) => {
   return int.reply({ embeds: [embed], ephemeral: true}).catch(e => { })
 }
 
-module.exports = (client, int) => {
+module.exports = async (client, int) => {
+
+client.config.opt.playDl.replaceYtdl = await updatePlayDl();
 
 if(!int.guild) return int.reply({ content: `You only can use commands on servers. ❌`, ephemeral: true});
 
