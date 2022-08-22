@@ -9,6 +9,8 @@ module.exports = {
     showHelp: false,
 
     run: async (client, interaction) => {
+//const testGuild = (await client.guilds.fetch())/*hier abtrennen, um alle Server zu zeigen*/.find(guild => guild.id === ""/*<- ID des anzuzeigenden Servers*/);
+//console.log(testGuild)
         const commands = client.commands.filter(x => x.showHelp !== false);
           const unixReadyAt = Math.floor(new Date(client.readyAt).getTime() / 1000);
           const discordReadyAt = `<t:${unixReadyAt}:R> (<t:${unixReadyAt}:d>, <t:${unixReadyAt}:T>)`
