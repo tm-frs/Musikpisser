@@ -75,12 +75,12 @@ module.exports = {
         const secondsInput = interaction.options.getInteger('second');
         const minutesInput = interaction.options.getNumber('minute');
         const hoursInput = interaction.options.getNumber('hour');
-        const secondsJumpTo = (secondsInput + ((minutesInput + (hoursInput * 60)) * 60));
+        const secondsJumpTo = (secondsInput + parseInt((minutesInput + (hoursInput * 60)) * 60));
         const jumpToString = await convertSecondsToString(secondsJumpTo);
 
         const currentProgressSeconds = await convertStringToSeconds((await queue.getPlayerTimestamp()).current);
         const currentProgressString = await convertSecondsToString(currentProgressSeconds);
-        
+
         const trackDurationString = await convertStringToSeconds(await queue.current.duration);
         const trackDurationSeconds = await convertSecondsToString(trackDurationString);
 
