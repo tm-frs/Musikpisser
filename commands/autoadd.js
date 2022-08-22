@@ -62,24 +62,24 @@ module.exports = {
 
     const queue = await createQueue(client, interaction);
     
-      const addTracks = async (target, targetInput, i) => {
+      const addTracks = async (target, targetInput, trackIndex, trackAmount) => {
         const res = await client.player.search(target, {
             requestedBy: interaction.member,
             searchEngine: QueryType.AUTO
         });
 
-        if (!res || !res.tracks.length) if (i===0) return interaction.editReply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
-        if (!res || !res.tracks.length) if (i!==0) return interaction.followUp({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
+        if (!res || !res.tracks.length) if (trackIndex===0) return interaction.editReply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
+        if (!res || !res.tracks.length) if (trackIndex!==0) return interaction.followUp({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
       
         try {
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);
         } catch {
             await client.player.deleteQueue(interaction.guild.id);
-            if (i===0) return interaction.editReply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
-            if (i!==0) return interaction.followUp({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+            if (trackIndex===0) return interaction.editReply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+            if (trackIndex!==0) return interaction.followUp({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
         }
 
-        if (i===0) await interaction.editReply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
+        if (trackIndex===0) await interaction.editReply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
 
         res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]);
 
@@ -90,13 +90,13 @@ module.exports = {
 //		console.log(playlists)
 //		console.log(target)
 //		console.log(playlists.includes(target))
-    await wait(100);
+    if (trackAmount!==(trackIndex + 1)) await wait(100);
     }  
   
     if (!isInMap) return interaction.editReply({ content: `Something went completely wrong! ❌`, ephemeral: true }).catch(e => { });
     if (isInMap) {
       for (var i = 0; i < (targetArray.length); i++) {
-        await addTracks(targetArray[i], target, i);
+        await addTracks(targetArray[i], target, i, targetArray.length);
       }
     }
 
