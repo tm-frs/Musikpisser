@@ -36,6 +36,11 @@ const convertSecondsToString = async (secondsInput) => {
 
     return stringOutput;
 }
+const convertStringToSeconds = async (stringInput) => {
+    const stringArray = stringInput.split(':');
+    const seconds = (stringArray.length===1) ? (+stringArray[0]) : (stringArray.length===2) ? ((+stringArray[0]) * 60 + (+stringArray[1])) : (stringArray.length===3) ? (((+stringArray[0]) * 60 + (+stringArray[1])) * 60 + (+stringArray[2])) : (stringArray.length===4) ? ((((+stringArray[0]) * 24 + (+stringArray[1])) * 60 + (+stringArray[2])) * 60 + (+stringArray[3])) : 0;
+    return seconds;
+}
 
 module.exports = {
     description: "Allows you to jump to a specific part of the current track.",
@@ -73,17 +78,19 @@ module.exports = {
         const secondsJumpTo = (secondsInput + ((minutesInput + (hoursInput * 60)) * 60));
         const jumpToString = await convertSecondsToString(secondsJumpTo);
 
-        const trackDurationArray = (await queue.current.duration).split(':');
-        const currentTrackDuration = (trackDurationArray.length===1) ? (+trackDurationArray[0]) : (trackDurationArray.length===2) ? ((+trackDurationArray[0]) * 60 + (+trackDurationArray[1])) : (trackDurationArray.length===3) ? (((+trackDurationArray[0]) * 60 + (+trackDurationArray[1])) * 60 + (+trackDurationArray[2])) : (trackDurationArray.length===4) ? ((((+trackDurationArray[0]) * 24 + (+trackDurationArray[1])) * 60 + (+trackDurationArray[2])) * 60 + (+trackDurationArray[3])) : 0
-        const trackDuration = await convertSecondsToString(currentTrackDuration);
+        const currentProgressSeconds = await convertStringToSeconds((await queue.getPlayerTimestamp()).current);
+        const currentProgressString = await convertSecondsToString(currentProgressSeconds);
+        
+        const trackDurationString = await convertStringToSeconds(await queue.current.duration);
+        const trackDurationSeconds = await convertSecondsToString(trackDurationString);
 
         if (!secondsInput && !minutesInput && !hoursInput) return interaction.editReply({ content: `You need to specify where you want to jump to. ❌`, ephemeral: true }).catch(e => { })
         if ((secondsInput < 0) || (minutesInput < 0) || (hoursInput < 0)) return interaction.editReply({ content: `You can't jump to a negative time! ❌`, ephemeral: true }).catch(e => { })
-        if (secondsJumpTo > currentTrackDuration) return interaction.editReply({ content: `The current track is only **${trackDuration}** long but you wanted to jump to **${jumpToString}**. ❌`, ephemeral: true }).catch(e => { })
+        if (secondsJumpTo > trackDurationString) return interaction.editReply({ content: `The current track is only **${trackDurationSeconds}** long but you wanted to jump to **${jumpToString}**. ❌`, ephemeral: true }).catch(e => { })
 
         const success = queue.seek(secondsJumpTo * 1000);
 
-        return success ? interaction.editReply({ content: `Jumped from **${trackDuration}** to **${jumpToString}**. ✅` }).catch(e => { })
+        return success ? interaction.editReply({ content: `Jumped from **${currentProgressString}** to **${jumpToString}** (the track is **${trackDurationSeconds}** long). ✅` }).catch(e => { })
         : interaction.editReply({ content: `Something went wrong. ❌`, ephemeral: true }).catch(e => { });
     },
 };
