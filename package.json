@@ -4,7 +4,10 @@
   "author": "CraftingShadowDE",
   "description": "Discord.js V14 Compatible || CraftingShadowDE's Music Bot Shared on GitHub!",
   "scripts": {
-    "start": "node main.js PORT=3001"
+    "start": "node main.js",
+    "prereinstall": "rm -rf node_modules",
+    "reinstall": "npm install",
+    "postreinstall": "curl -L https://github.com/fent/node-ytdl-core/pull/1111.patch | patch node_modules/ytdl-core/lib/sig.js"
   },
   "repository": {
     "type": "git",
