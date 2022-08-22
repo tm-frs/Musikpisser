@@ -70,7 +70,7 @@ module.exports = {
        if (!queue || !queue.playing) return interaction.editReply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })
 
         const isYouTubeURL = await ytdl.validateURL(await queue.current.url);
-       if (client.config.opt.playDl.replaceYtdl && isYouTubeURL) return interaction.editReply({ content: `You can't use the jump-feature because play-dl is active and this track is a YouTube-Track. ❌`, ephemeral: true }).catch(e => { })
+       if (client.config.opt.playDl.replaceYtdl && isYouTubeURL) return interaction.editReply({ content: `You can't use the jump-feature because play-dl is active and this track is a YouTube-Track. ❌\n*(Use \`/play-dl info\` to get more information.)*`, ephemeral: true }).catch(e => { })
 
         const secondsInput = interaction.options.getInteger('second');
         const minutesInput = interaction.options.getNumber('minute');

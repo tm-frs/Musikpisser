@@ -1,4 +1,5 @@
 
 /node_modules
 logins.txt
+play-dl_override.txt
 .env
