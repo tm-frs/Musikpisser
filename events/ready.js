@@ -1,18 +1,21 @@
 var fs = require('fs');
-var util = require('util');
 var logFile = fs.createWriteStream('logins.txt', { flags: 'as+' });
+var playDlFile = fs.createWriteStream('play-dl_override.txt', { flags: 'w' });
 
-const writefile = function () {
-  logFile.write(util.format.apply(null, arguments) + '\n');
+const writefile = function (file, text) {
+  file.write(text);
 }
 
 module.exports = async (client) => {
+    const configPlayDl = require("../config.js").opt.playDl.replaceYtdl;
+    writefile(playDlFile, (""+configPlayDl))
+
     const logPresenceUpdates = require("../config.js").logPresenceUpdates;
     const unixReadyAt = Math.floor(new Date(client.readyAt).getTime() / 1000);
     const jsReadyAtShort = ((new Date(unixReadyAt * 1000)).toUTCString()).replace("GMT", "(UTC+0)");
     const jsReadyAtLong = ((new Date(unixReadyAt * 1000)).toUTCString()).replace("GMT", "UTC+0000 (Coordinated Universal Time)");
     const loginText = `------------------------LOGIN-INFORMATION------------------------\n${client.user.username} Login! Login at: \n${jsReadyAtLong}\n-----------------------------------------------------------------`;
-    writefile(`\n${loginText}\n`);
+    writefile(logFile, (`\n${loginText}\n`+'\n'));
     console.log(loginText);
     client.user.accentColor = '#18191C';
   
