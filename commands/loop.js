@@ -10,7 +10,6 @@ module.exports = {
 		name: 'mode',
 		type: ApplicationCommandOptionType.String,
 		description: 'Loop type',
-		required: true,
 		choices: [
 		{name: "Info", value: 'info'}, //INFO
 		{name: "📴 Off", value: 'off'}, //OFF
