@@ -10,7 +10,7 @@ module.exports = {
         const queue = client.player.getQueue(interaction.guild.id);
  
         if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { });
-        if (!queue.tracks[0] && !(queue.repeatMode===2 || queue.repeatMode===3)) return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch(e => { });
+        if (!queue.tracks[0] && !(queue.repeatMode===2 || queue.repeatMode===3)) return interaction.reply({ content: `No music in queue after current so this would stop the music ❌`, ephemeral: true }).catch(e => { });
       
       if (queue.repeatMode===1){
         queue.setRepeatMode(QueueRepeatMode.OFF);
