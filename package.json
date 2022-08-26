@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node main.js",
     "prereinstall": "rm -rf node_modules",
-    "reinstall": "npm install",
-    "postreinstall": "curl -L https://github.com/fent/node-ytdl-core/pull/1111.patch | patch node_modules/ytdl-core/lib/sig.js"
+    "reinstall": "npm install"
   },
   "repository": {
     "type": "git",
@@ -30,7 +29,7 @@
     "opusscript": "^0.0.8",
     "orio.db": "^3.1.1",
     "play-dl": "^1.9.5",
-    "ytdl-core": "^4.11.0"
+    "ytdl-core": "^4.11.1"
   },
   "engines": {
     "node": "16.x"
