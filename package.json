@@ -30,7 +30,7 @@
     "opusscript": "^0.0.8",
     "orio.db": "^3.1.1",
     "play-dl": "^1.9.5",
-    "ytdl-core": "^4.11.0"
+    "ytdl-core": "^4.11.1"
   },
   "engines": {
     "node": "16.x"
