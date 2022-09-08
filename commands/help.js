@@ -25,7 +25,7 @@ module.exports = {
 //		.addField(`**DJ mode active:** `, DJ.enabled) //if reactivated, convert to addFields
 //		.addField(`**Available for everyone:** `, DJ.notAffected) //if reactivated, convert to addFields
         .setTimestamp()
-        .setFooter({ text: 'Music Bot - by ️CraftingShadowDE', iconURL:interaction.user.displayAvatarURL({ dynamic: true }) })
+        .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL:interaction.user.displayAvatarURL({ dynamic: true }) })
         interaction.reply({ embeds: [embed] }).catch(e => { })
     },
 };
