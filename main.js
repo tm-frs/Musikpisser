@@ -1,9 +1,11 @@
 const configvolumeSmoothness = require("./config.js").opt.volumeSmoothness;
 const configinitialVolume = require("./config.js").opt.initialVolume;
 require('dotenv').config();
+const netTools = require("./netTools.js");
 const { Player } = require('discord-player');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
+const wait = require('node:timers/promises').setTimeout;
 
 let client = new Client({
     intents: [
@@ -97,15 +99,18 @@ player.on('queueEnd', (queue) => {
 const express = require("express");
 const app = express();
 const http = require("http");
-const AppIp = (`http://127.0.0.1:`+(process.env['PORT'] || 3001)+`/`)
+const AppIp = (`http://127.0.0.1:`+(netTools.getPort())+`/`)
 app.get("/", (request, response) => {
   response.sendStatus(200);
 });
-app.listen(process.env['PORT'] || 3001);
+app.listen(netTools.getPort());
 setInterval(() => {
   http.get(AppIp);
 }, 60000);
-console.log(`App running on: ${AppIp}`)
+const logIPs = async () => {
+    console.log(`App running on: ${AppIp}\nPublic IP: ${await netTools.getPublicIp()}\nPrivate IP: ${await netTools.getPrivateIp()}`);
+}
+logIPs();
 
 const botToken = process.env['TOKEN'];
 if(botToken){
