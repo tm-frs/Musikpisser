@@ -32,19 +32,20 @@ module.exports = {
 		name: 'target',
 		description: "What song/playlist should be added?",
 		choices: [
-		{name: "Toad Sings Ra Ra Rasputin", value: 'rasputin'}, //rasputin
-		{name: "Song for Denise (Maxi Version) bass boosted 1 hour", value: 'wideputin'}, //widepuin
-		{name: "Undertale OST playlist (only boss fights)", value: 'undertale'}, //undertale
-		{name: "Hypixel Skyblock OST", value: 'skyblock'}, //skyblock
-		{name: "Chill Music (\"Poké & Chill\", \"Zelda & Chill\", \"Zelda & Chill 2\", ...)", value: 'chill'}, //chill
-    {name: "Paper Mario 2 OST", value: 'papermario2'},
+		{name: "Toad Sings Ra Ra Rasputin", value: 'rasputin'}, //Ra Ra Rasputin (Toad version) loop
+		{name: "Song for Denise (Maxi Version) bass boosted 1 hour", value: 'wideputin'}, //Widepuin music loop
+		{name: "Undertale OST playlist (only boss fights)", value: 'undertale'}, //Undertale OST (boss fights only)
+		{name: "Hypixel Skyblock OST", value: 'skyblock'}, //Hypixel Skyblock OST
+		{name: "Chill Music (\"Poké & Chill\", \"Zelda & Chill\", \"Zelda & Chill 2\", ...)", value: 'chill'}, //Chill Music (by Mikel)
+    {name: "Paper Mario 2 OST", value: 'papermario2'}, //Paper Mario 2 OST
+    {name: "Splatoon 3 OST", value: 'splatoon3'}, //Splatoon 3 OST
 		],
 		required: true
 	} ],
     voiceChannel: true,
 
     run: async (client, interaction) => {
-		const playlists = ['undertale','skyblock','chill','papermario2']
+		const playlists = ['undertale','skyblock','chill','papermario2','splatoon3']
     const target = interaction.options.getString('target') 
 
     const UrlMap = new Map();
@@ -54,6 +55,7 @@ module.exports = {
     UrlMap.set('skyblock', ['https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV']);
     UrlMap.set('chill', ['https://open.spotify.com/album/3oNO1P0Qlr4oSlMA2MIj67','https://open.spotify.com/album/0N0noai9OQs1rYEaS47vJw','https://open.spotify.com/album/4lBMa9JEuCSIs3NkPEIwvN']); // ['Zelda & Chill 1','Zelda & Chill 2','Poké & Chill']
     UrlMap.set('papermario2', ['https://youtube.com/playlist?list=PLZODI99P5wP9Qh_t4VNf4iRFEETG37Dhy']);
+    UrlMap.set('splatoon3',['https://www.youtube.com/playlist?list=PLxGVeb0fxoSjiSkrp8x6CsdYdzCnDD4WD'])
 
     const isInMap = UrlMap.has(target);
 		const targetArray = isInMap ? UrlMap.get(target) : [];
