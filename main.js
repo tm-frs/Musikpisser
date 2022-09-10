@@ -108,7 +108,7 @@ setInterval(() => {
   http.get(AppIp);
 }, 60000);
 const logIPs = async () => {
-    console.log(`App running on: ${AppIp}\nPublic IP: ${await netTools.getPublicIp()}\nPrivate IP: ${await netTools.getPrivateIp()}`);
+    console.log(`App running!\nPublic IP: ${await netTools.getPublicIp()}\nPrivate IP: ${await netTools.getPrivateIp()}:${netTools.getPort()}`);
 }
 logIPs();
 
