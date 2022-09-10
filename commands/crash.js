@@ -12,7 +12,7 @@ module.exports = {
         if (adminperms.includes(messagecreator)) { // checks if user is allowed to let the bot crash
         interaction.reply({ content: `Bot will be crashed ️✅` }).catch(e => { });
 		setTimeout(function() {
-			dgdfhfhjgjh // just some random things that are just here to crash the bot if needed
+			process.kill(process.pid); //kill the bot process
 		}, 1000);
         } else {
           console.log('Crash command not executed because '+messagecreator+' has no permission. \nThe following user(s) is/are allowed to crash the bot:\n'+adminperms); // writes in logs if command failed because there are no permissions
