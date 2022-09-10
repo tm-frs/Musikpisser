@@ -5,7 +5,33 @@ const netTools = require("./netTools.js");
 const { Player } = require('discord-player');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
+const util = require('util');
 const wait = require('node:timers/promises').setTimeout;
+
+
+let nowDateString = (new Date(Date.now())).toISOString().replace("T","_").replace(":","-").replace(":","-");
+nowDateString = nowDateString.substring(0,(nowDateString.length - 5));
+var logfileStream = fs.createWriteStream(`./logs/${nowDateString}.log`, { flags: 'as+' });
+/*process.stdout.write = process.stderr.write = logfileStream.write.bind(logfileStream);
+process.on('uncaughtException', function(err) {
+    console.error((err && err.stack) ? err.stack : err);
+});*/
+var logStdout = process.stdout;
+var logStderr = process.stderr;
+
+console.log = function() {
+    logfileStream.write(util.format.apply(null, arguments) + '\n');
+    logStdout.write(util.format.apply(null, arguments) + '\n');
+}
+console.error = function() {
+    logfileStream.write(util.format.apply(null, arguments) + '\n');
+    logStderr.write(util.format.apply(null, arguments) + '\n');
+}
+process.on('uncaughtException', function(err) {
+    console.error((err && err.stack) ? err.stack : err);
+    process.kill(process.pid);
+});
+
 
 let client = new Client({
     intents: [
@@ -98,6 +124,7 @@ player.on('queueEnd', (queue) => {
 const express = require("express");
 const app = express();
 const http = require("http");
+const { Console } = require("console");
 const AppIp = (`http://127.0.0.1:`+(netTools.getPort())+`/`)
 app.get("/", (request, response) => {
   response.sendStatus(200);
