@@ -243,10 +243,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
         break
         case 'addAgainButton': {
 
-    const deferReply = async (int) => {
-      await int.deferReply();
-    }
-    deferReply(int);
+    await int.deferReply();
 
 if (othervoicechannel) return int.editReply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
 
@@ -298,10 +295,7 @@ if (othervoicechannel) return int.editReply({ content: `You are not on the same 
         break
         case 'trackMenu': {
 
-          const deferReply = async (int) => {
-            await int.deferReply();
-          }
-          deferReply(int);
+          await int.deferReply();
 
 if (othervoicechannel) return int.editReply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
 
