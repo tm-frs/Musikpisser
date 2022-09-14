@@ -6,6 +6,8 @@ module.exports = {
 
     defaultPublicIpApi: 'api.ipify.org', // the default API to get the public IP from (default: 'api.ipify.org')
 
+    logFileLimit: -1, //the limit of log files (-1 or lower for infinite, 0 for none); latest.log will always be updated (default: -1)
+
     opt: {
         playDl: {
             replaceYtdl: true // this will block the option to skip in youtube tracks. if you have problems with the bot lagging and this is disabled, try to enable this (default: true)
