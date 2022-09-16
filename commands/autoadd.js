@@ -1,4 +1,5 @@
 const createQueue = require("../exports/queue.js").createQueue;
+const TypeMap = require("../exports/TypeMap.js").TypeMap;
 const { ApplicationCommandOptionType } = require('discord.js');
 const { QueryType } = require('discord-player');
 const { QueueRepeatMode } = require('discord-player');
@@ -48,7 +49,7 @@ module.exports = {
 		const playlists = ['undertale','skyblock','chill','papermario2','splatoon3']
     const target = interaction.options.getString('target') 
 
-    const UrlMap = new Map();
+    const UrlMap = new TypeMap('string','object');
     UrlMap.set('rasputin', ['https://www.youtube.com/watch?v=KT85z_tGZro']);
     UrlMap.set('wideputin', ['https://www.youtube.com/watch?v=RHRKu5mStNk']);
     UrlMap.set('undertale', ['https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V']);
