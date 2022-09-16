@@ -6,3 +6,6 @@ In config.js, you can set a limit for these log files (or disable them).
 
 Additionally, a latest.log file will be created (ignoring the config.js file).
 This file is deleted and re-created everytime the bot is started.
+
+There also is a logins.log file which is just a list of all logins (with a timestamp).
+It's creation is also not affected by the configuration.
