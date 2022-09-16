@@ -1,4 +1,4 @@
-const defaultApi = require("./config.js").defaultPublicIpApi;
+const defaultApi = require("../config.js").defaultPublicIpApi;
 var https = require('https');
 var ip = require("ip");
 require('dotenv').config();

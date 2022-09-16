@@ -1,4 +1,4 @@
-const createQueue = require("../queue.js").createQueue;
+const createQueue = require("../exports/queue.js").createQueue;
 const { Colors } = require('discord.js');
 const { InteractionType } = require('discord.js');
 const { ButtonStyle } = require('discord.js');

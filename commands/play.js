@@ -1,4 +1,4 @@
-const createQueue = require("../queue.js").createQueue;
+const createQueue = require("../exports/queue.js").createQueue;
 const { ApplicationCommandOptionType } = require('discord.js');
 const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
