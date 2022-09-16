@@ -18,7 +18,7 @@ const getLogfileAmount = async () => {
     const files = await fs.promises.readdir("./logs/", (err, files) => {
         if (err) throw err;
     });
-    var filesCleared = files.filter(filename => ((filename!=='latest.log') && (filename!=='README.txt')));
+    var filesCleared = files.filter(filename => ((filename!=='latest.log') && (filename!=='README.txt') && (filename!=='logins.log')));
     return filesCleared.length;
 }
 

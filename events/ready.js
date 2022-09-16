@@ -1,5 +1,5 @@
 var fs = require('fs');
-var logFile = fs.createWriteStream('logins.txt', { flags: 'as+' });
+var logFile = fs.createWriteStream('./logs/logins.log', { flags: 'as+' });
 var playDlFile = fs.createWriteStream('play-dl_override.txt', { flags: 'w' });
 
 const writefile = function (file, text) {
