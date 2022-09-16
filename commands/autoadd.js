@@ -57,7 +57,7 @@ module.exports = {
     UrlMap.set('chill', ['https://soundcloud.com/gamechops/sets/zelda-chill','https://soundcloud.com/daniel-egan-16/sets/zelda-and-chill-2','https://soundcloud.com/mikeljakobi/sets/poke-chill']); // ['Zelda & Chill 1','Zelda & Chill 2','Poké & Chill']
     //UrlMap.set('chill', ['https://open.spotify.com/album/3oNO1P0Qlr4oSlMA2MIj67','https://open.spotify.com/album/0N0noai9OQs1rYEaS47vJw','https://open.spotify.com/album/4lBMa9JEuCSIs3NkPEIwvN']); // ['Zelda & Chill 1','Zelda & Chill 2','Poké & Chill']
     UrlMap.set('papermario2', ['https://youtube.com/playlist?list=PLZODI99P5wP9Qh_t4VNf4iRFEETG37Dhy']);
-    UrlMap.set('splatoon3',['https://www.youtube.com/playlist?list=PLxGVeb0fxoSjiSkrp8x6CsdYdzCnDD4WD'])
+    UrlMap.set('splatoon3',['https://www.youtube.com/playlist?list=PLxGVeb0fxoSjiSkrp8x6CsdYdzCnDD4WD']);
 
     const isInMap = UrlMap.has(target);
 		const targetArray = isInMap ? UrlMap.get(target) : [];
