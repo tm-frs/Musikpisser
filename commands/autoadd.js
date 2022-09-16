@@ -6,9 +6,21 @@ const { QueueRepeatMode } = require('discord-player');
 const maxVol = require("../config.js").opt.maxVol;
 const wait = require('node:timers/promises').setTimeout;
 
-  /*
+const combineArraysOfMap = async (keyArray, valueArrayMap) => {
+  var combinedArray = [];
+
+  for (let i = 0; i < keyArray.length; i++) {
+    combinedArray = combinedArray.concat(valueArrayMap.get(keyArray[i]));    
+  }
+
+  return combinedArray;
+}
+
+ /*
   * NEUEN TRACK/NEUE PLAYLIST ADDEN
-  * ---------------------------
+  * -------------------------------
+  * WICHTIG: DIE INTERNEN NAMEN ZWEIER OPTIONEN DÜRFEN SICH NIE GLEICHEN (auch nicht, wenn die eine in der MixMap steht und die andere in der UrlMap)
+  * 
   * 1. Einfacher Track, keine Playlist
   * - neue Choice hinzufügen mit Name als name und internem Namen (nur Kleinbuchstaben) als value
   * - in der UrlMap-Map hinzufügen (mit "UrlMap.set([interner Name], [Array mit URL]);")
@@ -22,6 +34,11 @@ const wait = require('node:timers/promises').setTimeout;
   * 3. Playlist/Tracks bestehend aus mehreren URLs
   * - neue Choice hinzufügen mit Name als name und internem Namen (nur Kleinbuchstaben) als value
   * - in der UrlMap-Map hinzufügen (mit "UrlMap.set([interner Name], [Array mit URLs (sie werden nach dieser Reihenfolge hinzugefügt)]);")
+  * - Wenn gewollt, internen Namen zum playlists-Array hinzufügen oder unten eine eigene Option (LoopMode, volume, ...) hinzufügen bzw. irgendwo eingliedern
+  * 
+  * 4. Kombination aus mehreren bestehenden Inhalten der UrlMap-Map
+  * - neue Choice hinzufügen mit Name als name und internem Namen (nur Kleinbuchstaben) als value
+  * - in der MixMap-Map hinzufügen (mit "MixMap.set([interner Name], [Array mit key's aus der UrlMap]);")
   * - Wenn gewollt, internen Namen zum playlists-Array hinzufügen oder unten eine eigene Option (LoopMode, volume, ...) hinzufügen bzw. irgendwo eingliedern
   */
 
@@ -40,16 +57,18 @@ module.exports = {
 		{name: "Chill Music (\"Poké & Chill\", \"Zelda & Chill\", \"Zelda & Chill 2\", ...)", value: 'chill'}, //Chill Music (by Mikel)
     {name: "Paper Mario 2 OST", value: 'papermario2'}, //Paper Mario 2 OST
     {name: "Splatoon 3 OST", value: 'splatoon3'}, //Splatoon 3 OST
+    {name: "Mix (Undertale, Hypixel Skyblock, Chill Music)", value: 'mix1'}, //Mix 1
 		],
 		required: true
 	} ],
     voiceChannel: true,
 
     run: async (client, interaction) => {
-		const playlists = ['undertale','skyblock','chill','papermario2','splatoon3']
+		const playlists = ['undertale','skyblock','chill','papermario2','splatoon3','mix1']
     const target = interaction.options.getString('target') 
 
     const UrlMap = new TypeMap('string','object');
+    const MixMap = new TypeMap('string','object');
     UrlMap.set('rasputin', ['https://www.youtube.com/watch?v=KT85z_tGZro']);
     UrlMap.set('wideputin', ['https://www.youtube.com/watch?v=RHRKu5mStNk']);
     UrlMap.set('undertale', ['https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V']);
@@ -59,8 +78,12 @@ module.exports = {
     UrlMap.set('papermario2', ['https://youtube.com/playlist?list=PLZODI99P5wP9Qh_t4VNf4iRFEETG37Dhy']);
     UrlMap.set('splatoon3',['https://www.youtube.com/playlist?list=PLxGVeb0fxoSjiSkrp8x6CsdYdzCnDD4WD']);
 
-    const isInMap = UrlMap.has(target);
-		const targetArray = isInMap ? UrlMap.get(target) : [];
+    MixMap.set('mix1',['undertale','skyblock','chill']);
+
+    const isInUrlMap = UrlMap.has(target);
+    const isInMixMap = MixMap.has(target);
+    const isInMap = ((isInUrlMap || isInMixMap) && !(isInUrlMap && isInMixMap));
+		const targetArray = isInUrlMap ? UrlMap.get(target) : isInMixMap ? (await combineArraysOfMap(MixMap.get(target), UrlMap)) : [];
 
     await interaction.deferReply();
 
