@@ -1,5 +1,5 @@
 const adminperms = require("../config.js").opt.adminperms; // gets the name of the user that is allowed to do this from config file
-const netTools = require("../netTools.js");
+const netTools = require("../exports/netTools.js");
 const { Colors } = require('discord.js');
 const { EmbedBuilder } = require('discord.js');
 

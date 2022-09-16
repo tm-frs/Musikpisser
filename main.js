@@ -1,7 +1,7 @@
 const configvolumeSmoothness = require("./config.js").opt.volumeSmoothness;
 const configinitialVolume = require("./config.js").opt.initialVolume;
 require('dotenv').config();
-const netTools = require("./netTools.js");
+const netTools = require("./exports/netTools.js");
 const { Player } = require('discord-player');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
