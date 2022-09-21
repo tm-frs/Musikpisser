@@ -106,7 +106,7 @@ module.exports = {
             if (trackIndex!==0) return interaction.followUp({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
         }
 
-        if (trackIndex===0) await interaction.editReply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
+        if (trackIndex===0) await interaction.editReply({ content: `Your ${((trackAmount>1) ? true : res.playlist) ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
 
         res.playlist ? queue.addTracks(res.tracks) : function() {
           let toAdd = res.tracks[0];
