@@ -39,6 +39,7 @@ const combineArraysOfMap = async (keyArray, valueArrayMap) => {
   * 4. Kombination aus mehreren bestehenden Inhalten der UrlMap-Map
   * - neue Choice hinzufügen mit Name als name und internem Namen (nur Kleinbuchstaben) als value
   * - in der MixMap-Map hinzufügen (mit "MixMap.set([interner Name], [Array mit key's aus der UrlMap]);")
+  *(- Wenn Track/Playlist-URLs hinzugefügt werden sollen, die nicht Teil eines bestehenden UrlMap-Eintrages sind, füge einen hinzu (mit "UrlMap.set([interner Name des Mixes]_EXTRA, [Array mit URLs (sie werden nach dieser Reihenfolge hinzugefügt)]);"))
   * - Wenn gewollt, internen Namen zum playlists-Array hinzufügen oder unten eine eigene Option (LoopMode, volume, ...) hinzufügen bzw. irgendwo eingliedern
   */
 
@@ -78,7 +79,8 @@ module.exports = {
     UrlMap.set('papermario2', ['https://youtube.com/playlist?list=PLZODI99P5wP9Qh_t4VNf4iRFEETG37Dhy']);
     UrlMap.set('splatoon3',['https://www.youtube.com/playlist?list=PLxGVeb0fxoSjiSkrp8x6CsdYdzCnDD4WD']);
 
-    MixMap.set('mix1',['undertale','skyblock','chill']);
+    UrlMap.set('mix1_EXTRA',['https://www.youtube.com/watch?v=j517hMLrVKk','https://www.youtube.com/watch?v=KagnBGadfx8']);
+    MixMap.set('mix1',['undertale','skyblock','chill','mix1_EXTRA']);
 
     const isInUrlMap = UrlMap.has(target);
     const isInMixMap = MixMap.has(target);
