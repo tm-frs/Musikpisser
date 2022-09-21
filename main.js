@@ -143,7 +143,7 @@ player.on('trackStart', (queue, track) => {
 });
 
 player.on('trackAdd', (queue, track) => {
-    queue.metadata.send({ content: `**${track.title}** has been added to playlist. ✅` }).catch(e => { });
+    if (!track.dontSendAddedMessage) queue.metadata.send({ content: `**${track.title}** has been added to playlist. ✅` }).catch(e => { });
 });
 
 player.on('channelEmpty', (queue) => {
