@@ -108,7 +108,11 @@ module.exports = {
 
         if (trackIndex===0) await interaction.editReply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
 
-        res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]);
+        res.playlist ? queue.addTracks(res.tracks) : function() {
+          let toAdd = res.tracks[0];
+          toAdd.dontSendAddedMessage = true;
+          queue.addTrack(toAdd);
+        }();
 
 		if (playlists.includes(targetInput)) { // prüfen auf playlist
 			queue.setVolume(0); // volume auf 0, wenn playlist ausgewählt wurde
