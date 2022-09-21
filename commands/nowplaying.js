@@ -33,13 +33,17 @@ const playlist = (typeof track.playlist==="undefined") ? (`**Playlist:** \`none\
         embed.setTimestamp();
         embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-        const saveButton = new ButtonBuilder();
+        const updateButton = new ButtonBuilder();
+        updateButton.setLabel('Update');
+        updateButton.setCustomId('nowplaying');
+        updateButton.setStyle(ButtonStyle.Success);
 
+        const saveButton = new ButtonBuilder();
         saveButton.setLabel('Save Song');
         saveButton.setCustomId('saveTrack');
         saveButton.setStyle(ButtonStyle.Success);
 
-        const row = new ActionRowBuilder().addComponents(saveButton);
+        const row = new ActionRowBuilder().addComponents(updateButton).addComponents(saveButton);
 
         interaction.reply({ embeds: [embed], components: [row] }).catch(e => { })
     },
