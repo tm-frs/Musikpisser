@@ -150,6 +150,51 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
             });
     }
         break
+        case 'nowplaying': {
+          if (int.user.id === int.message.interaction.user.id) {
+            const queue = client.player.getQueue(int.guild.id);
+
+            if (!queue || !queue.playing) return int.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })
+           
+                   const track = queue.current;
+           
+                   const embed = new EmbedBuilder();
+           
+                   embed.setColor(Colors.Blue); // blue = 0x3498DB
+                   embed.setThumbnail(track.thumbnail);
+                   embed.setTitle(`Currently playing track:`)
+           
+               const options = ['📴 (Loop mode: Off)','🔂 (Loop mode: Track)','🔁 (Loop mode: Queue)','▶ (Loop mode: Autoplay)']
+                   const loopMode = options[queue.repeatMode];
+           
+                   const timestamp = queue.getPlayerTimestamp();
+           const trackDuration = timestamp.progress == 'Forever' ? 'Endless (Live)' : track.duration;
+           const playlist = (typeof track.playlist==="undefined") ? (`**Playlist:** \`none\``) : (`**Playlist:** [${track.playlist.title}](${track.playlist.url}) by [${track.playlist.author.name}](${track.playlist.author.url})`);
+           
+                   embed.setDescription(`**Title:** \`${track.title}\`\n**Author:** \`${track.author}\`\n**URL:** ${track.url}\n${playlist}\n**Duration:** \`${trackDuration}\`\n**Loop Mode:** \`${loopMode}\`\n**Audio:** \`${queue.volume}%\`\n**Track added by:** ${track.requestedBy}`);
+           
+                   embed.setTimestamp();
+                   embed.setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
+           
+                   const updateButton = new ButtonBuilder();
+                   updateButton.setLabel('Update');
+                   updateButton.setCustomId('nowplaying');
+                   updateButton.setStyle(ButtonStyle.Success);
+           
+                   const saveButton = new ButtonBuilder();
+                   saveButton.setLabel('Save Song');
+                   saveButton.setCustomId('saveTrack');
+                   saveButton.setStyle(ButtonStyle.Success);
+           
+                   const row = new ActionRowBuilder().addComponents(updateButton).addComponents(saveButton);
+           
+                   int.message.edit({ embeds: [embed], components: [row] }).catch(e => { });
+                   int.reply({ content: `**Success:** Nowplaying data updated. ✅`, ephemeral: true}).catch(e => { })
+        } else {
+          int.reply({ content: `You aren't allowed to do this because you are not the person that executed the nowplaying-command! ❌`, ephemeral: true });
+        }
+    }
+        break
         case 'time': {
             if (!queue || !queue.playing){
                 return int.reply({ content: `No music currently playing. ❌`, ephemeral: true, components: [] });
