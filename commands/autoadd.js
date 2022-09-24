@@ -5,6 +5,7 @@ const { QueryType } = require('discord-player');
 const { QueueRepeatMode } = require('discord-player');
 const maxVol = require("../config.js").opt.maxVol;
 const wait = require('node:timers/promises').setTimeout;
+const discordTools = require("../exports/discordTools.js");
 
 const combineArraysOfMap = async (keyArray, valueArrayMap) => {
   var combinedArray = [];
@@ -97,18 +98,18 @@ module.exports = {
             searchEngine: QueryType.AUTO
         });
 
-        if (!res || !res.tracks.length) if (trackIndex===0) return interaction.editReply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
+        if (!res || !res.tracks.length) if (trackIndex===0) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `No results found! ❌`, ephemeral: true });
         if (!res || !res.tracks.length) if (trackIndex!==0) return interaction.followUp({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
       
         try {
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);
         } catch {
             await client.player.deleteQueue(interaction.guild.id);
-            if (trackIndex===0) return interaction.editReply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+            if (trackIndex===0) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `I can't join the audio channel. ❌`, ephemeral: true });
             if (trackIndex!==0) return interaction.followUp({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
         }
 
-        if (trackIndex===0) await interaction.editReply({ content: `Your ${((trackAmount>1) ? true : res.playlist) ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
+        if (trackIndex===0) await interaction.editReply({ content: `Your ${((trackAmount>1) ? true : res.playlist) ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => { });
 
         res.playlist ? queue.addTracks(res.tracks) : function() {
           let toAdd = res.tracks[0];
@@ -126,7 +127,7 @@ module.exports = {
     if (trackAmount!==(trackIndex + 1)) await wait(100);
     }  
   
-    if (!isInMap) return interaction.editReply({ content: `Something went completely wrong! ❌`, ephemeral: true }).catch(e => { });
+    if (!isInMap) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Something went completely wrong! ❌`, ephemeral: true });
     if (isInMap) {
       for (var i = 0; i < (targetArray.length); i++) {
         await addTracks(targetArray[i], target, i, targetArray.length);
