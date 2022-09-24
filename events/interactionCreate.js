@@ -8,6 +8,7 @@ const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
 const wait = require('node:timers/promises').setTimeout;
 const configPlayDl = require("../config.js").opt.playDl.replaceYtdl;
+const discordTools = require("../exports/discordTools.js");
 
 var fs = require('fs');
 const streamToString = async (readable) => {
@@ -58,14 +59,14 @@ const replyNotAllowed = async (client, int, DJ) => {
   .setTimestamp()
   .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: await int.user.displayAvatarURL({ dynamic: true }) });
 
-  return int.reply({ embeds: [embed], ephemeral: true}).catch(e => { })
+  return int.reply({ embeds: [embed], ephemeral: true }).catch(e => { })
 }
 
 module.exports = async (client, int) => {
 
 client.config.opt.playDl.replaceYtdl = await updatePlayDl();
 
-if(!int.guild) return int.reply({ content: `You only can use commands on servers. ❌`, ephemeral: true});
+if(!int.guild) return int.reply({ content: `You only can use commands on servers. ❌`, ephemeral: true });
 
 const botvoicechannel = int.guild.members.cache.find(user => user.id === client.user.id).voice.channel
 const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== botvoicechannel.id)
@@ -110,11 +111,11 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
     } 
 
     if (cmd && cmd.voiceChannel) {
-        if (!int.member.voice.channel) return int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true});
+        if (!int.member.voice.channel) return int.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
 //        console.log(client.user.id)
 //        console.log(botvoicechannel)
-        if (othervoicechannel) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
-//old version:        if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+        if (othervoicechannel) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
+//old version:        if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
     }
 
     const roleDJ = DJ.enabled ? int.guild.roles.cache.find(x => x.name === DJ.roleName) : null;
@@ -144,9 +145,9 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
           .setTimestamp()
           .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
           int.member.send({ embeds: [embed] }).then(() => {
-                return int.reply({ content: `I sent you the name of the music in a private message ✅`, ephemeral: true}).catch(e => { })
+                return int.reply({ content: `I sent you the name of the music in a private message ✅`, ephemeral: true }).catch(e => { })
             }).catch(error => {
-                return int.reply({ content: `I can't send you a private message. ❌`, ephemeral: true}).catch(e => { })
+                return int.reply({ content: `I can't send you a private message. ❌`, ephemeral: true }).catch(e => { })
             });
     }
         break
@@ -189,7 +190,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
                    const row = new ActionRowBuilder().addComponents(updateButton).addComponents(saveButton);
            
                    int.message.edit({ embeds: [embed], components: [row] }).catch(e => { });
-                   int.reply({ content: `**Success:** Nowplaying data updated. ✅`, ephemeral: true}).catch(e => { })
+                   int.reply({ content: `**Success:** Nowplaying data updated. ✅`, ephemeral: true }).catch(e => { })
         } else {
           int.reply({ content: `You aren't allowed to do this because you are not the person that executed the nowplaying-command! ❌`, ephemeral: true });
         }
@@ -215,7 +216,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
             .setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nThe bot is playing since: *${discordPlayingSince}*.`)
             .setFooter({ text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
             int.message.edit({ embeds: [embed] }).catch(e => { })
-            int.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true}).catch(e => { })
+            int.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true }).catch(e => { })
         }
     }
     break
@@ -248,7 +249,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
         embed.setTimestamp();
         embed.setFooter({text: 'Music Bot - by CraftingShadowDE', iconURL: int.user.displayAvatarURL({ dynamic: true }) });
         int.message.edit({ embeds: [embed] }).catch(e => { })
-        int.reply({ content: `**Success:** Queue data updated. ✅`, ephemeral: true}).catch(e => { })
+        int.reply({ content: `**Success:** Queue data updated. ✅`, ephemeral: true }).catch(e => { })
     }
     }
 }
@@ -290,7 +291,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
 
     await int.deferReply();
 
-if (othervoicechannel) return int.editReply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+if (othervoicechannel) return discordTools.reReply(int, `There was an issue! ❌`, { content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 
     const selection = parseInt(((int.message.embeds[0].description).substr(-20, 2)).replace("*", ''))-1
     const name = ((int.message.embeds[0].title).substr(17,((int.message.embeds[0].title).length)-18))
@@ -298,7 +299,7 @@ if (othervoicechannel) return int.editReply({ content: `You are not on the same 
     const resultCount = (resultArray.length-2)/2
     const resultURLs = resultCount===1 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33))] : resultCount===2 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33))] : resultCount===3 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33))] : resultCount===4 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33))] : resultCount===5 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33))] : resultCount===6 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33))] : resultCount===7 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33))] : resultCount===8 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33))] : resultCount===9 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33)),(resultArray[17].substr(31,((resultArray[17]).length)-33))] : resultCount===10 ? [(resultArray[1].substr(31,((resultArray[1]).length)-33)),(resultArray[3].substr(31,((resultArray[3]).length)-33)),(resultArray[5].substr(31,((resultArray[5]).length)-33)),(resultArray[7].substr(31,((resultArray[7]).length)-33)),(resultArray[9].substr(31,((resultArray[9]).length)-33)),(resultArray[11].substr(31,((resultArray[11]).length)-33)),(resultArray[13].substr(31,((resultArray[13]).length)-33)),(resultArray[15].substr(31,((resultArray[15]).length)-33)),(resultArray[17].substr(31,((resultArray[17]).length)-33)),(resultArray[19].substr(31,((resultArray[19]).length)-33))] : []
     const selectedResult = resultURLs[selection]
-    if (!int.member.voice.channel) return int.editReply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+    if (!int.member.voice.channel) return discordTools.reReply(int, `There was an issue! ❌`, { content: `You are not connected to an audio channel. ❌`, ephemeral: true });
           const addTrack = async (selectedResult) => {
             const queue = await createQueue(client, int);
             const res = await client.player.search(selectedResult, {
@@ -309,9 +310,9 @@ if (othervoicechannel) return int.editReply({ content: `You are not on the same 
                 if (!queue.connection) await queue.connect(int.member.voice.channel);
             } catch {
                 await client.player.deleteQueue(int.guildId);
-                return int.editReply({ content: `${int.user}, I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+                return discordTools.reReply(int, { content: `${int.user}, I can't join the audio channel. ❌`, ephemeral: true });
             }
-            if (!res || !res.tracks.length) return int.editReply({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true }).catch(e => { });
+            if (!res || !res.tracks.length) return discordTools.reReply(int, `There was an issue! ❌`, { content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true });
             await int.editReply({ content: `${int.user}, **Track ${selection+1}** is loading again... 🎧` }).catch(e => { });
 
          
@@ -342,7 +343,7 @@ if (othervoicechannel) return int.editReply({ content: `You are not on the same 
 
           await int.deferReply();
 
-if (othervoicechannel) return int.editReply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+if (othervoicechannel) return discordTools.reReply(int, `There was an issue! ❌`, { content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 
           const chosenTrack = int.values[0]
           const selection = chosenTrack=='t1' ? 0 : chosenTrack=='t2' ? 1 : chosenTrack=='t3' ? 2 : chosenTrack=='t4' ? 3 : chosenTrack=='t5' ? 4 : chosenTrack=='t6' ? 5 : chosenTrack=='t7' ? 6 : chosenTrack=='t8' ? 7 : chosenTrack=='t9' ? 8 : chosenTrack=='t10' ? 9 : 'error'
@@ -371,9 +372,9 @@ if (othervoicechannel) return int.editReply({ content: `You are not on the same 
                 if (!queue.connection) await queue.connect(int.member.voice.channel);
             } catch {
                 await client.player.deleteQueue(int.guildId);
-                return int.editReply({ content: `${int.user}, I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+                return discordTools.reReply(int, `There was an issue! ❌`, { content: `${int.user}, I can't join the audio channel. ❌`, ephemeral: true });
             }
-            if (!res || !res.tracks.length) return int.editReply({ content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true }).catch(e => { });
+            if (!res || !res.tracks.length) return discordTools.reReply(int, `There was an issue! ❌`, { content: `${int.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true });
             await int.editReply({ content: `${int.user}, Your chosen track is loading now... 🎧` }).catch(e => { });
 
          
@@ -411,11 +412,11 @@ if (othervoicechannel) return int.editReply({ content: `You are not on the same 
      }
     createembed(name, selection, selectedResult);
     } else {
-      int.editReply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+      discordTools.reReply(int, `There was an issue! ❌`, { content: `You are not connected to an audio channel. ❌`, ephemeral: true });
       resetMenu(); 
     }
 	  } else {
-	  	int.editReply({ content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
+	  	discordTools.reReply(int, `There was an issue! ❌`, { content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
       resetMenu(); 
 	  }
    }

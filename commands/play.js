@@ -2,6 +2,7 @@ const createQueue = require("../exports/queue.js").createQueue;
 const { ApplicationCommandOptionType } = require('discord.js');
 const { QueryType } = require('discord-player');
 const blacklist = require("../config.js").opt.blacklist;
+const discordTools = require("../exports/discordTools.js");
 
 module.exports = {
     description: "Adds a track/playlist to the queue.",
@@ -18,14 +19,14 @@ module.exports = {
       await interaction.deferReply();
 
 		const name = interaction.options.getString('target')
-if (!name) return interaction.editReply({ content: `Write the name of the music you want to play. ❌`, ephemeral: true }).catch(e => { });
+if (!name) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Write the name of the music you want to play. ❌`, ephemeral: true });
 
         const res = await client.player.search(name, {
             requestedBy: interaction.member,
             searchEngine: QueryType.AUTO
         });
 
-        if (!res || !res.tracks.length) return interaction.editReply({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
+        if (!res || !res.tracks.length) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `No results found! ❌`, ephemeral: true });
 
         const queue = await createQueue(client, interaction);
 
@@ -33,7 +34,7 @@ if (!name) return interaction.editReply({ content: `Write the name of the music 
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);
         } catch {
             await client.player.deleteQueue(interaction.guild.id);
-            return interaction.editReply({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+            return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `I can't join the audio channel. ❌`, ephemeral: true });
         }
       
         await interaction.editReply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
