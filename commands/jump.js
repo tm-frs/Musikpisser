@@ -1,6 +1,7 @@
 const { ApplicationCommandOptionType } = require('discord.js');
 const wait = require('node:timers/promises').setTimeout;
 const ytdl = require('ytdl-core');
+const discordTools = require("../exports/discordTools.js");
 
 const convertSecondsToString = async (secondsInput) => {
     var stringOutput = "";
@@ -67,10 +68,10 @@ module.exports = {
         await interaction.deferReply();
 
         const queue = client.player.getQueue(interaction.guild.id);
-       if (!queue || !queue.playing) return interaction.editReply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })
+       if (!queue || !queue.playing) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `No music currently playing! ❌`, ephemeral: true });
 
         const isYouTubeURL = await ytdl.validateURL(await queue.current.url);
-       if (client.config.opt.playDl.replaceYtdl && isYouTubeURL) return interaction.editReply({ content: `You can't use the jump-feature because play-dl is active and this track is a YouTube-Track. ❌\n*(Use \`/play-dl info\` to get more information.)*`, ephemeral: true }).catch(e => { })
+       if (client.config.opt.playDl.replaceYtdl && isYouTubeURL) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You can't use the jump-feature because play-dl is active and this track is a YouTube-Track. ❌\n*(Use \`/play-dl info\` to get more information.)*`, ephemeral: true });
 
         const secondsInput = interaction.options.getInteger('second');
         const minutesInput = interaction.options.getNumber('minute');
@@ -84,13 +85,13 @@ module.exports = {
         const trackDurationString = await convertStringToSeconds(await queue.current.duration);
         const trackDurationSeconds = await convertSecondsToString(trackDurationString);
 
-        if (!secondsInput && !minutesInput && !hoursInput) return interaction.editReply({ content: `You need to specify where you want to jump to. ❌`, ephemeral: true }).catch(e => { })
-        if ((secondsInput < 0) || (minutesInput < 0) || (hoursInput < 0)) return interaction.editReply({ content: `You can't jump to a negative time! ❌`, ephemeral: true }).catch(e => { })
-        if (secondsJumpTo > trackDurationString) return interaction.editReply({ content: `The current track is only **${trackDurationSeconds}** long but you wanted to jump to **${jumpToString}**. ❌`, ephemeral: true }).catch(e => { })
+        if (!secondsInput && !minutesInput && !hoursInput) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You need to specify where you want to jump to. ❌`, ephemeral: true });
+        if ((secondsInput < 0) || (minutesInput < 0) || (hoursInput < 0)) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You can't jump to a negative time! ❌`, ephemeral: true });
+        if (secondsJumpTo > trackDurationString) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `The current track is only **${trackDurationSeconds}** long but you wanted to jump to **${jumpToString}**. ❌`, ephemeral: true });
 
         const success = queue.seek(secondsJumpTo * 1000);
 
         return success ? interaction.editReply({ content: `Jumped from **${currentProgressString}** to **${jumpToString}** (the track is **${trackDurationSeconds}** long). ✅` }).catch(e => { })
-        : interaction.editReply({ content: `Something went wrong. ❌`, ephemeral: true }).catch(e => { });
+        : discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Something went wrong. ❌`, ephemeral: true }).catch(e => { });
     },
 };

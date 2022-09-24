@@ -27,8 +27,8 @@ module.exports = {
         const othervoicechannel = (botvoicechannel && interaction.member.voice.channel.id !== botvoicechannel.id)
 
 		if (loopMode==='off') { //LOOP OFF ------------------------------------------------------------------------------------------------------------------------------------------------------------
-        if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true});
-        if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+        if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+        if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
       
         const queue = client.player.getQueue(interaction.guild.id);
 if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })  
@@ -49,8 +49,8 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		
         interaction.reply(success ? { embeds: [embed] } : { content: 'Could not update loop mode! ❌' }).catch(e => { })
 		} else if (loopMode==='track') { //LOOP TRACK -------------------------------------------------------------------------------------------------------------------------------------------------
-        if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true});
-        if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+        if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+        if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
       
         const queue = client.player.getQueue(interaction.guild.id);
 if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })  
@@ -71,8 +71,8 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		
         interaction.reply(success ? { embeds: [embed] } : { content: 'Could not update loop mode! ❌' }).catch(e => { })
 		} else if (loopMode==='queue') { //LOOP QUEUE -------------------------------------------------------------------------------------------------------------------------------------------------
-        if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true});
-        if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+        if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+        if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
       
         const queue = client.player.getQueue(interaction.guild.id);
 if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })  
@@ -93,8 +93,8 @@ if (!queue || !queue.playing) return interaction.reply({ content: `No music curr
 		
         interaction.reply(success ? { embeds: [embed] } : { content: 'Could not update loop mode! ❌' }).catch(e => { })
 		} else if (loopMode==='autoplay') { //LOOP AUTOPLAY -------------------------------------------------------------------------------------------------------------------------------------------
-        if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true});
-        if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true});
+        if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+        if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
       
       const queue = client.player.getQueue(interaction.guild.id);
 if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })  
