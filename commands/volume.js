@@ -7,7 +7,7 @@ module.exports = {
     options: [{
         name: 'volume',
         description: 'Type a number to adjust the volume (normal volume is 100).',
-        type: ApplicationCommandOptionType.Integer,
+        type: ApplicationCommandOptionType.Number,
         required: true
     }],
     voiceChannel: true,
@@ -16,7 +16,7 @@ module.exports = {
         const queue = client.player.getQueue(interaction.guild.id);
        if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { })
 
-        const vol = parseInt(interaction.options.getInteger('volume'));
+        const vol = interaction.options.getNumber('volume');
 
         if (!vol && vol !== 0) return interaction.reply({ content: `Current volume: **${queue.volume}%** 🔊\n**To change the volume, type a number between \`0\` and \`${maxVol}\`.**`, ephemeral: true }).catch(e => { })
 
