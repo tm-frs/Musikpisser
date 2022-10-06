@@ -59,7 +59,7 @@ module.exports = {
 		{name: "Chill Music (\"Poké & Chill\", \"Zelda & Chill\", \"Zelda & Chill 2\", ...)", value: 'chill'}, //Chill Music (by Mikel)
     {name: "Paper Mario 2 OST", value: 'papermario2'}, //Paper Mario 2 OST
     {name: "Splatoon 3 OST", value: 'splatoon3'}, //Splatoon 3 OST
-    {name: "Mix (Undertale, Hypixel Skyblock, Chill Music)", value: 'mix1'}, //Mix 1
+    {name: "Mix 1 (Undertale, Hypixel Skyblock, Splatoon 3)", value: 'mix1'}, //Mix 1
 		],
 		required: true
 	} ],
@@ -80,8 +80,8 @@ module.exports = {
     UrlMap.set('papermario2', ['https://youtube.com/playlist?list=PLZODI99P5wP9Qh_t4VNf4iRFEETG37Dhy']);
     UrlMap.set('splatoon3',['https://www.youtube.com/playlist?list=PLxGVeb0fxoSjiSkrp8x6CsdYdzCnDD4WD']);
 
-    UrlMap.set('mix1_EXTRA',['https://www.youtube.com/watch?v=j517hMLrVKk','https://www.youtube.com/watch?v=KagnBGadfx8']);
-    MixMap.set('mix1',['undertale','skyblock','chill','mix1_EXTRA']);
+    UrlMap.set('mix1_EXTRA',[]); //it's empty, but i'll leave it as an example
+    MixMap.set('mix1',['undertale','skyblock','splatoon3','mix1_EXTRA']);
 
     const isInUrlMap = UrlMap.has(target);
     const isInMixMap = MixMap.has(target);
