@@ -9,6 +9,7 @@ const blacklist = require("../config.js").opt.blacklist;
 const wait = require('node:timers/promises').setTimeout;
 const configPlayDl = require("../config.js").opt.playDl.replaceYtdl;
 const discordTools = require("../exports/discordTools.js");
+const { PermissionsBitField } = require('discord.js');
 
 var fs = require('fs');
 const streamToString = async (readable) => {
@@ -91,8 +92,8 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
         setTimeout(function() {
 
           const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
-          const messagecreatorhasrole = (int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) ? true : (DJ.alwaysAllowAdmins && int.member.permissions.has("MANAGE_GUILD")) ? true : false;
-//          console.log("Rolle existent:\n"+int.guild.roles.cache.some(x => x.name === DJ.roleName)+"\nNutzer hat Rolle:\n"+int.member.roles.cache.some(role => role.id === roleDJ.id)+"\nAdmins haben Berechtigung:\n"+DJ.alwaysAllowAdmins+"\nNutzer ist Admin:\n"+int.member.permissions.has("MANAGE_GUILD")+"\nBefund:\n"+messagecreatorhasrole)
+          const messagecreatorhasrole = (int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) ? true : (DJ.alwaysAllowAdmins && int.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) ? true : false;
+//          console.log("Rolle existent:\n"+int.guild.roles.cache.some(x => x.name === DJ.roleName)+"\nNutzer hat Rolle:\n"+int.member.roles.cache.some(role => role.id === roleDJ.id)+"\nAdmins haben Berechtigung:\n"+DJ.alwaysAllowAdmins+"\nNutzer ist Admin:\n"+int.member.permissions.has(PermissionsBitField.Flags.ManageGuild)+"\nBefund:\n"+messagecreatorhasrole)
           if (!messagecreatorhasrole) {
       return replyNotAllowed(client, int, DJ);
           }
@@ -101,7 +102,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
       } else {
       
       const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
-      const messagecreatorhasrole = (int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) ? true : (DJ.alwaysAllowAdmins && int.member.permissions.has("MANAGE_GUILD")) ? true : false;
+      const messagecreatorhasrole = (int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) ? true : (DJ.alwaysAllowAdmins && int.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) ? true : false;
 //      console.log(messagecreatorhasrole);
 //      console.log(roleDJ.id);
         if (!messagecreatorhasrole) {
@@ -119,7 +120,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
     }
 
     const roleDJ = DJ.enabled ? int.guild.roles.cache.find(x => x.name === DJ.roleName) : null;
-    const DJonAndAffectedAndPermission = ((DJ.enabled && !DJ.notAffected.includes(cmd.name)) && ((int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) || (DJ.alwaysAllowAdmins && int.member.permissions.has("MANAGE_GUILD"))))
+    const DJonAndAffectedAndPermission = ((DJ.enabled && !DJ.notAffected.includes(cmd.name)) && ((int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) || (DJ.alwaysAllowAdmins && int.member.permissions.has(PermissionsBitField.Flags.ManageGuild))))
     const DJonAndNotAffected = (DJ.enabled && DJ.notAffected.includes(cmd.name))
     const DJoff = (!DJ.enabled)
     if (DJonAndAffectedAndPermission || DJonAndNotAffected || DJoff) cmd.run(client, int)
@@ -128,7 +129,7 @@ const othervoicechannel = (botvoicechannel && int.member.voice.channel.id !== bo
     if (int.type === InteractionType.MessageComponent) {
       const DJ = client.config.opt.DJ;
       const roleDJ = int.guild.roles.cache.find(x => x.name === DJ.roleName);
-    const userIsAllowed = !DJ.enabled ? true : !DJ.affectedButtonsAndMenus.includes(int.customId) ? true : (int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) ? true : (DJ.alwaysAllowAdmins && int.member.permissions.has("MANAGE_GUILD")) ? true : false;
+    const userIsAllowed = !DJ.enabled ? true : !DJ.affectedButtonsAndMenus.includes(int.customId) ? true : (int.guild.roles.cache.some(x => x.name === DJ.roleName) && int.member.roles.cache.some(role => role.id === roleDJ.id)) ? true : (DJ.alwaysAllowAdmins && int.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) ? true : false;
     if (!int.guild.roles.cache.some(x => x.name === DJ.roleName) && DJ.enabled) createrole(client, int, DJ);
     if (!userIsAllowed) {
       replyNotAllowed(client, int, DJ);
