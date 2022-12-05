@@ -7,6 +7,7 @@ module.exports = {
     defaultPublicIpApi: 'api.ipify.org', // the default API to get the public IP from (default: 'api.ipify.org')
 
     logFileLimit: -1, //the limit of log files (-1 or lower for infinite, 0 for none); latest.log will always be updated (default: -1)
+    logErrors: true, //wether or not to create an errors.log-file in wich all errors are written in with timestamps; if set to false, the file will be created but not written to (default: true)
 
     opt: {
         playDl: {
