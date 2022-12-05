@@ -9,6 +9,7 @@ const util = require('util');
 var devnull = require('dev-null');
 const wait = require('node:timers/promises').setTimeout;
 const logFileLimit = require('./config.js').logFileLimit;
+const shouldCreateErrorLogFile = require('./config.js').logErrors;
 
 if (!fs.existsSync('./logs')){
     fs.mkdirSync('./logs');
@@ -18,7 +19,7 @@ const getLogfileAmount = async () => {
     const files = await fs.promises.readdir("./logs/", (err, files) => {
         if (err) throw err;
     });
-    var filesCleared = files.filter(filename => ((filename!=='latest.log') && (filename!=='README.txt') && (filename!=='logins.log')));
+    var filesCleared = files.filter(filename => ((filename!=='latest.log') && (filename!=='README.txt') && (filename!=='logins.log') && (filename!=='errors.log')));
     return filesCleared.length;
 }
 
@@ -33,6 +34,7 @@ let nowDateString = (new Date(Date.now())).toISOString().replace("T","_").replac
 nowDateString = nowDateString.substring(0,(nowDateString.length - 5));
 var logfileStream = fs.createWriteStream(`./logs/${nowDateString}.log`, { flags: 'as+' });
 var latestLogfileStream = fs.createWriteStream(`./logs/latest.log`, { flags: 'as+' });
+var errorLogfileStream = fs.createWriteStream(`./logs/errors.log`, { flags: 'as+' })
 /*process.stdout.write = process.stderr.write = logfileStream.write.bind(logfileStream);
 process.on('uncaughtException', function(err) {
     console.error((err && err.stack) ? err.stack : err);
@@ -49,6 +51,7 @@ console.log = function() {
 console.error = function() {
     latestLogfileStream.write(util.format.apply(null, arguments) + '\n');
     logfileStream.write(util.format.apply(null, arguments) + '\n');
+    errorLogfileStream.write(`ERROR: ${((new Date(Date.now())).toUTCString()).replace("GMT", "UTC+0000 (Coordinated Universal Time)")}\n` + util.format.apply(null, arguments) + '\n\n\n\n');
 
     logStderr.write(util.format.apply(null, arguments) + '\n');
 }
@@ -67,6 +70,12 @@ const maybeUpdateLogFile = async () => {
                 if (err.code!=='ENOENT') throw err;
             }
         });
+    }
+}
+maybeUpdateLogFile();
+const maybeUpdateErrorLogFile = async () => {
+    if (!shouldCreateErrorLogFile) {
+        logfileStream = devnull();
     }
 }
 maybeUpdateLogFile();
