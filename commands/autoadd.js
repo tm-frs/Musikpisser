@@ -7,189 +7,136 @@ const maxVol = require("../config.js").opt.maxVol;
 const wait = require('node:timers/promises').setTimeout;
 const discordTools = require("../exports/discordTools.js");
 
-const combineArraysOfMap = async (keyArray, valueArrayMap) => {
-  var combinedArray = [];
+const autoaddItemsArray = require("../config.js").autoadd;
+const maxOptionsPerCommand = 25; // one command can only have 25 options. If this ever changes, change this value
+const maxChoicesPerOption = 25; // one option can only have 25 choices. If this ever changes, change this value
 
-  for (let i = 0; i < keyArray.length; i++) {
-    combinedArray = combinedArray.concat(valueArrayMap.get(keyArray[i]));    
+function filterCommandOptions(autoaddItems) {
+  var commandTrue = [];
+
+  for (let i = 0; i < autoaddItems.length; i++) {
+    if (autoaddItems[i].createCommand) commandTrue.push(autoaddItems[i]);
   }
 
+  return commandTrue;
+}
+
+function getAmountOfOptions(commandTrue) {
+  let optionsAmount = Math.ceil(commandTrue.length / maxChoicesPerOption); // one option can't have infinite choices. this calculates the amount of options needed to fit all choices
+  if (optionsAmount > maxOptionsPerCommand) optionsAmount = maxOptionsPerCommand; // if the result is higher than maxOptionsPerCommand (one command can't have infinite options), set it to maxOptionsPerCommand so everything else will be cut off
+  return optionsAmount;
+}
+
+function getCommandOptions(commandTrue) {
+    if (commandTrue.length === 0) return [];
+
+    var commandOptions = [];
+    const optionsAmount = getAmountOfOptions(commandTrue);
+    var currentChoiceNumber = 0;
+    for (let currentOption = 1; currentOption < (optionsAmount + 1); currentOption++) {
+      const choicesExisting = (commandTrue.length - ((currentOption - 1) * maxChoicesPerOption))
+      let choicesOfOption = [];
+      for (let currentChoiceOfOption = 1; currentChoiceOfOption < (choicesExisting + 1); currentChoiceOfOption++) {
+        currentChoiceNumber++;
+        const currentChoice = commandTrue[currentChoiceNumber-1]
+        choicesOfOption.push({name: currentChoice.commandTitle, value: currentChoice.internalId});
+      }
+      commandOptions.push({type: ApplicationCommandOptionType.String, name: `targetlist-${currentOption}`, description: `List ${currentOption} with things. Please only select from one list.`, choices: choicesOfOption, required: false})
+    }
+    return commandOptions;
+}
+
+const amountOfOptions = getAmountOfOptions(filterCommandOptions(autoaddItemsArray));
+
+const processInput = async (chosenItem, autoaddItems) => {
+  var combinedArray = [];
+
+  if (!chosenItem.isMix) {
+    combinedArray = combinedArray.concat(chosenItem.content);
+  } else if (chosenItem.isMix) {
+    for (let i = 0; i < chosenItem.content.length; i++) {
+      const mixOriginItem = autoaddItems.find(item => {return item.internalId===chosenItem.content[i]});
+      combinedArray = combinedArray.concat(await processInput(mixOriginItem, autoaddItems));
+    }
+  }
+  
   return combinedArray;
 }
 
- /*
-  * NEUEN TRACK/NEUE PLAYLIST ADDEN
-  * -------------------------------
-  * WICHTIG: DIE INTERNEN NAMEN ZWEIER OPTIONEN DÜRFEN SICH NIE GLEICHEN (auch nicht, wenn die eine in der MixMap steht und die andere in der UrlMap)
-  * 
-  * 1. Einfacher Track, keine Playlist
-  * - neue Choice hinzufügen mit Name als name und internem Namen (nur Kleinbuchstaben) als value
-  * - in der UrlMap-Map hinzufügen (mit "UrlMap.set([interner Name], [Array mit URL]);")
-  * - Wenn gewollt, unten eine weitere Option (LoopMode, volume, ...) hinzufügen bzw. neuen Track irgendwo eingliedern
-  * 
-  * 2. Playlist bestehend aus einer URL
-  * - neue Choice hinzufügen mit Name als name und internem Namen (nur Kleinbuchstaben) als value
-  * - in der UrlMap-Map hinzufügen (mit "UrlMap.set([interner Name], [Array mit URL]);")
-  * - im playlists-Array den internen Namen hinzufügen
-  * 
-  * 3. Playlist/Tracks bestehend aus mehreren URLs
-  * - neue Choice hinzufügen mit Name als name und internem Namen (nur Kleinbuchstaben) als value
-  * - in der UrlMap-Map hinzufügen (mit "UrlMap.set([interner Name], [Array mit URLs (sie werden nach dieser Reihenfolge hinzugefügt)]);")
-  * - Wenn gewollt, internen Namen zum playlists-Array hinzufügen oder unten eine eigene Option (LoopMode, volume, ...) hinzufügen bzw. irgendwo eingliedern
-  * 
-  * 4. Kombination aus mehreren bestehenden Inhalten der UrlMap-Map
-  * - neue Choice hinzufügen mit Name als name und internem Namen (nur Kleinbuchstaben) als value
-  * - in der MixMap-Map hinzufügen (mit "MixMap.set([interner Name], [Array mit key's aus der UrlMap]);")
-  *(- Wenn Track/Playlist-URLs hinzugefügt werden sollen, die nicht Teil eines bestehenden UrlMap-Eintrages sind, füge einen hinzu (mit "UrlMap.set([interner Name des Mixes]_EXTRA, [Array mit URLs (sie werden nach dieser Reihenfolge hinzugefügt)]);"))
-  * - Wenn gewollt, internen Namen zum playlists-Array hinzufügen oder unten eine eigene Option (LoopMode, volume, ...) hinzufügen bzw. irgendwo eingliedern
-  */
+const defaultAfterAdd = async (client, interaction, queue, QueueRepeatMode) => {
+  queue.setVolume(client.config.opt.discordPlayer.initialVolume);
+}
 
 module.exports = {
     description: "Adds a song/playlist that has been added to the bot's code.",
     name: 'autoadd',
-	options: [ {
-		type: ApplicationCommandOptionType.String,
-		name: 'target',
-		description: "What song/playlist should be added?",
-		choices: [
-		{name: "Toad Sings Ra Ra Rasputin", value: 'rasputin'}, //Ra Ra Rasputin (Toad version) loop
-		{name: "Song for Denise (Maxi Version) bass boosted 1 hour", value: 'wideputin'}, //Widepuin music loop
-		{name: "Undertale OST playlist (only boss fights)", value: 'undertale'}, //Undertale OST (boss fights only)
-		{name: "Hypixel Skyblock OST", value: 'skyblock'}, //Hypixel Skyblock OST
-		{name: "Chill Music (\"Poké & Chill\", \"Zelda & Chill\", \"Zelda & Chill 2\", ...)", value: 'chill'}, //Chill Music (by Mikel)
-    {name: "Splatoon 3 OST", value: 'splatoon3'}, //Splatoon 3 OST
-    {name: "Mix 1 (Undertale, Hypixel Skyblock, Splatoon 3)", value: 'mix1'}, //Mix 1
-		],
-		required: true
-	} ],
+	  options: getCommandOptions(filterCommandOptions(autoaddItemsArray)),
     voiceChannel: true,
 
     run: async (client, interaction) => {
-		const playlists = ['undertale','skyblock','chill','papermario2','splatoon3','mix1']
-    const target = interaction.options.getString('target') 
-
-    const UrlMap = new TypeMap('string','object');
-    const MixMap = new TypeMap('string','object');
-    UrlMap.set('rasputin', ['https://www.youtube.com/watch?v=KT85z_tGZro']);
-    UrlMap.set('wideputin', ['https://www.youtube.com/watch?v=RHRKu5mStNk']);
-    UrlMap.set('undertale', ['https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V']);
-    UrlMap.set('skyblock', ['https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV']);
-    UrlMap.set('chill', ['https://soundcloud.com/gamechops/sets/zelda-chill','https://soundcloud.com/daniel-egan-16/sets/zelda-and-chill-2','https://soundcloud.com/mikeljakobi/sets/poke-chill']); // ['Zelda & Chill 1','Zelda & Chill 2','Poké & Chill']
-    //UrlMap.set('chill', ['https://open.spotify.com/album/3oNO1P0Qlr4oSlMA2MIj67','https://open.spotify.com/album/0N0noai9OQs1rYEaS47vJw','https://open.spotify.com/album/4lBMa9JEuCSIs3NkPEIwvN']); // ['Zelda & Chill 1','Zelda & Chill 2','Poké & Chill']
-    UrlMap.set('splatoon3',['https://www.youtube.com/playlist?list=PLxGVeb0fxoSjiSkrp8x6CsdYdzCnDD4WD']);
-
-    UrlMap.set('mix1_EXTRA',[]); //it's empty, but i'll leave it as an example
-    MixMap.set('mix1',['undertale','skyblock','splatoon3','mix1_EXTRA']);
-
-    const isInUrlMap = UrlMap.has(target);
-    const isInMixMap = MixMap.has(target);
-    const isInMap = ((isInUrlMap || isInMixMap) && !(isInUrlMap && isInMixMap));
-		const targetArray = isInUrlMap ? UrlMap.get(target) : isInMixMap ? (await combineArraysOfMap(MixMap.get(target), UrlMap)) : [];
+		
+    let userInput = [];
+    for (let i = 1; i < (amountOfOptions + 1 ); i++) {
+      userInput.push(interaction.options.getString(`targetlist-${i}`));
+    }
+    let userInputNotNull = [];
+    for (let i = 0; i < userInput.length; i++) {
+      const foundItem = autoaddItemsArray.find(item => {return item.internalId===userInput[i]})
+      if (userInput[i]) userInputNotNull.push(foundItem ? foundItem : null);
+    }
+    if (userInputNotNull.length === 0) {
+      return interaction.reply({ content: `Choose a filter from one of the lists! ❌`, ephemeral: true }).catch(e => { });
+    } else if (userInputNotNull.length > 1) {
+      return interaction.reply({ content: `Only choose a filter from **one** list! ❌`, ephemeral: true }).catch(e => { });
+    }
+    
+    let chosenItem = userInputNotNull[0];
+		const targetArray = await processInput(chosenItem, autoaddItemsArray);
 
     await interaction.deferReply();
 
     const queue = await createQueue(client, interaction);
     
-      const addTracks = async (target, targetInput, trackIndex, trackAmount) => {
-        const res = await client.player.search(target, {
-            requestedBy: interaction.member,
-            searchEngine: QueryType.AUTO
-        });
+    const addTracks = async (target, trackIndex, trackAmount) => {
+      const res = await client.player.search(target, {
+        requestedBy: interaction.member,
+        searchEngine: QueryType.AUTO
+      });
 
-        if (!res || !res.tracks.length) if (trackIndex===0) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `No results found! ❌`, ephemeral: true });
-        if (!res || !res.tracks.length) if (trackIndex!==0) return interaction.followUp({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
+      if (!res || !res.tracks.length) if (trackIndex===0) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `No results found! ❌`, ephemeral: true });
+      if (!res || !res.tracks.length) if (trackIndex!==0) return interaction.followUp({ content: `No results found! ❌`, ephemeral: true }).catch(e => { });
       
-        try {
-            if (!queue.connection) await queue.connect(interaction.member.voice.channel);
-        } catch {
-            await client.player.deleteQueue(interaction.guild.id);
-            if (trackIndex===0) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `I can't join the audio channel. ❌`, ephemeral: true });
-            if (trackIndex!==0) return interaction.followUp({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
-        }
+      try {
+        if (!queue.connection) await queue.connect(interaction.member.voice.channel);
+      } catch {
+        await client.player.deleteQueue(interaction.guild.id);
+        if (trackIndex===0) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `I can't join the audio channel. ❌`, ephemeral: true });
+        if (trackIndex!==0) return interaction.followUp({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch(e => { });
+      }
 
-        if (trackIndex===0) await interaction.editReply({ content: `Your ${((trackAmount>1) ? true : res.playlist) ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => { });
+      if (trackIndex===0) await interaction.editReply({ content: `Your ${((trackAmount>1) ? true : res.playlist) ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => { });
 
-        res.playlist ? queue.addTracks(res.tracks) : function() {
-          let toAdd = res.tracks[0];
-          toAdd.dontSendAddedMessage = true;
-          queue.addTrack(toAdd);
-        }();
+      res.playlist ? queue.addTracks(res.tracks) : function() {
+        let toAdd = res.tracks[0];
+        toAdd.dontSendAddedMessage = true;
+        queue.addTrack(toAdd);
+      }();
 
-		if (playlists.includes(targetInput)) { // prüfen auf playlist
-			queue.setVolume(0); // volume auf 0, wenn playlist ausgewählt wurde
-		}
-
-//		console.log(playlists)
-//		console.log(target)
-//		console.log(playlists.includes(target))
-    if (trackAmount!==(trackIndex + 1)) await wait(100);
+			queue.setVolume(0); // volume to 0
+		
+      if (trackAmount!==(trackIndex + 1)) await wait(100);
     }  
   
-    if (!isInMap) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Something went completely wrong! ❌`, ephemeral: true });
-    if (isInMap) {
+    if (targetArray.length<=0) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Something went completely wrong! ❌`, ephemeral: true });
+    if (targetArray.length!==0) {
       for (var i = 0; i < (targetArray.length); i++) {
-        await addTracks(targetArray[i], target, i, targetArray.length);
+        await addTracks(targetArray[i], i, targetArray.length);
       }
     }
 
-        if (!queue.playing) await queue.play();
+    if (!queue.playing) await queue.play();
       
-		if (target==='rasputin') { //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      const rasputinprep = async () => {
-      await wait(4000); //Wait for 4 seconds
-            // loop track:
-				const success = queue.setRepeatMode(QueueRepeatMode.TRACK);
-        success ? interaction.followUp({ content: `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, Current track will be repeated non-stop 🔂` }).catch(e => {}) :
-        interaction.followUp({ content: `${interaction.member.user}, Could not update loop mode! ❌`, ephemeral: true }).catch(e => {});
-        
-      
-			  await wait(1); // Wait for 0.001 seconds
-            // volume:
-				queue.setVolume(250);
-				interaction.followUp({ content: `Volume changed to **250%** (maximum is **${maxVol}%**) 🔊` }).catch(e => {});
-      }
-      rasputinprep();
-		} else if (target==='wideputin') { //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-			const wideputinprep = async () => {
-        await wait(4000); // Wait for 4 seconds
-            // loop track:
-				const success = queue.setRepeatMode(QueueRepeatMode.TRACK);    
-				success ? interaction.followUp({ content: `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, Current track will be repeated non-stop 🔂` }).catch(e => {}) :
-        interaction.followUp({ content: `${interaction.member.user}, Could not update loop mode! ❌`, ephemeral: true }).catch(e => {});
-
-			  await wait(1); // Wait for 0.001 seconds
-            // volume:
-				queue.setVolume(200);    
-			  interaction.followUp({ content: `Volume changed to **200%** (maximum is **${maxVol}%**) 🔊` }).catch(e => {});
-			}
-      wideputinprep();
-		} else if (playlists.includes(target)) { //playlists-----------------------------------------------------------------------------------------------------------------------------------------------
-			const playlistprep = async () => {
-        await wait(4000); // Wait for 4 seconds
-				// shuffle:
-				queue.shuffle();
-				interaction.followUp({ content: `Queue has been shuffled! ✅` }).catch(e => {});
-        
-			// Warten für 4 Sekunden (0 Sekunden danach)
-			  await wait(1); // Wait for 0.001 seconds
-				// loop queue:
-				const success = queue.setRepeatMode(QueueRepeatMode.QUEUE);
-        success ? interaction.followUp({ content: `Loop Mode: **${queue.repeatMode === 0 ? 'Inactive' : 'Active'}**, The whole sequence will repeat non-stop 🔁` }).catch(e => {}) :
-        interaction.followUp({ content: `${interaction.member.user}, Could not update loop mode! ❌`, ephemeral: true }).catch(e => {});
-      
-			  await wait(1); // Wait for 0.001 seconds
-				// skip:
-				queue.skip();
-
-        await wait(998); // Wait for 0.998 seconds
-        // volume:
-				queue.setVolume(client.config.opt.discordPlayer.initialVolume);
-
-        await wait(1000) // Wait for 1 second
-				// shuffle:
-				queue.shuffle();
-    }
-    playlistprep();
-		} //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    if (!chosenItem.afterAdd) chosenItem.afterAdd = defaultAfterAdd;
+    chosenItem.afterAdd(client, interaction, queue, QueueRepeatMode)
     }
 };
