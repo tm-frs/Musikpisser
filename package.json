@@ -17,7 +17,7 @@
     "url": "https://github.com/CraftingShadowDE/Musikpisser/issues"
   },
   "dependencies": {
-    "@discord-player/extractor": "^4.0.0",
+    "@discord-player/extractor": "^4.2.2",
     "@discordjs/voice": "^0.14.0",
     "dev-null": "^0.1.1",
     "discord-player": "^5.4.0",
