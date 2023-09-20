@@ -1,55 +1,60 @@
-const createQueue = require("../exports/queue.js").createQueue;
-const { ApplicationCommandOptionType } = require('discord.js');
-const { QueryType } = require('discord-player');
-const blacklist = require("../config.js").opt.blacklist;
-const discordTools = require("../exports/discordTools.js");
+const createQueue = require(`../exports/queue.js`).createQueue;
+const { ApplicationCommandOptionType } = require(`discord.js`);
+const { QueryType } = require(`discord-player`);
+const discordTools = require(`../exports/discordTools.js`);
 
 module.exports = {
-    description: "Adds a track/playlist to the queue.",
-    name: 'play',
-    options: [{
-        name: 'target',
-        description: "Enter the name or the URL of the track/playlist you want to add.",
-        type: ApplicationCommandOptionType.String,
-        required: true
-    }],
-    voiceChannel: true,
+	description: `Adds a track/playlist to the queue.`,
+	name: `play`,
+	options: [{
+		name: `query`,
+		description: `Enter the name or the URL of the track/playlist you want to add.`,
+		type: ApplicationCommandOptionType.String,
+		required: true
+	}, {
+		name: `search-engine`,
+		description: `Select a search engine you like (YouTube is chosen if this is left empty).`,
+		type: ApplicationCommandOptionType.String,
+		choices: [
+			{name: `YouTube-Suche`, value: `youtubeSearch`},
+			{name: `Spotify-Suche`, value: `spotifySearch`},
+			{name: `Soundcloud-Suche`, value: `soundcloudSearch`},
+			{name: `Apple Music-Suche`, value: `appleMusicSearch`},
+			{name: `discord-player Standardsuche (Spotify)`, value: `autoSearch`}
+		],
+		required: false
+	}],
+	voiceChannel: true,
 
-    run: async (client, interaction) => {
-      await interaction.deferReply();
+	run: async (client, interaction) => {
+		await interaction.deferReply();
 
-		const name = interaction.options.getString('target')
-if (!name) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Write the name of the music you want to play. ❌`, ephemeral: true });
+		const name = interaction.options.getString(`query`);
+		const searchEngine = interaction.options.getString(`search-engine`);
 
-        const res = await client.player.search(name, {
-            requestedBy: interaction.member,
-            searchEngine: QueryType.AUTO
-        });
+		if (!name) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Write the name of the music you want to play. ❌`, ephemeral: true });
 
-        if (!res || !res.tracks.length) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `No results found! ❌`, ephemeral: true });
+		const res = await client.player.search(name, {
+			requestedBy: interaction.member,
+			searchEngine: QueryType.AUTO,
+			fallbackSearchEngine: (searchEngine ? searchEngine : `youtubeSearch`)
+		});
 
-        const queue = await createQueue(client, interaction);
+		if (!res || !res.tracks.length) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `No results found! ❌`, ephemeral: true });
 
-        try {
-            if (!queue.connection) await queue.connect(interaction.member.voice.channel);
-        } catch {
-            await client.player.deleteQueue(interaction.guild.id);
-            return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `I can't join the audio channel. ❌`, ephemeral: true });
-        }
-      
-        await interaction.editReply({ content: `Your ${res.playlist ? 'Playlist' : 'Track'} is loading now... 🎧` }).catch(e => {});
+		const queue = await createQueue(client, interaction);
 
-      const filter = res.tracks[0].title; // adds an variable that is used to check for the blacklist
-      
-//      console.log('RES TRACKS 0:\n'+filter); // info ausgabe der res (result) variable zum Filtern, nur Ergebnis 1
-//      console.log('Blacklist detection:', blacklist.includes(filter)); // Test auf Blacklist mit Konsolenausgabe
-      
-        if (blacklist.includes(filter)) { // Filter
-          return interaction.followUp({ content: `${interaction.member.user}, Something went wrong :( ❌`, ephemeral: true }).catch(e => { }); // "Fehlermeldung"
-        } else {
-          res.playlist ? queue.addTracks(res.tracks) : queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
-        }
+		try {
+			if (!queue.connection) await queue.connect(interaction.member.voice.channel);
+		} catch {
+			await queue.destroy();
+			return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `I can't join the audio channel. ❌`, ephemeral: true });
+		}
 
-        if (!queue.playing) await queue.play();
-    },
+		await interaction.editReply({ content: `Your ${res.playlist ? `Playlist` : `Track`} is loading now... 🎧` }).catch((e) => {}); // eslint-disable-line no-unused-vars
+
+		res.playlist ? queue.addTrack(res.tracks) : queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
+
+		if (!queue.node.isPlaying()) await queue.node.play();
+	}
 };

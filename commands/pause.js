@@ -1,16 +1,16 @@
 module.exports = {
-    description: "Pauses the currently playing music.",
-    name: 'pause',
-    options: [],
-    voiceChannel: true,
+	description: `Pauses the currently playing music.`,
+	name: `pause`,
+	options: [],
+	voiceChannel: true,
 
-    run: async (client, interaction) => {
-        const queue = client.player.getQueue(interaction.guild.id);
+	run: async (client, interaction) => {
+		const queue = client.player.nodes.get(interaction.guild.id);
 
-       if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { });
+		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
 
-        const success = queue.setPaused(true);
+		const success = queue.node.pause();
 
-        return interaction.reply({ content: success ? `The song currently playing, **${queue.current.title}**, has been paused ✅` : `Something went wrong. ❌` }).catch(e => { });
-    },
+		return interaction.reply({ content: success ? `The song currently playing, **${queue.currentTrack.title}**, has been paused ✅` : `Something went wrong. ❌` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+	}
 };
