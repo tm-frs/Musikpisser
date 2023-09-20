@@ -4,9 +4,10 @@
   "author": "CraftingShadowDE",
   "description": "Discord.js V14 Compatible || CraftingShadowDE's Music Bot Shared on GitHub!",
   "scripts": {
-    "start": "node main.js",
+    "start": "node --trace-warnings main.js",
     "prereinstall": "rm -rf node_modules",
-    "reinstall": "npm install"
+    "reinstall": "npm install",
+    "eslint": ".\\node_modules\\.bin\\eslint .\\"
   },
   "repository": {
     "type": "git",
@@ -17,10 +18,11 @@
     "url": "https://github.com/CraftingShadowDE/Musikpisser/issues"
   },
   "dependencies": {
-    "@discord-player/extractor": "^4.0.0",
-    "@discordjs/voice": "^0.14.0",
+    "@discord-player/extractor": "^4.4.4",
+    "@discordjs/opus": "^0.9.0",
+    "@discordjs/voice": "^0.16.0",
     "dev-null": "^0.1.1",
-    "discord-player": "^5.4.0",
+    "discord-player": "^6.6.4",
     "discord-sync-commands-v14": "^2.0.0",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
@@ -28,12 +30,14 @@
     "ffmpeg-static": "^5.1.0",
     "ip": "^1.1.8",
     "ms": "^3.0.0-canary.1",
-    "opusscript": "^0.0.8",
     "orio.db": "^3.1.1",
     "play-dl": "^1.9.6",
     "ytdl-core": "^4.11.2"
   },
   "engines": {
     "node": "16.x"
+  },
+  "devDependencies": {
+    "eslint": "^8.49.0"
   }
 }
