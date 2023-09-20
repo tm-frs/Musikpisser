@@ -1,18 +1,18 @@
-const maxVol = require("../config.js").opt.maxVol;
+const maxVol = require(`../config.js`).opt.maxVol;
 
 module.exports = {
-    description: "Changes the volume of the music to max volume.",
-    name: 'maxvolume',
-    options: [],
-    voiceChannel: true,
+	description: `Changes the volume of the music to max volume.`,
+	name: `maxvolume`,
+	options: [],
+	voiceChannel: true,
 
-    run: async (client, interaction) => {
-        const queue = client.player.getQueue(interaction.guild.id);
+	run: async (client, interaction) => {
+		const queue = client.player.nodes.get(interaction.guild.id);
 
-       if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { });
+		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
 
-		queue.setVolume(maxVol);
+		queue.node.setVolume(maxVol);
 
-        return interaction.reply({ content: `Volume changed to max volume (**${maxVol}%**) 🔊` }).catch(e => { }) ;
-    },
+		return interaction.reply({ content: `Volume changed to max volume (**${maxVol}%**) 🔊` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+	}
 };

@@ -1,22 +1,19 @@
-const { QueueRepeatMode } = require('discord-player');
-
 module.exports = {
-	description: "Shuffles the queue. (The current song and the next song won't be shuffled)",
-    name: 'shuffle',
-    options: [],
-    voiceChannel: true,
+	description: `Shuffles the queue. (The current song and the next song won't be shuffled)`,
+	name: `shuffle`,
+	options: [],
+	voiceChannel: true,
 
-    run: async (client, interaction) => {
-        const queue = client.player.getQueue(interaction.guild.id);
+	run: async (client, interaction) => {
+		const queue = client.player.nodes.get(interaction.guild.id);
 
- 
-if (!queue || !queue.playing) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch(e => { });
 
-        if (queue || queue.playing) {
+		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
 
-            const success = queue.shuffle();
+		if (queue || queue.node.isPlaying()) {
+			const success = queue.tracks.shuffle();
 
-            return interaction.reply({ content: success ? `Queue has been shuffled! ✅` : `Something went wrong. ❌` }).catch(e => { });
-        }
-    },
+			return interaction.reply({ content: success ? `Queue has been shuffled! ✅` : `Something went wrong. ❌` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		}
+	}
 };
