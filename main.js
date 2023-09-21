@@ -62,7 +62,9 @@ console.error = function() {
 };
 process.on(`uncaughtException`, function(err) {
 	console.error((err && err.stack) ? err.stack : err);
-	//process.kill(process.pid);
+	setTimeout(() => {
+		process.kill(process.pid);
+	}, 10000);
 });
 
 const maybeUpdateLogFile = async () => {

@@ -32,7 +32,8 @@ module.exports = {
 
 			const queue = client.player.nodes.get(interaction.guild.id);
 			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
-			const success = queue.setRepeatMode(QueueRepeatMode.OFF);
+			await queue.setRepeatMode(QueueRepeatMode.OFF);
+			const success = (queue.repeatMode === QueueRepeatMode.OFF);
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 			const mode = options[0];
 
@@ -54,7 +55,8 @@ module.exports = {
 
 			const queue = client.player.nodes.get(interaction.guild.id);
 			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
-			const success = queue.setRepeatMode(QueueRepeatMode.TRACK);
+			await queue.setRepeatMode(QueueRepeatMode.TRACK);
+			const success = (queue.repeatMode === QueueRepeatMode.TRACK);
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 			const mode = options[1];
 
@@ -76,7 +78,8 @@ module.exports = {
 
 			const queue = client.player.nodes.get(interaction.guild.id);
 			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
-			const success = queue.setRepeatMode(QueueRepeatMode.QUEUE);
+			await queue.setRepeatMode(QueueRepeatMode.QUEUE);
+			const success = (queue.repeatMode === QueueRepeatMode.QUEUE);
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 			const mode = options[2];
 
@@ -98,7 +101,8 @@ module.exports = {
 
 			const queue = client.player.nodes.get(interaction.guild.id);
 			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
-			const success = queue.setRepeatMode(QueueRepeatMode.AUTOPLAY);
+			await queue.setRepeatMode(QueueRepeatMode.AUTOPLAY);
+			const success = (queue.repeatMode === QueueRepeatMode.AUTOPLAY);
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 			const mode = options[3];
 

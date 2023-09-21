@@ -1,4 +1,4 @@
-const createQueue = async (client, interaction) => {
+const createQueue = async (client, interaction, initVolume) => {
 	const queue = await client.player.nodes.create(interaction.guild, {
 		metadata: {
 			channel: interaction.channel,
@@ -7,7 +7,7 @@ const createQueue = async (client, interaction) => {
 		},
 		leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
 		selfDeaf: client.config.opt.voiceConfig.selfDeaf,
-		volume: client.config.opt.discordPlayer.initialVolume,
+		volume: ((initVolume !== undefined) ? initVolume : client.config.opt.discordPlayer.initialVolume),
 		volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
 	});
 	return queue;

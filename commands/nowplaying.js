@@ -23,11 +23,11 @@ module.exports = {
 		const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 		const loopMode = options[queue.repeatMode];
 
-		const timestamp = queue.getPlayerTimestamp();
+		const timestamp = queue.node.getTimestamp();
 		const trackDuration = timestamp.progress === `Forever` ? `Endless (Live)` : track.duration;
 		const playlist = (typeof track.playlist === `undefined`) ? (`**Playlist:** \`none\``) : (`**Playlist:** [${track.playlist.title}](${track.playlist.url}) by [${track.playlist.author.name}](${track.playlist.author.url})`);
 
-		embed.setDescription(`**Title:** \`${track.title}\`\n**Author:** \`${track.author}\`\n**URL:** ${track.url}\n${playlist}\n**Duration:** \`${trackDuration}\`\n**Loop Mode:** \`${loopMode}\`\n**Audio:** \`${queue.volume}%\`\n**Track added by:** ${track.requestedBy}`);
+		embed.setDescription(`**Title:** \`${track.title}\`\n**Author:** \`${track.author}\`\n**URL:** ${track.url}\n${playlist}\n**Duration:** \`${trackDuration}\`\n**Loop Mode:** \`${loopMode}\`\n**Audio:** \`${queue.node.volume}%\`\n**Track added by:** ${track.requestedBy}`);
 
 		embed.setTimestamp();
 		embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
@@ -42,7 +42,8 @@ module.exports = {
 		saveButton.setCustomId(`saveTrack`);
 		saveButton.setStyle(ButtonStyle.Success);
 
-		const row = new ActionRowBuilder().addComponents(updateButton)
+		const row = new ActionRowBuilder()
+			.addComponents(updateButton)
 			.addComponents(saveButton);
 
 		interaction.reply({ embeds: [embed], components: [row] }).catch((e) => { }); // eslint-disable-line no-unused-vars
