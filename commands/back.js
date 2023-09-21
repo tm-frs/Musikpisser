@@ -1,5 +1,5 @@
 module.exports = {
-	description: `Switches back to the previous song.`,
+	description: `Plays the previous song and moves the current one to queue.`,
 	name: `back`,
 	options: [],
 	voiceChannel: true,
@@ -9,7 +9,7 @@ module.exports = {
 
 		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
 
-		if (!queue.previousTracks[1]) return interaction.reply({ content: `There was no music playing before ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		if (!(queue.history.size > 0)) return interaction.reply({ content: `So far, no track has left the queue (or all were back-ed in again) ❌\n*(if the queue is looping so the tracks aren't actually removed, they don't count)*`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
 
 		await queue.history.back();
 

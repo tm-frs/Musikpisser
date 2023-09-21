@@ -1,5 +1,7 @@
+const initialVolume = require(`../config.js`).opt.discordPlayer.initialVolume;
+
 module.exports = {
-	description: `Changes the volume of the music to initial/normal volume (default is 100%).`,
+	description: `Changes the volume of the music to normal/initial volume (${initialVolume}%).`,
 	name: `normalvolume`,
 	options: [],
 	voiceChannel: true,
@@ -9,8 +11,8 @@ module.exports = {
 
 		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
 
-		queue.node.setVolume(client.config.opt.discordPlayer.initialVolume);
+		queue.node.setVolume(initialVolume);
 
-		return interaction.reply({ content: `Volume changed to initial/normal volume (**${client.config.opt.discordPlayer.initialVolume}%**) 🔊` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		return interaction.reply({ content: `Volume changed to initial/normal volume (**${initialVolume}%**) 🔊` }).catch((e) => { }); // eslint-disable-line no-unused-vars
 	}
 };

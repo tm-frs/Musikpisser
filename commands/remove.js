@@ -10,7 +10,7 @@ module.exports = {
 		const queue = client.player.nodes.get(interaction.guild.id);
 
 		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
-		if (!queue.tracks[0] && !(queue.repeatMode === 3)) return interaction.reply({ content: `No music in queue after current so this would stop the music ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		if (!queue.tracks.data[0] && !(queue.repeatMode === 3)) return interaction.reply({ content: `No music in queue after current so this would stop the music ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
 
 		if (queue.repeatMode === 1) { //----------------------------------------------------------------QUEUE REPEAT MODE = TRACK
 			queue.setRepeatMode(QueueRepeatMode.OFF);
