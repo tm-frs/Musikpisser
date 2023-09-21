@@ -1,5 +1,6 @@
 const { Colors } = require(`discord.js`);
-const Discord = require(`discord.js`);
+const { ButtonStyle } = require(`discord.js`);
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require(`discord.js`);
 
 module.exports = {
 	description: `Shows you the bot's ping.`,
@@ -10,7 +11,14 @@ module.exports = {
 		const start = Date.now();
 		interaction.reply(`Please wait...`).then(async () => {
 			let last = Date.now();
-			const embed = new Discord.EmbedBuilder()
+
+			const updateButton = new ButtonBuilder();
+			updateButton.setLabel(`Update`);
+			updateButton.setCustomId(`ping`);
+			updateButton.setStyle(ButtonStyle.Success);
+			const row = new ActionRowBuilder().addComponents(updateButton);
+
+			const embed = new EmbedBuilder()
 				.setColor(Colors.Blue) // blue = 0x3498DB
 				.setTitle(client.user.username + ` - Current Ping`)
 				.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
@@ -18,7 +26,7 @@ module.exports = {
 					{ name: `API Latency (time the API needs to do things):`, value: `\`${Math.round(client.ws.ping)}ms\` 🛰️` }])
 				.setTimestamp()
 				.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-			interaction.editReply({ content: null, embeds: [embed] }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			interaction.editReply({ content: null, embeds: [embed], components: [row] }).catch((e) => { }); // eslint-disable-line no-unused-vars
 		});
 	}
 };

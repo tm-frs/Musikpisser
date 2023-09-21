@@ -1,43 +1,7 @@
 const { ApplicationCommandOptionType } = require(`discord.js`);
 const discordTools = require(`../exports/discordTools.js`);
+const { convertSecondsToString, convertStringToSeconds } = require(`../exports/timeStrings.js`);
 
-const convertSecondsToString = async (secondsInput) => {
-	var stringOutput = ``;
-	var tempMathValue;
-	tempMathValue = secondsInput;
-	var days = 0;
-	var hours = 0;
-	var minutes = 0;
-	var seconds = 0;
-
-	if ((tempMathValue % (24 * 60 * 60)) !== tempMathValue) days = parseInt(tempMathValue / (24 * 60 * 60));
-	tempMathValue -= (days * 24 * 60 * 60);
-	const daysString = ((`` + days).length === 1) ? (`0` + days) : (`` + days);
-
-	if ((tempMathValue % (60 * 60)) !== tempMathValue) hours = parseInt(tempMathValue / (60 * 60));
-	tempMathValue -= (hours * 60 * 60);
-	const hoursStringLong = ((`` + hours).length === 1) ? (`0` + hours) : (`` + hours);
-	const hoursStringShort = (`` + hours);
-
-	if ((tempMathValue % 60) !== tempMathValue) minutes = parseInt(tempMathValue / 60);
-	tempMathValue -= (minutes * 60);
-	const minutesStringLong = ((`` + minutes).length === 1) ? (`0` + minutes) : (`` + minutes);
-	const minutesStringShort = (`` + minutes);
-
-	seconds = tempMathValue;
-	const secondsString = ((`` + seconds).length === 1) ? (`0` + seconds) : (`` + seconds);
-
-	if (days !== 0) stringOutput = (daysString + `:` + hoursStringLong + `:` + minutesStringLong + `:` + secondsString);
-	if (days === 0 && hours !== 0) stringOutput = (hoursStringShort + `:` + minutesStringLong + `:` + secondsString);
-	if (days === 0 && hours === 0) stringOutput = (minutesStringShort + `:` + secondsString);
-
-	return stringOutput;
-};
-const convertStringToSeconds = async (stringInput) => {
-	const stringArray = stringInput.split(`:`);
-	const seconds = (stringArray.length === 1) ? (+stringArray[0]) : (stringArray.length === 2) ? ((+stringArray[0]) * 60 + (+stringArray[1])) : (stringArray.length === 3) ? (((+stringArray[0]) * 60 + (+stringArray[1])) * 60 + (+stringArray[2])) : (stringArray.length === 4) ? ((((+stringArray[0]) * 24 + (+stringArray[1])) * 60 + (+stringArray[2])) * 60 + (+stringArray[3])) : 0;
-	return seconds;
-};
 
 module.exports = {
 	description: `Allows you to jump to a specific part of the current track.`,
@@ -70,19 +34,19 @@ module.exports = {
 		const minutesInput = interaction.options.getNumber(`minute`);
 		const hoursInput = interaction.options.getNumber(`hour`);
 		const secondsJumpTo = (secondsInput + parseInt((minutesInput + (hoursInput * 60)) * 60));
-		const jumpToString = await convertSecondsToString(secondsJumpTo);
+		const jumpToString = convertSecondsToString(secondsJumpTo);
 
-		const currentProgressSeconds = await convertStringToSeconds((await queue.getPlayerTimestamp()).current);
-		const currentProgressString = await convertSecondsToString(currentProgressSeconds);
+		const currentProgressSeconds = Math.round(((await queue.node.getTimestamp()).current.value) / 1000);
+		const currentProgressString = convertSecondsToString(currentProgressSeconds);
 
-		const trackDurationString = await convertStringToSeconds(await queue.currentTrack.duration);
-		const trackDurationSeconds = await convertSecondsToString(trackDurationString);
+		const trackDurationString = convertStringToSeconds(await queue.currentTrack.duration);
+		const trackDurationSeconds = convertSecondsToString(trackDurationString);
 
 		if (!secondsInput && !minutesInput && !hoursInput) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You need to specify where you want to jump to. ❌`, ephemeral: true });
 		if ((secondsInput < 0) || (minutesInput < 0) || (hoursInput < 0)) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You can't jump to a negative time! ❌`, ephemeral: true });
 		if (secondsJumpTo > trackDurationString) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `The current track is only **${trackDurationSeconds}** long but you wanted to jump to **${jumpToString}**. ❌`, ephemeral: true });
 
-		const success = queue.seek(secondsJumpTo * 1000);
+		const success = queue.node.seek(secondsJumpTo * 1000);
 
 		return success ? interaction.editReply({ content: `Jumped from **${currentProgressString}** to **${jumpToString}** (the track is **${trackDurationSeconds}** long). ✅` }).catch((e) => { }) // eslint-disable-line no-unused-vars
 			: discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Something went wrong. ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars

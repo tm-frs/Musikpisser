@@ -62,7 +62,7 @@ const processInput = async (chosenItem, autoaddItems) => {
 };
 
 const defaultAfterAdd = async (client, interaction, queue, QueueRepeatMode) => { // eslint-disable-line no-unused-vars
-	queue.node.setVolume(client.config.opt.discordPlayer.initialVolume);
+	return null;
 };
 
 module.exports = {
@@ -92,7 +92,7 @@ module.exports = {
 
 		await interaction.deferReply();
 
-		const queue = await createQueue(client, interaction);
+		const queue = await createQueue(client, interaction, 0);
 
 		const addTracks = async (target, trackIndex, trackAmount) => {
 			const res = await client.player.search(target, {
@@ -119,8 +119,6 @@ module.exports = {
 				queue.addTrack(toAdd);
 			}();
 
-			queue.node.setVolume(0); // volume to 0
-
 			if (trackAmount !== (trackIndex + 1)) await wait(100);
 		};
 
@@ -132,8 +130,11 @@ module.exports = {
 		}
 
 		if (!queue.node.isPlaying()) await queue.node.play();
-
+		await wait(2000);
 		if (!chosenItem.afterAdd) chosenItem.afterAdd = defaultAfterAdd;
-		chosenItem.afterAdd(client, interaction, queue, QueueRepeatMode);
+		await chosenItem.afterAdd(client, interaction, queue, QueueRepeatMode);
+		await wait(2000);
+		await queue.node.seek(0);
+		await queue.node.setVolume(client.config.opt.discordPlayer.initialVolume);
 	}
 };

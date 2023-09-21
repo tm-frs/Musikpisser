@@ -14,14 +14,14 @@ module.exports = {
 		required: true
 	}, {
 		name: `search-engine`,
-		description: `Select a search engine you like (YouTube is chosen if this is left empty).`,
+		description: `Select a search engine you like (no choice => YouTube).`,
 		type: ApplicationCommandOptionType.String,
 		choices: [
-			{name: `YouTube-Suche`, value: `youtubeSearch`},
-			{name: `Spotify-Suche`, value: `spotifySearch`},
-			{name: `Soundcloud-Suche`, value: `soundcloudSearch`},
-			{name: `Apple Music-Suche`, value: `appleMusicSearch`},
-			{name: `discord-player Standardsuche (Spotify)`, value: `autoSearch`}
+			{name: `YouTube Search`, value: `youtubeSearch`},
+			{name: `Spotify Search`, value: `spotifySearch`},
+			{name: `Soundcloud Search`, value: `soundcloudSearch`},
+			{name: `Apple Music Search`, value: `appleMusicSearch`},
+			{name: `discord-player default (should be Spotify)`, value: `autoSearch`}
 		],
 		required: false
 	}],
