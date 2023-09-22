@@ -171,7 +171,7 @@ module.exports = async (client, interaction) => {
 
 					const timestamp = queue.node.getTimestamp();
 					const trackDuration = timestamp.progress === `Forever` ? `Endless (Live)` : track.duration;
-					const playlist = (typeof track.playlist === `undefined`) ? (`**Playlist:** \`none\``) : (`**Playlist:** [${track.playlist.title}](${track.playlist.url}) by [${track.playlist.author.name}](${track.playlist.author.url})`);
+					const playlist = (typeof track.playlist === `undefined`) ? (`**Playlist:** \`none\``) : (`**Playlist:** [${track.playlist.title}](${track.playlist.url}) by \`${track.playlist.author.name}\``);
 
 					embed.setDescription(`**Title:** \`${track.title}\`\n**Author:** \`${track.author}\`\n**URL:** ${track.url}\n${playlist}\n**Duration:** \`${trackDuration}\`\n**Loop Mode:** \`${loopMode}\`\n**Audio:** \`${queue.node.volume}%\`\n**Track added by:** ${track.requestedBy}`);
 
