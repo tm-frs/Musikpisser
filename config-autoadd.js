@@ -50,7 +50,7 @@ const singleprep = async (client, interaction, queue, QueueRepeatMode) => { // e
 
 module.exports = [
 	{
-		internalId: `rasputin`,
+		internalId: `toadSingsRasputin`,
 		isMix: false,
 		content: [`https://www.youtube.com/watch?v=KT85z_tGZro`],
 		createCommand: true,
@@ -58,19 +58,11 @@ module.exports = [
 		afterAdd: singleprep
 	},
 	{
-		internalId: `wideputin`,
-		isMix: false,
-		content: [`https://www.youtube.com/watch?v=RHRKu5mStNk`],
-		createCommand: true,
-		commandTitle: `Song for Denise (Maxi Version) bass boosted 1 hour`,
-		afterAdd: singleprep
-	},
-	{
 		internalId: `undertaleBossOst`,
 		isMix: false,
 		content: [`https://www.youtube.com/playlist?list=PLvJE24xlovhuuhaQInNsjRyRF8QdFnh6V`],
 		createCommand: true,
-		commandTitle: `Undertale OST Playlist (only boss fights)`,
+		commandTitle: `Undertale OST (only boss fights)`,
 		afterAdd: playlistprep
 	},
 	{
@@ -82,6 +74,14 @@ module.exports = [
 		afterAdd: playlistprep
 	},
 	{
+		internalId: `undertaleBoth`,
+		isMix: true,
+		content: [`undertaleBossOst`, `undertaleRemixes`],
+		createCommand: true,
+		commandTitle: `Undertale (Boss OST & Remixes)`,
+		afterAdd: playlistprep
+	},
+	{
 		internalId: `hypixelSkyblockOst`,
 		isMix: false,
 		content: [`https://www.youtube.com/playlist?list=PLPYaA8L35a72GLLbbMKc2v8D-AHPDFXsV`],
@@ -90,27 +90,27 @@ module.exports = [
 		afterAdd: playlistprep
 	},
 	{
-		internalId: `chill`,
+		internalId: `nintendoAndChill`, // https://open.spotify.com/intl-de/artist/1T7zBkQCOCacKjbnmFX7cp/discography/album
 		isMix: false,
-		content: [`https://soundcloud.com/gamechops/sets/zelda-chill`, `https://soundcloud.com/daniel-egan-16/sets/zelda-and-chill-2`, `https://soundcloud.com/pokegamer05/sets/zelda-and-chill-3`, `https://soundcloud.com/mikeljakobi/sets/poke-chill`],
+		content: [`https://open.spotify.com/intl-de/album/4lBMa9JEuCSIs3NkPEIwvN?si=z25t1nqmQEe78ttSvO9QyQ`, `https://open.spotify.com/intl-de/album/3oNO1P0Qlr4oSlMA2MIj67?si=ydDtluOOQr-RSAfIbocFag`, `https://open.spotify.com/intl-de/album/0N0noai9OQs1rYEaS47vJw?si=RAmn0gOGRBm9EexcGMjFPQ`, `https://open.spotify.com/intl-de/album/2a15PtLwMSfMVOWJUcM4Ia?si=E-pYcPWTQMOUW00HPIQIKg`],//[`https://soundcloud.com/mikeljakobi/sets/poke-chill`, `https://soundcloud.com/gamechops/sets/zelda-chill`, `https://soundcloud.com/daniel-egan-16/sets/zelda-and-chill-2`, `https://soundcloud.com/pokegamer05/sets/zelda-and-chill-3`],
 		createCommand: true,
-		commandTitle: `Chill Music ("Poké & Chill", "Zelda & Chill", "Zelda & Chill 2", ...)`,
+		commandTitle: `Nintendo and Chill (Poké & Chill, Zelda & Chill 1-3)`,
 		afterAdd: playlistprep
 	},
 	{
-		internalId: `splatoon3Ost`,
-		isMix: false,
-		content: [`https://www.youtube.com/playlist?list=PLxGVeb0fxoSjiSkrp8x6CsdYdzCnDD4WD`],
-		createCommand: true,
-		commandTitle: `Splatoon 3 OST`,
-		afterAdd: playlistprep
-	},
-	{
-		internalId: `mix1`,
+		internalId: `undertale-hypixel`,
 		isMix: true,
-		content: [`undertaleBossOst`, `undertaleRemixes`, `hypixelSkyblockOst`, `splatoon3Ost`],
+		content: [`undertaleBoth`, `hypixelSkyblockOst`],
 		createCommand: true,
-		commandTitle: `Mix 1 (Undertale (both), Hypixel Skyblock, Chill, Splatoon 3)`,
+		commandTitle: `Undertale (both) + Hypixel Skyblock OST`,
+		afterAdd: playlistprep
+	},
+	{
+		internalId: `playlistAll`,
+		isMix: true,
+		content: [`undertaleBoth`, `hypixelSkyblockOst`, `nintendoAndChill`],
+		createCommand: true,
+		commandTitle: `everything (Undertale, Hypixel Skyblock, )`,
 		afterAdd: playlistprep
 	}
 ];
