@@ -110,7 +110,7 @@ module.exports = [
 		isMix: true,
 		content: [`undertaleBoth`, `hypixelSkyblockOst`, `nintendoAndChill`],
 		createCommand: true,
-		commandTitle: `everything (Undertale, Hypixel Skyblock, )`,
+		commandTitle: `everything (Undertale, Hypixel Skyblock, ...)`,
 		afterAdd: playlistprep
 	}
 ];
