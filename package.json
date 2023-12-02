@@ -20,7 +20,7 @@
   "dependencies": {
     "@discord-player/extractor": "^4.4.5",
     "@discordjs/opus": "^0.9.0",
-    "@discordjs/voice": "^0.16.0",
+    "@discordjs/voice": "^0.16.1",
     "dev-null": "^0.1.1",
     "discord-player": "^6.6.6",
     "discord-sync-commands-v14": "^2.0.0",
