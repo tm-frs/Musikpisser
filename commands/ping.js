@@ -26,7 +26,7 @@ module.exports = {
 					{ name: `API Latency (time the API needs to do things):`, value: `\`${Math.round(client.ws.ping)}ms\` 🛰️` }])
 				.setTimestamp()
 				.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-			interaction.editReply({ content: null, embeds: [embed], components: [row] }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			interaction.editReply({ content: null, embeds: [embed], components: [row] }).catch((e) => { });
 		});
 	}
 };

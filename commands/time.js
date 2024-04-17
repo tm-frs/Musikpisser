@@ -12,7 +12,7 @@ module.exports = {
 	run: async (client, interaction) => {
 		const queue = client.player.nodes.get(interaction.guild.id);
 
-		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 
 		const progress = queue.node.createProgressBar();
 		const timestamp = queue.node.getTimestamp();
@@ -21,7 +21,7 @@ module.exports = {
 		const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`;
 		const playingDuraionString = convertSecondsToString(Math.round(queue.node.streamTime / 1000));
 
-		if (timestamp.progress === `Infinity`) return interaction.reply({ content: `This song is live streaming, no duration data to display. 🎧`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		if (timestamp.progress === `Infinity`) return interaction.reply({ content: `This song is live streaming, no duration data to display. 🎧`, ephemeral: true }).catch((e) => { });
 
 		const updateButton = new ButtonBuilder();
 
@@ -38,6 +38,6 @@ module.exports = {
 			.setTimestamp()
 			.setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nCurrent session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*`)
 			.setFooter({ text: `Music Bot - by CraftingShadowDE️`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-		interaction.reply({ embeds: [embed], components: [row]}).catch((e) => { }); // eslint-disable-line no-unused-vars
+		interaction.reply({ embeds: [embed], components: [row]}).catch((e) => { });
 	}
 };

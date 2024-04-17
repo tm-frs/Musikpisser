@@ -34,9 +34,6 @@
     "play-dl": "^1.9.7",
     "ytdl-core": "^4.11.2"
   },
-  "engines": {
-    "node": "16.x"
-  },
   "devDependencies": {
     "eslint": "^9.0.0"
   }

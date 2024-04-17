@@ -29,10 +29,10 @@ module.exports = {
 				.setTimestamp()
 				.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-			await interaction.editReply({ embeds: [embed], content: `Here it is! ✅ Be careful with this!`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			await interaction.editReply({ embeds: [embed], content: `Here it is! ✅ Be careful with this!`, ephemeral: true }).catch((e) => { });
 		} else {
 			console.log(`Get-IP command not executed because ` + messagecreator + ` has no permission. \nThe following user(s) is/are allowed to get the bot's IP:\n` + adminperms); // writes in logs if command failed because there are no permissions and tells the user he is not allowed to get the bot's IP
-			return interaction.editReply({ content: `You are not allowed to do this! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			return interaction.editReply({ content: `You are not allowed to do this! ❌`, ephemeral: true }).catch((e) => { });
 		}
 	}
 };

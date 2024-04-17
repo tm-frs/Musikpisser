@@ -10,13 +10,13 @@ module.exports = {
 		const messagecreator = (interaction.member.user.username + `#` + interaction.member.user.discriminator); // saves the name of the user executing this as a variable
 		console.log(`Crash command executed by: ` + messagecreator); // will let you see in the logs who used the command
 		if (adminperms.includes(messagecreator)) { // checks if user is allowed to let the bot crash
-			interaction.reply({ content: `Bot will be crashed ️✅` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			interaction.reply({ content: `Bot will be crashed ️✅` }).catch((e) => { });
 			setTimeout(function() {
 				process.kill(process.pid); //kill the bot process
 			}, 1000);
 		} else {
 			console.log(`Crash command not executed because ` + messagecreator + ` has no permission. \nThe following user(s) is/are allowed to crash the bot:\n` + adminperms); // writes in logs if command failed because there are no permissions and tells the user he is not allowed to let the bot crash
-			return interaction.reply({ content: `You are not allowed to do this! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			return interaction.reply({ content: `You are not allowed to do this! ❌`, ephemeral: true }).catch((e) => { });
 		}
 	}
 };

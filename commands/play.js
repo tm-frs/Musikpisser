@@ -51,7 +51,7 @@ module.exports = {
 			return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `I can't join the audio channel. ❌`, ephemeral: true });
 		}
 
-		await interaction.editReply({ content: `Your ${res.playlist ? `Playlist` : `Track`} is loading now... 🎧` }).catch((e) => {}); // eslint-disable-line no-unused-vars
+		await interaction.editReply({ content: `Your ${res.playlist ? `Playlist` : `Track`} is loading now... 🎧` }).catch((e) => {});
 
 		res.playlist ? queue.addTrack(res.tracks) : queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
 

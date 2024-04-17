@@ -14,9 +14,9 @@ module.exports = {
 		const queue = client.player.nodes.get(interaction.guild.id);
 
 
-		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 
-		if (!queue.tracks.data[0]) return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		if (!queue.tracks.data[0]) return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch((e) => { });
 
 		const unixPlayingSince = Math.round((Date.now() - queue.node.streamTime) / 1000);
 		const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`;
@@ -48,6 +48,6 @@ module.exports = {
 		embed.setTimestamp();
 		embed.setFooter({text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-		interaction.reply({ embeds: [embed], components: [row]}).catch((e) => { }); // eslint-disable-line no-unused-vars
+		interaction.reply({ embeds: [embed], components: [row]}).catch((e) => { });
 	}
 };

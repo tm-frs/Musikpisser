@@ -48,7 +48,8 @@ module.exports = {
 
 		const success = queue.node.seek(secondsJumpTo * 1000);
 
-		return success ? interaction.editReply({ content: `Jumped from **${currentProgressString}** to **${jumpToString}** (the track is **${trackDurationSeconds}** long). ✅` }).catch((e) => { }) // eslint-disable-line no-unused-vars
-			: discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Something went wrong. ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		return success ?
+			interaction.editReply({ content: `Jumped from **${currentProgressString}** to **${jumpToString}** (the track is **${trackDurationSeconds}** long). ✅` }).catch((e) => { }) :
+			discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Something went wrong. ❌`, ephemeral: true }).catch((e) => { });
 	}
 };

@@ -31,7 +31,7 @@ module.exports = {
 			if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 
 			const queue = client.player.nodes.get(interaction.guild.id);
-			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 			await queue.setRepeatMode(QueueRepeatMode.OFF);
 			const success = (queue.repeatMode === QueueRepeatMode.OFF);
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
@@ -48,13 +48,13 @@ module.exports = {
 			embed.setTimestamp();
 			embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `track`) { //LOOP TRACK -------------------------------------------------------------------------------------------------------------------------------------------------
 			if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
 			if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 
 			const queue = client.player.nodes.get(interaction.guild.id);
-			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 			await queue.setRepeatMode(QueueRepeatMode.TRACK);
 			const success = (queue.repeatMode === QueueRepeatMode.TRACK);
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
@@ -71,13 +71,13 @@ module.exports = {
 			embed.setTimestamp();
 			embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `queue`) { //LOOP QUEUE -------------------------------------------------------------------------------------------------------------------------------------------------
 			if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
 			if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 
 			const queue = client.player.nodes.get(interaction.guild.id);
-			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 			await queue.setRepeatMode(QueueRepeatMode.QUEUE);
 			const success = (queue.repeatMode === QueueRepeatMode.QUEUE);
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
@@ -94,13 +94,13 @@ module.exports = {
 			embed.setTimestamp();
 			embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `autoplay`) { //LOOP AUTOPLAY -------------------------------------------------------------------------------------------------------------------------------------------
 			if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
 			if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 
 			const queue = client.player.nodes.get(interaction.guild.id);
-			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 			await queue.setRepeatMode(QueueRepeatMode.AUTOPLAY);
 			const success = (queue.repeatMode === QueueRepeatMode.AUTOPLAY);
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
@@ -117,7 +117,7 @@ module.exports = {
 			embed.setTimestamp();
 			embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `info`) { //LOOP INFO ---------------------------------------------------------------------------------------------------------------------------------------------------
 			const queue = client.player.nodes.get(interaction.guild.id);
 			const noqueue = (!queue || !queue.node.isPlaying());
@@ -135,7 +135,7 @@ module.exports = {
 			embed.setTimestamp();
 			embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-			interaction.reply({ embeds: [embed] }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			interaction.reply({ embeds: [embed] }).catch((e) => { });
 		} //ENDE --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	}
 };
