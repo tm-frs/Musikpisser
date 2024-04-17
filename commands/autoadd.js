@@ -82,9 +82,9 @@ module.exports = {
 			if (userInput[i]) userInputNotNull.push(foundItem ? foundItem : null);
 		}
 		if (userInputNotNull.length === 0) {
-			return interaction.reply({ content: `Choose a filter from one of the lists! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			return interaction.reply({ content: `Choose a filter from one of the lists! ❌`, ephemeral: true }).catch((e) => { });
 		} else if (userInputNotNull.length > 1) {
-			return interaction.reply({ content: `Only choose a filter from **one** list! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			return interaction.reply({ content: `Only choose a filter from **one** list! ❌`, ephemeral: true }).catch((e) => { });
 		}
 
 		let chosenItem = userInputNotNull[0];
@@ -101,17 +101,17 @@ module.exports = {
 			});
 
 			if (!res || !res.tracks.length) if (trackIndex === 0) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `No results found! ❌`, ephemeral: true });
-			if (!res || !res.tracks.length) if (trackIndex !== 0) return interaction.followUp({ content: `No results found! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			if (!res || !res.tracks.length) if (trackIndex !== 0) return interaction.followUp({ content: `No results found! ❌`, ephemeral: true }).catch((e) => { });
 
 			try {
 				if (!queue.connection) await queue.connect(interaction.member.voice.channel);
 			} catch {
 				await client.player.deleteQueue(interaction.guild.id);
 				if (trackIndex === 0) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `I can't join the audio channel. ❌`, ephemeral: true });
-				if (trackIndex !== 0) return interaction.followUp({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+				if (trackIndex !== 0) return interaction.followUp({ content: `I can't join the audio channel. ❌`, ephemeral: true }).catch((e) => { });
 			}
 
-			if (trackIndex === 0) await interaction.editReply({ content: `Your ${((trackAmount > 1) ? true : res.playlist) ? `Playlist` : `Track`} is loading now... 🎧` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+			if (trackIndex === 0) await interaction.editReply({ content: `Your ${((trackAmount > 1) ? true : res.playlist) ? `Playlist` : `Track`} is loading now... 🎧` }).catch((e) => { });
 
 			res.playlist ? queue.addTrack(res.tracks) : function() {
 				let toAdd = res.tracks[0];

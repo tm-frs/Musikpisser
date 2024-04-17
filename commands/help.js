@@ -25,6 +25,6 @@ module.exports = {
 		//		.addField(`**Available for everyone:** `, DJ.notAffected) //if reactivated, convert to addFields
 			.setTimestamp()
 			.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-		interaction.reply({ embeds: [embed] }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		interaction.reply({ embeds: [embed] }).catch((e) => { });
 	}
 };

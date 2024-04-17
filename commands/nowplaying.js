@@ -10,7 +10,7 @@ module.exports = {
 	run: async (client, interaction) => {
 		const queue = client.player.nodes.get(interaction.guild.id);
 
-		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 
 		const track = queue.currentTrack;
 
@@ -46,6 +46,6 @@ module.exports = {
 			.addComponents(updateButton)
 			.addComponents(saveButton);
 
-		interaction.reply({ embeds: [embed], components: [row] }).catch((e) => { }); // eslint-disable-line no-unused-vars
+		interaction.reply({ embeds: [embed], components: [row] }).catch((e) => { });
 	}
 };

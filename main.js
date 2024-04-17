@@ -143,7 +143,7 @@ fs.readdir(`./events`, (_err, files) => {
 
 
 player.events.on(`error`, (queue, error) => {
-	queue.metadata.channel.send({ content: `⚠️ There was a problem with the song queue! => Error: **${error.message}**` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+	queue.metadata.channel.send({ content: `⚠️ There was a problem with the song queue! => Error: **${error.message}**` }).catch((e) => { });
 	const timestamp = ((new Date(Date.now())).toUTCString())
 		.replace(`GMT`, `UTC+0000 (Coordinated Universal Time)`);
 	console.log(`ERROR: ⚠️ There was a problem with the song queue! => Error: "${error.message}" (time: ${timestamp})`);
@@ -151,7 +151,7 @@ player.events.on(`error`, (queue, error) => {
 });
 
 player.events.on(`playerError`, (queue, error) => {
-	queue.metadata.channel.send({ content: `⚠️ There was a problem with the connection! => Error: **${error.message}**` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+	queue.metadata.channel.send({ content: `⚠️ There was a problem with the connection! => Error: **${error.message}**` }).catch((e) => { });
 	const timestamp = ((new Date(Date.now())).toUTCString())
 		.replace(`GMT`, `UTC+0000 (Coordinated Universal Time)`);
 	console.log(`ERROR: ⚠️ There was a problem with the connection! => Error: "${error.message}" (time: ${timestamp})`);
@@ -159,15 +159,15 @@ player.events.on(`playerError`, (queue, error) => {
 
 player.events.on(`playerStart`, (queue, track) => {
 	if (!client.config.opt.loopMessage && queue.repeatMode !== 0) return;
-	queue.metadata.channel.send({ content: `🎵 Music started playing: **${track.title}** -> Channel: <#${queue.dispatcher.channel.id}> 🎧` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+	queue.metadata.channel.send({ content: `🎵 Music started playing: **${track.title}** -> Channel: <#${queue.dispatcher.channel.id}> 🎧` }).catch((e) => { });
 });
 
 player.events.on(`audioTrackAdd`, (queue, track) => {
-	if (!track.dontSendAddedMessage) queue.metadata.channel.send({ content: `**${track.title}** has been added to playlist. ✅` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+	if (!track.dontSendAddedMessage) queue.metadata.channel.send({ content: `**${track.title}** has been added to playlist. ✅` }).catch((e) => { });
 });
 
 player.events.on(`emptyChannel`, (queue) => {
-	queue.metadata.channel.send({ content: `I left the audio channel because there was no one on my channel. ❌` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+	queue.metadata.channel.send({ content: `I left the audio channel because there was no one on my channel. ❌` }).catch((e) => { });
 });
 
 player.events.on(`emptyQueue`, (queue) => {
@@ -176,7 +176,7 @@ player.events.on(`emptyQueue`, (queue) => {
 			if (queue.connection) queue.connection.disconnect();
 		}, client.config.opt.voiceConfig.leaveOnTimer.time);
 	}
-	queue.metadata.channel.send({ content: `All tracks in queue are finished. ✅` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+	queue.metadata.channel.send({ content: `All tracks in queue are finished. ✅` }).catch((e) => { });
 });
 
 if (enableDebugMessages) {
@@ -212,7 +212,7 @@ logIPs();
 
 const botToken = process.env[`TOKEN`];
 if (botToken) {
-	client.login(botToken).catch((e) => { // eslint-disable-line no-unused-vars
+	client.login(botToken).catch((e) => {
 		console.log(`The Bot Token you entered into your bot's .env-file is incorrect or your bot's INTENTS are OFF!`);
 	});
 } else {

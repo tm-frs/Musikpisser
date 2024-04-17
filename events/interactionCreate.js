@@ -31,7 +31,7 @@ const createrole = async (client, interaction, rrm) => {
 		.setTimestamp()
 		.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
 
-	return interaction.channel.send({ content: `@everyone`, embeds: [embed] }).catch((e) => { }); // eslint-disable-line no-unused-vars
+	return interaction.channel.send({ content: `@everyone`, embeds: [embed] }).catch((e) => { });
 };
 const replyNotAllowed = async (client, interaction, rrm) => {
 	const rrmRole = await interaction.guild.roles.cache.find((x) => x.name === rrm.roleName);
@@ -43,7 +43,7 @@ const replyNotAllowed = async (client, interaction, rrm) => {
 		.setTimestamp()
 		.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
 
-	return interaction.reply({ embeds: [embed], ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+	return interaction.reply({ embeds: [embed], ephemeral: true }).catch((e) => { });
 };
 
 module.exports = async (client, interaction) => {
@@ -114,7 +114,7 @@ module.exports = async (client, interaction) => {
 			switch (interaction.customId) {
 			case `ping`: {
 				const start = Date.now();
-				interaction.message.edit({ content: `Please wait...`, embeds: [], components: [] }).catch((e) => { }) // eslint-disable-line no-unused-vars
+				interaction.message.edit({ content: `Please wait...`, embeds: [], components: [] }).catch((e) => { })
 					.then(async () => {
 						let last = Date.now();
 
@@ -132,8 +132,8 @@ module.exports = async (client, interaction) => {
 								{ name: `API Latency (time the API needs to do things):`, value: `\`${Math.round(client.ws.ping)}ms\` 🛰️` }])
 							.setTimestamp()
 							.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-						interaction.message.edit({ content: null, embeds: [embed], components: [row] }).catch((e) => { }); // eslint-disable-line no-unused-vars
-						interaction.reply({ content: `**Success:** Ping data updated. ✅`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+						interaction.message.edit({ content: null, embeds: [embed], components: [row] }).catch((e) => { });
+						interaction.reply({ content: `**Success:** Ping data updated. ✅`, ephemeral: true }).catch((e) => { });
 					});
 			}
 				break;
@@ -147,16 +147,16 @@ module.exports = async (client, interaction) => {
 					.setTimestamp()
 					.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 				interaction.member.send({ embeds: [embed] }).then(() => {
-					return interaction.reply({ content: `I sent you the name of the music in a private message ✅`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+					return interaction.reply({ content: `I sent you the name of the music in a private message ✅`, ephemeral: true }).catch((e) => { });
 				})
 					.catch((error) => { // eslint-disable-line no-unused-vars
-						return interaction.reply({ content: `I can't send you a private message. ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+						return interaction.reply({ content: `I can't send you a private message. ❌`, ephemeral: true }).catch((e) => { });
 					});
 			}
 				break;
 			case `nowplaying`: {
 				if (interaction.user.id === interaction.message.interaction.user.id) {
-					if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+					if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 
 					const track = queue.currentTrack;
 
@@ -192,15 +192,15 @@ module.exports = async (client, interaction) => {
 						.addComponents(updateButton)
 						.addComponents(saveButton);
 
-					interaction.message.edit({ embeds: [embed], components: [row] }).catch((e) => { }); // eslint-disable-line no-unused-vars
-					interaction.reply({ content: `**Success:** Nowplaying data updated. ✅`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+					interaction.message.edit({ embeds: [embed], components: [row] }).catch((e) => { });
+					interaction.reply({ content: `**Success:** Nowplaying data updated. ✅`, ephemeral: true }).catch((e) => { });
 				} else {
 					interaction.reply({ content: `You aren't allowed to do this because you are not the person that executed the nowplaying-command! ❌`, ephemeral: true });
 				}
 			}
 				break;
 			case `time`: {
-				if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+				if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 
 				const progress = queue.node.createProgressBar();
 				const timestamp = queue.node.getTimestamp();
@@ -209,7 +209,7 @@ module.exports = async (client, interaction) => {
 				const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`;
 				const playingDuraionString = convertSecondsToString(Math.round(queue.node.streamTime / 1000));
 
-				if (timestamp.progress === `Infinity`) return interaction.reply({ content: `This song is live streaming, no duration data to display. 🎧`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+				if (timestamp.progress === `Infinity`) return interaction.reply({ content: `This song is live streaming, no duration data to display. 🎧`, ephemeral: true }).catch((e) => { });
 
 				const saveButton = new ButtonBuilder();
 
@@ -227,15 +227,15 @@ module.exports = async (client, interaction) => {
 					.setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nCurrent session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*`)
 					.setFooter({ text: `Music Bot - by CraftingShadowDE️`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-				interaction.message.edit({ embeds: [embed], components: [row] }).catch((e) => { }); // eslint-disable-line no-unused-vars
-				interaction.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+				interaction.message.edit({ embeds: [embed], components: [row] }).catch((e) => { });
+				interaction.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true }).catch((e) => { });
 			}
 				break;
 			case `queue`: {
 				if (!queue || !queue.node.isPlaying()) {
 					return interaction.reply({ content: `No music currently playing. ❌`, ephemeral: true, components: [] });
 				} else if (!queue.tracks.data[0]) {
-					return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+					return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch((e) => { });
 				} else {
 					const unixPlayingSince = Math.round((Date.now() - queue.node.streamTime) / 1000);
 					const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`;
@@ -267,8 +267,8 @@ module.exports = async (client, interaction) => {
 					embed.setTimestamp();
 					embed.setFooter({text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-					interaction.message.edit({ embeds: [embed], row: [row] }).catch((e) => { }); // eslint-disable-line no-unused-vars
-					interaction.reply({ content: `**Success:** Queue data updated. ✅`, ephemeral: true }).catch((e) => { }); // eslint-disable-line no-unused-vars
+					interaction.message.edit({ embeds: [embed], row: [row] }).catch((e) => { });
+					interaction.reply({ content: `**Success:** Queue data updated. ✅`, ephemeral: true }).catch((e) => { });
 				}
 			}
 				break;
@@ -288,7 +288,7 @@ module.exports = async (client, interaction) => {
 						embed.setTimestamp();
 						embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-						interaction.update({ embeds: [embed], components: [] }).catch((e) => { }); // eslint-disable-line no-unused-vars
+						interaction.update({ embeds: [embed], components: [] }).catch((e) => { });
 					};
 					createembed(name);
 				} else {
@@ -320,7 +320,7 @@ module.exports = async (client, interaction) => {
 						return discordTools.reReply(interaction, { content: `${interaction.user}, I can't join the audio channel. ❌`, ephemeral: true });
 					}
 					if (!res || !res.tracks.length) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `${interaction.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true });
-					await interaction.editReply({ content: `${interaction.user}, **Track ${selection + 1}** is loading again... 🎧` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+					await interaction.editReply({ content: `${interaction.user}, **Track ${selection + 1}** is loading again... 🎧` }).catch((e) => { });
 
 					queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
 
@@ -329,11 +329,11 @@ module.exports = async (client, interaction) => {
 				addTrack(selectedResult);
 
 				const uiDisabled = [{ type: 1, components: [{ style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: true, type: 2 }] }]; // eslint-disable-line camelcase
-				interaction.message.edit({ components: uiDisabled }).catch((e) => { }); // eslint-disable-line no-unused-vars
+				interaction.message.edit({ components: uiDisabled }).catch((e) => { });
 
 				setTimeout(function() {
 					const uiEnabled = [{ type: 1, components: [{ style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2 }] }]; // eslint-disable-line camelcase
-					interaction.message.edit({ components: uiEnabled }).catch((e) => { }); // eslint-disable-line no-unused-vars
+					interaction.message.edit({ components: uiEnabled }).catch((e) => { });
 				}, 30000);
 			}
 				break;
@@ -372,7 +372,7 @@ module.exports = async (client, interaction) => {
 								return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `${interaction.user}, I can't join the audio channel. ❌`, ephemeral: true });
 							}
 							if (!res || !res.tracks.length) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `${interaction.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true });
-							await interaction.editReply({ content: `${interaction.user}, Your chosen track is loading now... 🎧` }).catch((e) => { }); // eslint-disable-line no-unused-vars
+							await interaction.editReply({ content: `${interaction.user}, Your chosen track is loading now... 🎧` }).catch((e) => { });
 
 							queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
 
@@ -396,7 +396,7 @@ module.exports = async (client, interaction) => {
 							embed.setTimestamp();
 							embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 							const ui = [{ type: 1, components: [{ style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2 }] }]; // eslint-disable-line camelcase
-							interaction.message.edit({ embeds: [embed], components: ui }).catch((e) => { }); // eslint-disable-line no-unused-vars
+							interaction.message.edit({ embeds: [embed], components: ui }).catch((e) => { });
 						};
 						createembed(name, selection, selectedResult);
 					} else {
