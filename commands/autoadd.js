@@ -82,9 +82,9 @@ module.exports = {
 			if (userInput[i]) userInputNotNull.push(foundItem ? foundItem : null);
 		}
 		if (userInputNotNull.length === 0) {
-			return interaction.reply({ content: `Choose a filter from one of the lists! ❌`, ephemeral: true }).catch((e) => { });
+			return interaction.reply({ content: `Choose an option from one of the lists! ❌`, ephemeral: true }).catch((e) => { });
 		} else if (userInputNotNull.length > 1) {
-			return interaction.reply({ content: `Only choose a filter from **one** list! ❌`, ephemeral: true }).catch((e) => { });
+			return interaction.reply({ content: `Only choose an option from **one** list! ❌`, ephemeral: true }).catch((e) => { });
 		}
 
 		let chosenItem = userInputNotNull[0];

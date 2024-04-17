@@ -41,6 +41,6 @@ module.exports = {
 				highWaterMark: 1 << 25 // Please don't touch
 			}
 		},
-		adminperms: [`USERNAME#XXXX`] // write the Username of the user(s) that is/are allowed to use admin commands (get this bot's ip with a discord-command, crash the bot with the crash command, change play-dl setting while the bot is running); new usernames are '[username]#0' instead of '[username]#[discriminator]'
+		adminperms: [`USERNAME#XXXX`] // write the Username of the user(s) that is/are allowed to use admin commands (get this bot's ip with a discord-command, crash the bot with the crash command); new usernames are '[username]#0' instead of '[username]#[discriminator]'
 	}
 };
