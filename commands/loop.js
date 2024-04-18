@@ -46,7 +46,7 @@ module.exports = {
 			embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
 			embed.setTimestamp();
-			embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `track`) { //LOOP TRACK -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ module.exports = {
 			embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
 			embed.setTimestamp();
-			embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `queue`) { //LOOP QUEUE -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ module.exports = {
 			embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
 			embed.setTimestamp();
-			embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `autoplay`) { //LOOP AUTOPLAY -------------------------------------------------------------------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ module.exports = {
 			embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
 			embed.setTimestamp();
-			embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `info`) { //LOOP INFO ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -133,7 +133,7 @@ module.exports = {
 			embed.setDescription(`**Loop mode:** ${mode}\n**Requested by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
 
 			embed.setTimestamp();
-			embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply({ embeds: [embed] }).catch((e) => { });
 		} //ENDE --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -30,8 +30,8 @@ const playlistprep = async (client, interaction, queue, QueueRepeatMode) => {
 	await queue.setRepeatMode(QueueRepeatMode.QUEUE);
 	const success = (queue.repeatMode === QueueRepeatMode.QUEUE);
 	success ?
-		interaction.followUp({ content: `Loop Mode: **${queue.repeatMode === 0 ? `Inactive` : `Active`}**, The whole sequence will repeat non-stop 🔁` }).catch((e) => {}) :
-		interaction.followUp({ content: `${interaction.member.user}, Could not update loop mode! ❌`, ephemeral: true }).catch((e) => {});
+		interaction.followUp({ content: `Loop Mode: **${queue.repeatMode === 0 ? `Inactive` : `Active`}**, the whole queue will be repeated indefinetely 🔁` }).catch((e) => {}) :
+		interaction.followUp({ content: `${interaction.member.user}, could not update loop mode! ❌`, ephemeral: true }).catch((e) => {});
 
 	// skip:
 	await queue.node.skip();
@@ -45,8 +45,8 @@ const singleprep = async (client, interaction, queue, QueueRepeatMode) => {
 	await queue.setRepeatMode(QueueRepeatMode.TRACK);
 	const success = (queue.repeatMode === QueueRepeatMode.TRACK);
 	success ?
-		interaction.followUp({ content: `Loop Mode: **${queue.repeatMode === 0 ? `Inactive` : `Active`}**, Current track will be repeated non-stop 🔂` }).catch((e) => {}) :
-		interaction.followUp({ content: `${interaction.member.user}, Could not update loop mode! ❌`, ephemeral: true }).catch((e) => {});
+		interaction.followUp({ content: `Loop Mode: **${queue.repeatMode === 0 ? `Inactive` : `Active`}**, the current track will be repeated indefinetely 🔂` }).catch((e) => {}) :
+		interaction.followUp({ content: `${interaction.member.user}, could not update loop mode! ❌`, ephemeral: true }).catch((e) => {});
 };
 
 
