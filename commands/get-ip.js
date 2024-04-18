@@ -27,7 +27,7 @@ module.exports = {
 				.setDescription(`The bot's current public and private IP:`)
 				.addFields([{ name: `Private IP:`, value: `${privateIP}:${port}` }, { name: `Public IP:`, value: `${publicIP}` }])
 				.setTimestamp()
-				.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+				.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			await interaction.editReply({ embeds: [embed], content: `Here it is! ✅ Be careful with this!`, ephemeral: true }).catch((e) => { });
 		} else {

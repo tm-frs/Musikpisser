@@ -37,7 +37,7 @@ module.exports = {
 			.setThumbnail(queue.currentTrack.thumbnail)
 			.setTimestamp()
 			.setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nCurrent session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*`)
-			.setFooter({ text: `Music Bot - by CraftingShadowDE️`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			.setFooter({ text: `Musikpisser Music Bot️`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 		interaction.reply({ embeds: [embed], components: [row]}).catch((e) => { });
 	}
 };

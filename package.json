@@ -1,8 +1,8 @@
 {
   "name": "musikpisser",
   "main": "main.js",
-  "author": "CraftingShadowDE",
-  "description": "Discord.js V14 Compatible || CraftingShadowDE's Music Bot Shared on GitHub!",
+  "author": "tm-frs",
+  "description": "Discord Music Bot based on discord.js and discord-player",
   "scripts": {
     "start": "node --trace-warnings main.js",
     "prereinstall": "rm -rf node_modules",
@@ -11,11 +11,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/CraftingShadowDE/Musikpisser.git"
+    "url": "https://github.com/tm-frs/Musikpisser.git"
   },
-  "homepage": "https://github.com/CraftingShadowDE/Musikpisser#readme",
+  "homepage": "https://github.com/tm-frs/Musikpisser#readme",
   "bugs": {
-    "url": "https://github.com/CraftingShadowDE/Musikpisser/issues"
+    "url": "https://github.com/tm-frs/Musikpisser/issues"
   },
   "dependencies": {
     "@discord-player/extractor": "^4.4.7",
@@ -30,7 +30,6 @@
     "ffmpeg-static": "^5.1.0",
     "ip": "^2.0.1",
     "ms": "^3.0.0-canary.1",
-    "orio.db": "^3.1.1",
     "play-dl": "^1.9.7",
     "ytdl-core": "^4.11.2"
   },

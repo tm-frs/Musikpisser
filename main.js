@@ -96,8 +96,6 @@ let client = new Client({
 	disableMentions: `everyone`
 });
 
-client.db = require(`orio.db`);
-client.db.deleteAll();
 client.config = require(`./config`);
 client.player = new Player(client, client.config.opt.discordPlayer, {volume: configinitialVolume, volumeSmoothness: configvolumeSmoothness});
 const player = client.player;

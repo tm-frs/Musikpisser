@@ -29,7 +29,7 @@ const createrole = async (client, interaction, rrm) => {
 		.setThumbnail(await client.user.displayAvatarURL({ format: `png`, size: 4096 }))
 		.setDescription(`A rrm-role has been created because rrm-mode is active and the role was not existing yet. The role is ${rrmRole} and everyone needs it to use the bot. (Some commands can still be used by everyone.)`)
 		.setTimestamp()
-		.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
+		.setFooter({ text: `Musikpisser Music Bot`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
 
 	return interaction.channel.send({ content: `@everyone`, embeds: [embed] }).catch((e) => { });
 };
@@ -41,7 +41,7 @@ const replyNotAllowed = async (client, interaction, rrm) => {
 		.setThumbnail(await client.user.displayAvatarURL({ format: `png`, size: 4096 }))
 		.setDescription(`You can't use this command because only those with the ${rrmRole} role can. ❌`)
 		.setTimestamp()
-		.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
+		.setFooter({ text: `Musikpisser Music Bot`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
 
 	return interaction.reply({ embeds: [embed], ephemeral: true }).catch((e) => { });
 };
@@ -131,7 +131,7 @@ module.exports = async (client, interaction) => {
 							.addFields([{ name: `Message Latency (time till a message arrives):`, value: `\`${last - start}ms\` 🛰️` },
 								{ name: `API Latency (time the API needs to do things):`, value: `\`${Math.round(client.ws.ping)}ms\` 🛰️` }])
 							.setTimestamp()
-							.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+							.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 						interaction.message.edit({ content: null, embeds: [embed], components: [row] }).catch((e) => { });
 						interaction.reply({ content: `**Success:** Ping data updated. ✅`, ephemeral: true }).catch((e) => { });
 					});
@@ -145,7 +145,7 @@ module.exports = async (client, interaction) => {
 					.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
 					.setDescription(description)
 					.setTimestamp()
-					.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+					.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 				interaction.member.send({ embeds: [embed] }).then(() => {
 					return interaction.reply({ content: `I sent you the name of the music in a private message ✅`, ephemeral: true }).catch((e) => { });
 				})
@@ -176,7 +176,7 @@ module.exports = async (client, interaction) => {
 					embed.setDescription(`**Title:** \`${track.title}\`\n**Author:** \`${track.author}\`\n**URL:** ${track.url}\n${playlist}\n**Duration:** \`${trackDuration}\`\n**Loop Mode:** \`${loopMode}\`\n**Audio:** \`${queue.node.volume}%\`\n**Track added by:** ${track.requestedBy}`);
 
 					embed.setTimestamp();
-					embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+					embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 					const updateButton = new ButtonBuilder();
 					updateButton.setLabel(`Update`);
@@ -225,7 +225,7 @@ module.exports = async (client, interaction) => {
 					.setThumbnail(queue.currentTrack.thumbnail)
 					.setTimestamp()
 					.setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nCurrent session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*`)
-					.setFooter({ text: `Music Bot - by CraftingShadowDE️`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+					.setFooter({ text: `Musikpisser Music Bot️`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 				interaction.message.edit({ embeds: [embed], components: [row] }).catch((e) => { });
 				interaction.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true }).catch((e) => { });
@@ -265,7 +265,7 @@ module.exports = async (client, interaction) => {
 					embed.setDescription(`Current session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*\nDuration of the entire queue: **${convertSecondsToString(Math.round(queue.estimatedDuration / 1000))}**\n\n**Currently Playing:** \`${queue.currentTrack.title}\` | by \`${queue.currentTrack.author}\` _(Duration: **${queue.currentTrack.duration}**)_ (requested by <@${queue.currentTrack.requestedBy.id}>)\n\n${tracks.slice(0, 5).join(`\n`)}\n\n${nextSongs}`);
 
 					embed.setTimestamp();
-					embed.setFooter({text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+					embed.setFooter({text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 					interaction.message.edit({ embeds: [embed], row: [row] }).catch((e) => { });
 					interaction.reply({ content: `**Success:** Queue data updated. ✅`, ephemeral: true }).catch((e) => { });
@@ -286,7 +286,7 @@ module.exports = async (client, interaction) => {
 						embed.setDescription(description);
 
 						embed.setTimestamp();
-						embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+						embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 						interaction.update({ embeds: [embed], components: [] }).catch((e) => { });
 					};
@@ -394,7 +394,7 @@ module.exports = async (client, interaction) => {
 							embed.setDescription(description);
 
 							embed.setTimestamp();
-							embed.setFooter({ text: `Music Bot - by CraftingShadowDE`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+							embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 							const ui = [{ type: 1, components: [{ style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2 }] }]; // eslint-disable-line camelcase
 							interaction.message.edit({ embeds: [embed], components: ui }).catch((e) => { });
 						};
