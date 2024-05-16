@@ -31,7 +31,7 @@ const createrole = async (client, interaction, rrm) => {
 		.setTimestamp()
 		.setFooter({ text: `Musikpisser Music Bot`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
 
-	return interaction.channel.send({ content: `@everyone`, embeds: [embed] }).catch((e) => { });
+	return interaction.channel.send({ content: `INFO: ${rrmRole} has been created.`, embeds: [embed] }).catch((e) => { });
 };
 const replyNotAllowed = async (client, interaction, rrm) => {
 	const rrmRole = await interaction.guild.roles.cache.find((x) => x.name === rrm.roleName);
