@@ -8,6 +8,7 @@ const wait = require(`node:timers/promises`).setTimeout; // eslint-disable-line 
 const discordTools = require(`../exports/discordTools.js`);
 const { PermissionsBitField } = require(`discord.js`);
 const { convertSecondsToString, convertStringToSeconds } = require(`../exports/timeStrings.js`); // eslint-disable-line no-unused-vars
+const adminperms = require(`../config.js`).opt.adminperms;
 
 const streamToString = async (readable) => { // eslint-disable-line no-unused-vars
 	let result = ``;
@@ -17,37 +18,51 @@ const streamToString = async (readable) => { // eslint-disable-line no-unused-va
 	return result;
 };
 
-const createrole = async (client, interaction, rrm) => {
-	await interaction.guild.roles.create({ name: rrm.roleName, color: `#C27C0E`, mentionable: true, permissions: [] });
+const rrm = {
+	config: require(`../config.js`).opt.roleRestrictedMode,
+	checkForPermissions: async (interaction) => {
+		const rrmRole = interaction.guild.roles.cache.find((x) => x.name === rrm.config.roleName); // role for rrm on the server
 
-	const rrmRole = await interaction.guild.roles.cache.find((x) => x.name === rrm.roleName);
-	console.log(`rrm-Role has been created because rrm-Mode is active and the role is not existing.`);
+		const userIsBotAdmin = adminperms.includes((interaction.member.user.username + `#` + interaction.member.user.discriminator)); // whether the user is a bot admin
+		const userHasRole = (interaction.guild.roles.cache.some((x) => x.name === rrm.config.roleName) && interaction.member.roles.cache.some((role) => role.id === rrmRole.id)); // whether the role for rrm exists and the user has that role
+		const userIsServerAdmin = (rrm.config.alwaysAllowAdmins && interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)); // whether the user is a server admin (determined by Manage Guild permission)
 
-	const embed = new EmbedBuilder()
-		.setColor(Colors.Red) // red = 0xED4245
-		.setTitle(`ANNOUNCEMENT`)
-		.setThumbnail(await client.user.displayAvatarURL({ format: `png`, size: 4096 }))
-		.setDescription(`A rrm-role has been created because rrm-mode is active and the role was not existing yet. The role is ${rrmRole} and everyone needs it to use the bot. (Some commands can still be used by everyone.)`)
-		.setTimestamp()
-		.setFooter({ text: `Musikpisser Music Bot`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
+		return (userIsBotAdmin || userHasRole || userIsServerAdmin); // if one of these is the case, the user shall be allowed to user the bot
+	},
+	createRole: async (client, interaction) => {
+		await interaction.guild.roles.create({ name: rrm.config.roleName, color: Colors.DarkGold, mentionable: true, permissions: [] }); // darkgold = 0xC27C0E
 
-	return interaction.channel.send({ content: `INFO: ${rrmRole} has been created.`, embeds: [embed] }).catch((e) => { });
-};
-const replyNotAllowed = async (client, interaction, rrm) => {
-	const rrmRole = await interaction.guild.roles.cache.find((x) => x.name === rrm.roleName);
-	const embed = new EmbedBuilder()
-		.setColor(Colors.Blue) // blue = 0x3498DB
-		.setTitle(await client.user.username)
-		.setThumbnail(await client.user.displayAvatarURL({ format: `png`, size: 4096 }))
-		.setDescription(`You can't use this command because only those with the ${rrmRole} role can. ❌`)
-		.setTimestamp()
-		.setFooter({ text: `Musikpisser Music Bot`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
+		const rrmRole = await interaction.guild.roles.cache.find((x) => x.name === rrm.config.roleName);
+		console.log(`rrm-Role has been created on guild '${interaction.guild.name}' with id ${interaction.guild.id} because rrm-Mode is active and the role did not exist there.`);
+		const botGuildMember = await interaction.guild.members.me;
+		botGuildMember.roles.add(rrmRole);
 
-	return interaction.reply({ embeds: [embed], ephemeral: true }).catch((e) => { });
+		const embed = new EmbedBuilder()
+			.setColor(Colors.Red) // red = 0xED4245
+			.setTitle(`ANNOUNCEMENT`)
+			.setThumbnail(await client.user.displayAvatarURL({ format: `png`, size: 4096 }))
+			.setDescription(`A rrm-role has been created because rrm-mode is active and the role was not existing yet. The role is ${rrmRole} and everyone (server admins excluded) needs it to use the bot. (Some commands can still be used by everyone.)`)
+			.setTimestamp()
+			.setFooter({ text: `Musikpisser Music Bot`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
+
+		return interaction.channel.send({ content: `INFO: ${rrmRole} has been created.`, embeds: [embed] }).catch((e) => { });
+	},
+	sendReplyNotAllowed: async (client, interaction) => {
+		const rrmRole = await interaction.guild.roles.cache.find((x) => x.name === rrm.config.roleName);
+		const embed = new EmbedBuilder()
+			.setColor(Colors.Blue) // blue = 0x3498DB
+			.setTitle(await client.user.username)
+			.setThumbnail(await client.user.displayAvatarURL({ format: `png`, size: 4096 }))
+			.setDescription(`You can't use this command because only those with the ${rrmRole} role and server admins can. ❌`)
+			.setTimestamp()
+			.setFooter({ text: `Musikpisser Music Bot`, iconURL: await interaction.user.displayAvatarURL({ dynamic: true }) });
+
+		return interaction.reply({ embeds: [embed], ephemeral: true }).catch((e) => { });
+	}
 };
 
 module.exports = async (client, interaction) => {
-	if (!interaction.guild) return interaction.reply({ content: `You only can use commands on servers. ❌`, ephemeral: true });
+	if (!interaction.guild) return interaction.reply({ content: `Commands can only be used on servers. ❌`, ephemeral: true });
 
 	const botvoicechannel = interaction.guild.members.cache.find((user) => user.id === client.user.id).voice.channel;
 	const othervoicechannel = (botvoicechannel && interaction.member.voice.channel.id !== botvoicechannel.id);
@@ -60,30 +75,18 @@ module.exports = async (client, interaction) => {
 			ephemeral: true
 		});
 
-		const rrm = client.config.opt.roleRestrictedMode;
 
-
-
-		if (cmd && rrm.enabled && !rrm.notAffected.includes(cmd.name)) {
-			if (!interaction.guild.roles.cache.some((x) => x.name === rrm.roleName)) {
-				createrole(client, interaction, rrm);
+		if (cmd && rrm.config.enabled && !rrm.config.notAffected.includes(cmd.name)) {
+			if (!interaction.guild.roles.cache.some((x) => x.name === rrm.config.roleName)) {
+				rrm.createRole(client, interaction);
 
 				setTimeout(function() {
-					const rrmRole = interaction.guild.roles.cache.find((x) => x.name === rrm.roleName);
-					const messagecreatorhasrole = (interaction.guild.roles.cache.some((x) => x.name === rrm.roleName) && interaction.member.roles.cache.some((role) => role.id === rrmRole.id)) ? true : (rrm.alwaysAllowAdmins && interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) ? true : false;
-					//          console.log("Rolle existent:\n"+int.guild.roles.cache.some(x => x.name === rrm.roleName)+"\nNutzer hat Rolle:\n"+int.member.roles.cache.some(role => role.id === rrmRole.id)+"\nAdmins haben Berechtigung:\n"+rrm.alwaysAllowAdmins+"\nNutzer ist Admin:\n"+int.member.permissions.has(PermissionsBitField.Flags.ManageGuild)+"\nBefund:\n"+messagecreatorhasrole)
-					if (!messagecreatorhasrole) {
-						return replyNotAllowed(client, interaction, rrm);
+					if (!rrm.checkForPermissions(interaction)) {
+						return rrm.sendReplyNotAllowed(client, interaction);
 					}
 				}, 1001);
-			} else {
-				const rrmRole = interaction.guild.roles.cache.find((x) => x.name === rrm.roleName);
-				const messagecreatorhasrole = (interaction.guild.roles.cache.some((x) => x.name === rrm.roleName) && interaction.member.roles.cache.some((role) => role.id === rrmRole.id)) ? true : (rrm.alwaysAllowAdmins && interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) ? true : false;
-				//      console.log(messagecreatorhasrole);
-				//      console.log(rrmRole.id);
-				if (!messagecreatorhasrole) {
-					replyNotAllowed(client, interaction, rrm);
-				}
+			} else if (!rrm.checkForPermissions(interaction)) {
+				rrm.sendReplyNotAllowed(client, interaction);
 			}
 		}
 
@@ -95,20 +98,15 @@ module.exports = async (client, interaction) => {
 			//old version:        if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 		}
 
-		const rrmRole = rrm.enabled ? interaction.guild.roles.cache.find((x) => x.name === rrm.roleName) : null;
-		const rrmOnAndAffectedAndPermission = ((rrm.enabled && !rrm.notAffected.includes(cmd.name)) && ((interaction.guild.roles.cache.some((x) => x.name === rrm.roleName) && interaction.member.roles.cache.some((role) => role.id === rrmRole.id)) || (rrm.alwaysAllowAdmins && interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild))));
-		const rrmOnAndNotAffected = (rrm.enabled && rrm.notAffected.includes(cmd.name));
-		const rrmOff = (!rrm.enabled);
-		if (rrmOnAndAffectedAndPermission || rrmOnAndNotAffected || rrmOff) cmd.run(client, interaction);
+		const rrmOnAndAffectedAndPermission = (rrm.config.enabled && !rrm.config.notAffected.includes(cmd.name) && rrm.checkForPermissions(interaction));
+		const rrmOnAndNotAffected = (rrm.config.enabled && rrm.config.notAffected.includes(cmd.name));
+		if (!rrm.config.enabled || rrmOnAndAffectedAndPermission || rrmOnAndNotAffected) cmd.run(client, interaction);
 	}
 
 	if (interaction.type === InteractionType.MessageComponent) {
-		const rrm = client.config.opt.roleRestrictedMode;
-		const rrmRole = interaction.guild.roles.cache.find((x) => x.name === rrm.roleName);
-		const userIsAllowed = !rrm.enabled ? true : !rrm.affectedButtonsAndMenus.includes(interaction.customId) ? true : (interaction.guild.roles.cache.some((x) => x.name === rrm.roleName) && interaction.member.roles.cache.some((role) => role.id === rrmRole.id)) ? true : (rrm.alwaysAllowAdmins && interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) ? true : false;
-		if (!interaction.guild.roles.cache.some((x) => x.name === rrm.roleName) && rrm.enabled) createrole(client, interaction, rrm);
-		if (!userIsAllowed) {
-			replyNotAllowed(client, interaction, rrm);
+		if (!interaction.guild.roles.cache.some((x) => x.name === rrm.config.roleName) && rrm.config.enabled) rrm.createRole(client, interaction);
+		if (rrm.config.enabled && rrm.config.affectedButtonsAndMenus.includes(interaction.customId) && !rrm.checkForPermissions(interaction)) { // if rrm active AND interaction affected AND no permission
+			rrm.sendReplyNotAllowed(client, interaction);
 		} else {
 			const queue = client.player.nodes.get(interaction.guildId);
 			switch (interaction.customId) {
