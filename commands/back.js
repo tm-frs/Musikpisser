@@ -1,5 +1,5 @@
 module.exports = {
-	description: `Plays the previous song and moves the current one to queue.`,
+	description: `Play the previous song and move the current one to queue`,
 	name: `back`,
 	options: [],
 	voiceChannel: true,

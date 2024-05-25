@@ -4,16 +4,16 @@ const { QueryType } = require(`discord-player`);
 const discordTools = require(`../exports/discordTools.js`);
 
 module.exports = {
-	description: `Adds a track/playlist to the queue.`,
+	description: `Add a track/playlist to the queue`,
 	name: `play`,
 	options: [{
 		name: `query`,
-		description: `Enter the name or the URL of the track/playlist you want to add.`,
+		description: `The name or the URL of the track/playlist you want to add`,
 		type: ApplicationCommandOptionType.String,
 		required: true
 	}, {
 		name: `search-engine`,
-		description: `Select a search engine you like (no choice => YouTube).`,
+		description: `Search engine you want to use (no choice => YouTube) (don't specify when adding a URL)`,
 		type: ApplicationCommandOptionType.String,
 		choices: [
 			{name: `YouTube Search`, value: `youtubeSearch`},
@@ -53,7 +53,7 @@ module.exports = {
 
 		await interaction.editReply({ content: `Your ${res.playlist ? `Playlist` : `Track`} is loading now... 🎧` }).catch((e) => {});
 
-		res.playlist ? queue.addTrack(res.tracks) : queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
+		res.playlist ? queue.addTrack(res.tracks) : queue.addTrack(res.tracks[0]); // add music to queue
 
 		if (!queue.node.isPlaying()) await queue.node.play();
 	}

@@ -8,7 +8,7 @@ const wait = require(`node:timers/promises`).setTimeout; // eslint-disable-line 
   */
 
 
-/* Example of an item:
+/* Scheme of a proper object:
    *
    * {
    *     internalId: 'internalId', // STRING: an unique internal ID to identify this, 1-100 characters (necessary)
@@ -16,7 +16,7 @@ const wait = require(`node:timers/promises`).setTimeout; // eslint-disable-line 
    *     content: [], // ARRAY OF STRINGS: an array of URLs [for isMix=false] or of internal IDs [for isMix=true] (necessary)
    *     createCommand: true, // BOOLEAN: whether or not a command choice will be created, if false it can only be used in a mix (necessary)
    *     commandTitle: "commandTitle", // STRING: title of the command choice, 1-100 characters (necessary for createCommand=true)
-   *     afterAdd: null // FUNCTION: function that is run after adding the tracks [for createCommand=true] (not necessary at all)
+   *     afterAdd: null // FUNCTION: function that is run after adding the tracks [for createCommand=true] (not necessary)
    * }
    *
    */
@@ -94,7 +94,7 @@ module.exports = [
 	{
 		internalId: `nintendoAndChill`, // https://open.spotify.com/intl-de/artist/1T7zBkQCOCacKjbnmFX7cp/discography/album
 		isMix: false,
-		content: [`https://open.spotify.com/intl-de/album/4lBMa9JEuCSIs3NkPEIwvN?si=z25t1nqmQEe78ttSvO9QyQ`, `https://open.spotify.com/intl-de/album/3oNO1P0Qlr4oSlMA2MIj67?si=ydDtluOOQr-RSAfIbocFag`, `https://open.spotify.com/intl-de/album/0N0noai9OQs1rYEaS47vJw?si=RAmn0gOGRBm9EexcGMjFPQ`, `https://open.spotify.com/intl-de/album/2a15PtLwMSfMVOWJUcM4Ia?si=E-pYcPWTQMOUW00HPIQIKg`], //[`https://soundcloud.com/mikeljakobi/sets/poke-chill`, `https://soundcloud.com/gamechops/sets/zelda-chill`, `https://soundcloud.com/daniel-egan-16/sets/zelda-and-chill-2`, `https://soundcloud.com/pokegamer05/sets/zelda-and-chill-3`],
+		content: [`https://open.spotify.com/intl-de/album/4lBMa9JEuCSIs3NkPEIwvN?si=z25t1nqmQEe78ttSvO9QyQ`, `https://open.spotify.com/intl-de/album/3oNO1P0Qlr4oSlMA2MIj67?si=ydDtluOOQr-RSAfIbocFag`, `https://open.spotify.com/intl-de/album/0N0noai9OQs1rYEaS47vJw?si=RAmn0gOGRBm9EexcGMjFPQ`, `https://open.spotify.com/intl-de/album/2a15PtLwMSfMVOWJUcM4Ia?si=E-pYcPWTQMOUW00HPIQIKg`], // [`https://soundcloud.com/mikeljakobi/sets/poke-chill`, `https://soundcloud.com/gamechops/sets/zelda-chill`, `https://soundcloud.com/daniel-egan-16/sets/zelda-and-chill-2`, `https://soundcloud.com/pokegamer05/sets/zelda-and-chill-3`],
 		createCommand: true,
 		commandTitle: `Nintendo and Chill (Poké & Chill, Zelda & Chill 1-3)`,
 		afterAdd: playlistprep

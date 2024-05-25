@@ -1,5 +1,5 @@
 module.exports = {
-	description: `Resumes paused music.`,
+	description: `Resume the current (paused) track`,
 	name: `resume`,
 	options: [],
 	voiceChannel: true,

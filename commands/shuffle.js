@@ -1,5 +1,5 @@
 module.exports = {
-	description: `Shuffles the queue. (The current song and the next song won't be shuffled)`,
+	description: `Shuffle the queue (current and next track are excluded)`,
 	name: `shuffle`,
 	options: [],
 	voiceChannel: true,

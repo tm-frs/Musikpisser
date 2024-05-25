@@ -66,7 +66,7 @@ const defaultAfterAdd = async (client, interaction, queue, QueueRepeatMode) => {
 };
 
 module.exports = {
-	description: `Adds a song/playlist that has been added to the bot's code.`,
+	description: `Add a song/playlist that is hardcoded into the bot`,
 	name: `autoadd`,
 	  options: getCommandOptions(filterCommandOptions(autoaddItemsArray)),
 	voiceChannel: true,

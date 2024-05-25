@@ -1,7 +1,7 @@
 const { QueueRepeatMode } = require(`discord-player`);
 
 module.exports = {
-	description: `Skips the current track and starts the next track in queue.`,
+	description: `Skip the current track and go on to the next track in queue`,
 	name: `skip`,
 	options: [],
 	voiceChannel: true,

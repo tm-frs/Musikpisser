@@ -1,5 +1,5 @@
 module.exports = {
-	description: `Music stops playing.`,
+	description: `Stop playing music and leave the channel (deletes queue)`,
 	name: `stop`,
 	options: [],
 	voiceChannel: true,

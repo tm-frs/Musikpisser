@@ -12,7 +12,7 @@ module.exports = async (client) => {
 		.replace(`GMT`, `(UTC+0)`);
 	const jsReadyAtLong = ((new Date(unixReadyAt * 1000)).toUTCString())
 		.replace(`GMT`, `UTC+0000 (Coordinated Universal Time)`);
-	const loginText = `------------------------LOGIN-INFORMATION------------------------\n${client.user.username} Login! Login at: \n${jsReadyAtLong}\n-----------------------------------------------------------------`;
+	const loginText = `------------------------LOGIN-INFORMATION------------------------\n${client.user.username}#${client.user.discriminator}: Login successful! Login at: \n${jsReadyAtLong}\n-----------------------------------------------------------------`;
 	writefile(logFile, (`\n${loginText}\n` + `\n`));
 	console.log(loginText);
 	client.user.accentColor = `#18191C`;

@@ -7,7 +7,7 @@ const { QueryType } = require(`discord-player`);
 const wait = require(`node:timers/promises`).setTimeout; // eslint-disable-line no-unused-vars
 const discordTools = require(`../exports/discordTools.js`);
 const { PermissionsBitField } = require(`discord.js`);
-const { convertSecondsToString, convertStringToSeconds } = require(`../exports/timeStrings.js`); // eslint-disable-line no-unused-vars
+const { convertSecondsToString, convertStringToSeconds, reformatString } = require(`../exports/timeStrings.js`); // eslint-disable-line no-unused-vars
 const adminperms = require(`../config.js`).opt.adminperms;
 
 const streamToString = async (readable) => { // eslint-disable-line no-unused-vars
@@ -110,302 +110,344 @@ module.exports = async (client, interaction) => {
 		} else {
 			const queue = client.player.nodes.get(interaction.guildId);
 			switch (interaction.customId) {
-			case `ping`: {
-				const start = Date.now();
-				interaction.message.edit({ content: `Please wait...`, embeds: [], components: [] }).catch((e) => { })
-					.then(async () => {
-						let last = Date.now();
+				case `ping`: {
+					const start = Date.now();
+					interaction.message.edit({ content: `Please wait...`, embeds: [], components: [] }).catch((e) => { })
+						.then(async () => {
+							let last = Date.now();
 
-						const updateButton = new ButtonBuilder();
-						updateButton.setLabel(`Update`);
-						updateButton.setCustomId(`ping`);
-						updateButton.setStyle(ButtonStyle.Success);
-						const row = new ActionRowBuilder().addComponents(updateButton);
+							const updateButton = new ButtonBuilder();
+							updateButton.setLabel(`Update`);
+							updateButton.setCustomId(`ping`);
+							updateButton.setStyle(ButtonStyle.Success);
+							const row = new ActionRowBuilder().addComponents(updateButton);
 
-						const embed = new EmbedBuilder()
-							.setColor(Colors.Blue) // blue = 0x3498DB
-							.setTitle(client.user.username + ` - Current Ping`)
-							.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
-							.addFields([{ name: `Message Latency (time till a message arrives):`, value: `\`${last - start}ms\` 🛰️` },
-								{ name: `API Latency (time the API needs to do things):`, value: `\`${Math.round(client.ws.ping)}ms\` 🛰️` }])
-							.setTimestamp()
-							.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-						interaction.message.edit({ content: null, embeds: [embed], components: [row] }).catch((e) => { });
-						interaction.reply({ content: `**Success:** Ping data updated. ✅`, ephemeral: true }).catch((e) => { });
-					});
-			}
-				break;
-			case `saveTrack`: {
-				const description = interaction.message.embeds[0].description + `\n**Saved at this server:** \`` + interaction.guild.name + `\``;
-				const embed = new EmbedBuilder()
-					.setColor(Colors.Green) // green = 0x57F287
-					.setTitle(client.user.username + ` - Saved Track`)
-					.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
-					.setDescription(description)
-					.setTimestamp()
-					.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-				interaction.member.send({ embeds: [embed] }).then(() => {
-					return interaction.reply({ content: `I sent you the name of the music in a private message ✅`, ephemeral: true }).catch((e) => { });
-				})
-					.catch((error) => { // eslint-disable-line no-unused-vars
-						return interaction.reply({ content: `I can't send you a private message. ❌`, ephemeral: true }).catch((e) => { });
-					});
-			}
-				break;
-			case `nowplaying`: {
-				if (interaction.user.id === interaction.message.interaction.user.id) {
-					if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
-
-					const track = queue.currentTrack;
-
-					const embed = new EmbedBuilder();
-
-					embed.setColor(Colors.Blue); // blue = 0x3498DB
-					embed.setThumbnail(track.thumbnail);
-					embed.setTitle(`Currently playing track:`);
-
-					const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
-					const loopMode = options[queue.repeatMode];
-
-					const timestamp = queue.node.getTimestamp();
-					const trackDuration = timestamp.progress === `Forever` ? `Endless (Live)` : track.duration;
-					const playlist = (typeof track.playlist === `undefined`) ? (`**Playlist:** \`none\``) : (`**Playlist:** [${track.playlist.title}](${track.playlist.url}) by \`${track.playlist.author.name}\``);
-
-					embed.setDescription(`**Title:** \`${track.title}\`\n**Author:** \`${track.author}\`\n**URL:** ${track.url}\n${playlist}\n**Duration:** \`${trackDuration}\`\n**Loop Mode:** \`${loopMode}\`\n**Audio:** \`${queue.node.volume}%\`\n**Track added by:** ${track.requestedBy}`);
-
-					embed.setTimestamp();
-					embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-
-					const updateButton = new ButtonBuilder();
-					updateButton.setLabel(`Update`);
-					updateButton.setCustomId(`nowplaying`);
-					updateButton.setStyle(ButtonStyle.Success);
-
-					const saveButton = new ButtonBuilder();
-					saveButton.setLabel(`Save Song`);
-					saveButton.setCustomId(`saveTrack`);
-					saveButton.setStyle(ButtonStyle.Success);
-
-					const row = new ActionRowBuilder()
-						.addComponents(updateButton)
-						.addComponents(saveButton);
-
-					interaction.message.edit({ embeds: [embed], components: [row] }).catch((e) => { });
-					interaction.reply({ content: `**Success:** Nowplaying data updated. ✅`, ephemeral: true }).catch((e) => { });
-				} else {
-					interaction.reply({ content: `You aren't allowed to do this because you are not the person that executed the nowplaying-command! ❌`, ephemeral: true });
+							const embed = new EmbedBuilder()
+								.setColor(Colors.Blue) // blue = 0x3498DB
+								.setTitle(client.user.username + ` - Current Ping`)
+								.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
+								.addFields([{ name: `Message Latency (time till a message arrives):`, value: `\`${last - start}ms\` 🛰️` },
+									{ name: `API Latency (time the API needs to do things):`, value: `\`${Math.round(client.ws.ping)}ms\` 🛰️` }])
+								.setTimestamp()
+								.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+							interaction.message.edit({ content: null, embeds: [embed], components: [row] }).catch((e) => { });
+							interaction.reply({ content: `**Success:** Ping data updated. ✅`, ephemeral: true }).catch((e) => { });
+						});
 				}
-			}
-				break;
-			case `time`: {
-				if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
-
-				const progress = queue.node.createProgressBar();
-				const timestamp = queue.node.getTimestamp();
-
-				const unixPlayingSince = Math.round((Date.now() - queue.node.streamTime) / 1000);
-				const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`;
-				const playingDuraionString = convertSecondsToString(Math.round(queue.node.streamTime / 1000));
-
-				if (timestamp.progress === `Infinity`) return interaction.reply({ content: `This song is live streaming, no duration data to display. 🎧`, ephemeral: true }).catch((e) => { });
-
-				const saveButton = new ButtonBuilder();
-
-				saveButton.setLabel(`Update`);
-				saveButton.setCustomId(`time`);
-				saveButton.setStyle(ButtonStyle.Success);
-
-				const row = new ActionRowBuilder().addComponents(saveButton);
-
-				const embed = new EmbedBuilder()
-					.setColor(Colors.Blue) // blue = 0x3498DB
-					.setTitle(queue.currentTrack.title)
-					.setThumbnail(queue.currentTrack.thumbnail)
-					.setTimestamp()
-					.setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nCurrent session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*`)
-					.setFooter({ text: `Musikpisser Music Bot️`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-
-				interaction.message.edit({ embeds: [embed], components: [row] }).catch((e) => { });
-				interaction.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true }).catch((e) => { });
-			}
-				break;
-			case `queue`: {
-				if (!queue || !queue.node.isPlaying()) {
-					return interaction.reply({ content: `No music currently playing. ❌`, ephemeral: true, components: [] });
-				} else if (!queue.tracks.data[0]) {
-					return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch((e) => { });
-				} else {
-					const unixPlayingSince = Math.round((Date.now() - queue.node.streamTime) / 1000);
-					const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`;
-					const playingDuraionString = convertSecondsToString(Math.round(queue.node.streamTime / 1000));
-
-					const saveButton = new ButtonBuilder();
-
-					saveButton.setLabel(`Update`);
-					saveButton.setCustomId(`queue`);
-					saveButton.setStyle(ButtonStyle.Success);
-
-					const row = new ActionRowBuilder().addComponents(saveButton);
-
-					const embed = new EmbedBuilder();
-					const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
-					const loopMode = options[queue.repeatMode];
-
-					embed.setColor(Colors.Blue); // blue = 0x3498DB
-					embed.setThumbnail(interaction.guild.iconURL({ size: 4096, format: `png`, dynamic: true }));
-					embed.setTitle(`Server Music List - ${interaction.guild.name} ${loopMode}`);
-
-					const tracks = queue.tracks.data.map((track, i) => `**${i + 1}**. \`${track.title}\` | by \`${track.author}\` _(Duration: **${track.duration}**)_\n(requested by <@${track.requestedBy.id}>)`);
-
-					const songs = queue.getSize();
-					const nextSongs = songs > 5 ? `There ${((songs - 5) !== 1) ? `are` : `is`} **${songs - 5} other song${((songs - 5) !== 1) ? `s` : ``}** in the queue.` : `There are **no other songs** in the queue.`;
-
-					embed.setDescription(`Current session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*\nDuration of the entire queue: **${convertSecondsToString(Math.round(queue.estimatedDuration / 1000))}**\n\n**Currently Playing:** \`${queue.currentTrack.title}\` | by \`${queue.currentTrack.author}\` _(Duration: **${queue.currentTrack.duration}**)_ (requested by <@${queue.currentTrack.requestedBy.id}>)\n\n${tracks.slice(0, 5).join(`\n`)}\n\n${nextSongs}`);
-
-					embed.setTimestamp();
-					embed.setFooter({text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-
-					interaction.message.edit({ embeds: [embed], row: [row] }).catch((e) => { });
-					interaction.reply({ content: `**Success:** Queue data updated. ✅`, ephemeral: true }).catch((e) => { });
+					break;
+				case `saveTrack`: {
+					const description = interaction.message.embeds[0].description + `\n**Saved at this server:** \`` + interaction.guild.name + `\``;
+					const embed = new EmbedBuilder()
+						.setColor(Colors.Green) // green = 0x57F287
+						.setTitle(client.user.username + ` - Saved Track`)
+						.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
+						.setDescription(description)
+						.setTimestamp()
+						.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+					interaction.member.send({ embeds: [embed] }).then(() => {
+						return interaction.reply({ content: `I sent you the name of the music in a private message ✅`, ephemeral: true }).catch((e) => { });
+					})
+						.catch((error) => { // eslint-disable-line no-unused-vars
+							return interaction.reply({ content: `I can't send you a private message. ❌`, ephemeral: true }).catch((e) => { });
+						});
 				}
-			}
-				break;
-			case `cancelButton`: {
-				const name = ((interaction.message.embeds[0].title).substr(17, ((interaction.message.embeds[0].title).length) - 18));
+					break;
+				case `nowplaying`: {
+					if (interaction.user.id === interaction.message.interaction.user.id) {
+						if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 
-				if (interaction.user.id === interaction.message.interaction.user.id) {
-					const createembed = async (name) => {
+						const track = queue.currentTrack;
+
 						const embed = new EmbedBuilder();
 
 						embed.setColor(Colors.Blue); // blue = 0x3498DB
-						embed.setTitle(`Searched Music: "${name}"`);
+						embed.setThumbnail(track.thumbnail);
+						embed.setTitle(`Currently playing track:`);
 
-						const description = ((interaction.message.embeds[0].description).substring(0, ((interaction.message.embeds[0].description).length) - 183)) + `Selection cancelled because the cancel-button was pressed! ❌`;
-						embed.setDescription(description);
+						const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
+						const loopMode = options[queue.repeatMode];
+
+						const timestamp = queue.node.getTimestamp();
+						const trackDuration = timestamp.progress === `Forever` ? `Endless (Live)` : reformatString(track.duration);
+						const playlist = (typeof track.playlist === `undefined`) ? (`**Playlist:** \`none\``) : (`**Playlist:** [${track.playlist.title}](${track.playlist.url}) by \`${track.playlist.author.name}\``);
+
+						embed.setDescription(`**Title:** \`${track.title}\`\n**Author:** \`${track.author}\`\n**URL:** ${track.url}\n${playlist}\n**Duration:** \`${trackDuration}\`\n**Loop Mode:** \`${loopMode}\`\n**Audio:** \`${queue.node.volume}%\`\n**Track added by:** ${track.requestedBy}`);
 
 						embed.setTimestamp();
 						embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-						interaction.update({ embeds: [embed], components: [] }).catch((e) => { });
-					};
-					createembed(name);
-				} else {
-					interaction.reply({ content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
-				}
-			}
-				break;
-			case `addAgainButton`: {
-				await interaction.deferReply();
+						const updateButton = new ButtonBuilder();
+						updateButton.setLabel(`Update`);
+						updateButton.setCustomId(`nowplaying`);
+						updateButton.setStyle(ButtonStyle.Success);
 
-				if (othervoicechannel) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
+						const saveButton = new ButtonBuilder();
+						saveButton.setLabel(`Save Song`);
+						saveButton.setCustomId(`saveTrack`);
+						saveButton.setStyle(ButtonStyle.Success);
 
-				const selection = parseInt(((interaction.message.embeds[0].description).substr(-20, 2)).replace(`*`, ``)) - 1;
-				const resultArray = (interaction.message.embeds[0].description).split(`\n`);
-				const resultCount = (resultArray.length - 2) / 2;
-				const resultURLs = resultCount === 1 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33))] : resultCount === 2 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33))] : resultCount === 3 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33))] : resultCount === 4 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33))] : resultCount === 5 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33))] : resultCount === 6 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33))] : resultCount === 7 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33))] : resultCount === 8 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33))] : resultCount === 9 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33)), (resultArray[17].substr(31, ((resultArray[17]).length) - 33))] : resultCount === 10 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33)), (resultArray[17].substr(31, ((resultArray[17]).length) - 33)), (resultArray[19].substr(31, ((resultArray[19]).length) - 33))] : [];
-				const selectedResult = resultURLs[selection];
-				if (!interaction.member.voice.channel) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You are not connected to an audio channel. ❌`, ephemeral: true });
-				const addTrack = async (selectedResult) => {
-					const queue = await createQueue(client, interaction);
-					const res = await client.player.search(selectedResult, {
-						requestedBy: interaction.user,
-						searchEngine: QueryType.AUTO
-					});
-					try {
-						if (!queue.connection) await queue.connect(interaction.member.voice.channel);
-					} catch {
-						await client.player.deleteQueue(interaction.guildId);
-						return discordTools.reReply(interaction, { content: `${interaction.user}, I can't join the audio channel. ❌`, ephemeral: true });
+						const row = new ActionRowBuilder()
+							.addComponents(updateButton)
+							.addComponents(saveButton);
+
+						interaction.message.edit({ embeds: [embed], components: [row] }).catch((e) => { });
+						interaction.reply({ content: `**Success:** Nowplaying data updated. ✅`, ephemeral: true }).catch((e) => { });
+					} else {
+						interaction.reply({ content: `You aren't allowed to do this because you are not the person that executed the nowplaying-command! ❌`, ephemeral: true });
 					}
-					if (!res || !res.tracks.length) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `${interaction.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true });
-					await interaction.editReply({ content: `${interaction.user}, **Track ${selection + 1}** is loading again... 🎧` }).catch((e) => { });
+				}
+					break;
+				case `time`: {
+					if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 
-					queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
+					const progress = queue.node.createProgressBar();
+					const timestamp = queue.node.getTimestamp();
 
-					if (!queue.node.isPlaying()) await queue.node.play();
-				};
-				addTrack(selectedResult);
+					const unixPlayingSince = Math.round((Date.now() - queue.node.streamTime) / 1000);
+					const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`;
+					const playingDuraionString = convertSecondsToString(Math.round(queue.node.streamTime / 1000));
 
-				const uiDisabled = [{ type: 1, components: [{ style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: true, type: 2 }] }]; // eslint-disable-line camelcase
-				interaction.message.edit({ components: uiDisabled }).catch((e) => { });
+					if (timestamp.progress === `Infinity`) return interaction.reply({ content: `This song is live streaming, no duration data to display. 🎧`, ephemeral: true }).catch((e) => { });
 
-				setTimeout(function() {
-					const uiEnabled = [{ type: 1, components: [{ style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2 }] }]; // eslint-disable-line camelcase
-					interaction.message.edit({ components: uiEnabled }).catch((e) => { });
-				}, 30000);
-			}
-				break;
-			case `trackMenu`: {
-				await interaction.deferReply();
+					const saveButton = new ButtonBuilder();
 
-				if (othervoicechannel) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
+					saveButton.setLabel(`Update`);
+					saveButton.setCustomId(`time`);
+					saveButton.setStyle(ButtonStyle.Success);
 
-				const chosenTrack = interaction.values[0];
-				const selection = (chosenTrack === `t1`) ? 0 : (chosenTrack === `t2`) ? 1 : (chosenTrack === `t3`) ? 2 : (chosenTrack === `t4`) ? 3 : (chosenTrack === `t5`) ? 4 : (chosenTrack === `t6`) ? 5 : (chosenTrack === `t7`) ? 6 : (chosenTrack === `t8`) ? 7 : (chosenTrack === `t9`) ? 8 : (chosenTrack === `t10`) ? 9 : `error`;
-				const name = ((interaction.message.embeds[0].title).substr(17, ((interaction.message.embeds[0].title).length) - 18));
-				const resultArray = (interaction.message.embeds[0].description).split(`\n`);
-				const resultCount = (resultArray.length - 2) / 2;
-				const resultURLs = resultCount === 1 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33))] : resultCount === 2 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33))] : resultCount === 3 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33))] : resultCount === 4 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33))] : resultCount === 5 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33))] : resultCount === 6 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33))] : resultCount === 7 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33))] : resultCount === 8 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33))] : resultCount === 9 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33)), (resultArray[17].substr(31, ((resultArray[17]).length) - 33))] : resultCount === 10 ? [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33)), (resultArray[17].substr(31, ((resultArray[17]).length) - 33)), (resultArray[19].substr(31, ((resultArray[19]).length) - 33))] : [];
-				const selectedResult = resultURLs[selection];
+					const row = new ActionRowBuilder().addComponents(saveButton);
 
-				const interactionComponents = interaction.message.components;
+					const embed = new EmbedBuilder()
+						.setColor(Colors.Blue) // blue = 0x3498DB
+						.setTitle(queue.currentTrack.title)
+						.setThumbnail(queue.currentTrack.thumbnail)
+						.setTimestamp()
+						.setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nCurrent session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*`)
+						.setFooter({ text: `Musikpisser Music Bot️`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-				const resetMenu = async () => {
-					await interaction.message.edit({ components: [] });
-					await interaction.message.edit({ components: interactionComponents });
-				};
+					interaction.message.edit({ embeds: [embed], components: [row] }).catch((e) => { });
+					interaction.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true }).catch((e) => { });
+				}
+					break;
+				case `queue`: {
+					if (!queue || !queue.node.isPlaying()) {
+						return interaction.reply({ content: `No music currently playing. ❌`, ephemeral: true, components: [] });
+					} else if (!queue.tracks.data[0]) {
+						return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch((e) => { });
+					} else {
+						const unixPlayingSince = Math.round((Date.now() - queue.node.streamTime) / 1000);
+						const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`;
+						const playingDuraionString = convertSecondsToString(Math.round(queue.node.streamTime / 1000));
 
-				if (interaction.user.id === interaction.message.interaction.user.id) {
-					if (interaction.member.voice.channel) {
-						const addTrack = async (selectedResult) => {
-							const queue = await createQueue(client, interaction);
-							const res = await client.player.search(selectedResult, {
-								requestedBy: interaction.user,
-								searchEngine: QueryType.AUTO
-							});
-							try {
-								if (!queue.connection) await queue.connect(interaction.member.voice.channel);
-							} catch {
-								await client.player.deleteQueue(interaction.guildId);
-								return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `${interaction.user}, I can't join the audio channel. ❌`, ephemeral: true });
-							}
-							if (!res || !res.tracks.length) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `${interaction.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true });
-							await interaction.editReply({ content: `${interaction.user}, Your chosen track is loading now... 🎧` }).catch((e) => { });
+						const saveButton = new ButtonBuilder();
 
-							queue.addTrack(res.tracks[0]); // im Normalfall Musik hinzufügen
+						saveButton.setLabel(`Update`);
+						saveButton.setCustomId(`queue`);
+						saveButton.setStyle(ButtonStyle.Success);
 
-							if (!queue.node.isPlaying()) await queue.node.play();
-						};
-						addTrack(selectedResult);
-						const createembed = async (name, selection, selectedResult) => {
-							const res = await client.player.search(selectedResult, {
-								requestedBy: interaction.user,
-								searchEngine: QueryType.AUTO
-							});
-							if (!res || !res.tracks.length) return;
+						const row = new ActionRowBuilder().addComponents(saveButton);
+
+						const embed = new EmbedBuilder();
+						const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
+						const loopMode = options[queue.repeatMode];
+
+						embed.setColor(Colors.Blue); // blue = 0x3498DB
+						embed.setThumbnail(interaction.guild.iconURL({ size: 4096, format: `png`, dynamic: true }));
+						embed.setTitle(`Server Music List - ${interaction.guild.name} ${loopMode}`);
+
+						const tracks = queue.tracks.data.map((track, i) => `**${i + 1}**. \`${track.title}\` | by \`${track.author}\` _(Duration: **${reformatString(track.duration)}**)_\n(requested by <@${track.requestedBy.id}>)`);
+
+						const songs = queue.getSize();
+						const nextSongs = songs > 5 ? `There ${((songs - 5) !== 1) ? `are` : `is`} **${songs - 5} other song${((songs - 5) !== 1) ? `s` : ``}** in the queue.` : `There are **no other songs** in the queue.`;
+
+						embed.setDescription(`Current session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*\nDuration of the entire queue: **${convertSecondsToString(Math.round(queue.estimatedDuration / 1000))}**\n\n**Currently Playing:** \`${queue.currentTrack.title}\` | by \`${queue.currentTrack.author}\` _(Duration: **${reformatString(queue.currentTrack.duration)}**)_ (requested by <@${queue.currentTrack.requestedBy.id}>)\n\n${tracks.slice(0, 5).join(`\n`)}\n\n${nextSongs}`);
+
+						embed.setTimestamp();
+						embed.setFooter({text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+
+						interaction.message.edit({ embeds: [embed], row: [row] }).catch((e) => { });
+						interaction.reply({ content: `**Success:** Queue data updated. ✅`, ephemeral: true }).catch((e) => { });
+					}
+				}
+					break;
+				case `cancelButton`: {
+					const name = ((interaction.message.embeds[0].title).substr(17, ((interaction.message.embeds[0].title).length) - 18));
+
+					if (interaction.user.id === interaction.message.interaction.user.id) {
+						const createembed = async (name) => {
 							const embed = new EmbedBuilder();
 
 							embed.setColor(Colors.Blue); // blue = 0x3498DB
 							embed.setTitle(`Searched Music: "${name}"`);
 
-							const description = resultCount === 10 ? (((interaction.message.embeds[0].description).substring(0, ((interaction.message.embeds[0].description).length) - 183)) + `Selection stopped because track **${selection + 1}** was selected. ✅`) : (((interaction.message.embeds[0].description).substring(0, ((interaction.message.embeds[0].description).length) - 182)) + `Selection stopped because track **${selection + 1}** was selected. ✅`);
+							const description = ((interaction.message.embeds[0].description).substring(0, ((interaction.message.embeds[0].description).length) - 183)) + `Selection cancelled because the cancel-button was pressed! ❌`;
 							embed.setDescription(description);
 
 							embed.setTimestamp();
 							embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
-							const ui = [{ type: 1, components: [{ style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2 }] }]; // eslint-disable-line camelcase
-							interaction.message.edit({ embeds: [embed], components: ui }).catch((e) => { });
+
+							interaction.update({ embeds: [embed], components: [] }).catch((e) => { });
 						};
-						createembed(name, selection, selectedResult);
+						createembed(name);
 					} else {
-						discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+						interaction.reply({ content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
+					}
+				}
+					break;
+				case `addAgainButton`: {
+					await interaction.deferReply();
+
+					if (othervoicechannel) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
+
+					const selection = parseInt(((interaction.message.embeds[0].description).substr(-20, 2)).replace(`*`, ``)) - 1;
+					const resultArray = (interaction.message.embeds[0].description).split(`\n`);
+					const resultCount = (resultArray.length - 2) / 2;
+					const resultURLs = (() => {
+						switch (resultCount) {
+							case 1: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33))];
+							case 2: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33))];
+							case 3: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33))];
+							case 4: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33))];
+							case 5: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33))];
+							case 6: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33))];
+							case 7: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33))];
+							case 8: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33))];
+							case 9: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33)), (resultArray[17].substr(31, ((resultArray[17]).length) - 33))];
+							case 10: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33)), (resultArray[17].substr(31, ((resultArray[17]).length) - 33)), (resultArray[19].substr(31, ((resultArray[19]).length) - 33))];
+							default: return [];
+						}
+					})();
+					const selectedResult = resultURLs[selection];
+					if (!interaction.member.voice.channel) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+					const addTrack = async (selectedResult) => {
+						const queue = await createQueue(client, interaction);
+						const res = await client.player.search(selectedResult, {
+							requestedBy: interaction.user,
+							searchEngine: QueryType.AUTO
+						});
+						try {
+							if (!queue.connection) await queue.connect(interaction.member.voice.channel);
+						} catch {
+							await client.player.deleteQueue(interaction.guildId);
+							return discordTools.reReply(interaction, { content: `${interaction.user}, I can't join the audio channel. ❌`, ephemeral: true });
+						}
+						if (!res || !res.tracks.length) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `${interaction.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true });
+						await interaction.editReply({ content: `${interaction.user}, **Track ${selection + 1}** is loading again... 🎧` }).catch((e) => { });
+
+						queue.addTrack(res.tracks[0]); // add music to queue
+
+						if (!queue.node.isPlaying()) await queue.node.play();
+					};
+					addTrack(selectedResult);
+
+					const uiDisabled = [{ type: 1, components: [{ style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: true, type: 2 }] }]; // eslint-disable-line camelcase
+					interaction.message.edit({ components: uiDisabled }).catch((e) => { });
+
+					setTimeout(function() {
+						const uiEnabled = [{ type: 1, components: [{ style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2 }] }]; // eslint-disable-line camelcase
+						interaction.message.edit({ components: uiEnabled }).catch((e) => { });
+					}, 30000);
+				}
+					break;
+				case `trackMenu`: {
+					await interaction.deferReply();
+
+					if (othervoicechannel) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
+
+					const chosenTrack = interaction.values[0];
+					const selection = (() => {
+						switch (chosenTrack) {
+							case `t1`: return 0;
+							case `t2`: return 1;
+							case `t3`: return 2;
+							case `t4`: return 3;
+							case `t5`: return 4;
+							case `t6`: return 5;
+							case `t7`: return 6;
+							case `t8`: return 7;
+							case `t9`: return 8;
+							case `t10`: return 9;
+							default: return `error`;
+						}
+					})();
+					const name = ((interaction.message.embeds[0].title).substr(17, ((interaction.message.embeds[0].title).length) - 18));
+					const resultArray = (interaction.message.embeds[0].description).split(`\n`);
+					const resultCount = (resultArray.length - 2) / 2;
+					const resultURLs = (() => {
+						switch (resultCount) {
+							case 1: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33))];
+							case 2: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33))];
+							case 3: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33))];
+							case 4: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33))];
+							case 5: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33))];
+							case 6: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33))];
+							case 7: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33))];
+							case 8: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33))];
+							case 9: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33)), (resultArray[17].substr(31, ((resultArray[17]).length) - 33))];
+							case 10: return [(resultArray[1].substr(31, ((resultArray[1]).length) - 33)), (resultArray[3].substr(31, ((resultArray[3]).length) - 33)), (resultArray[5].substr(31, ((resultArray[5]).length) - 33)), (resultArray[7].substr(31, ((resultArray[7]).length) - 33)), (resultArray[9].substr(31, ((resultArray[9]).length) - 33)), (resultArray[11].substr(31, ((resultArray[11]).length) - 33)), (resultArray[13].substr(31, ((resultArray[13]).length) - 33)), (resultArray[15].substr(31, ((resultArray[15]).length) - 33)), (resultArray[17].substr(31, ((resultArray[17]).length) - 33)), (resultArray[19].substr(31, ((resultArray[19]).length) - 33))];
+							default: return [];
+						}
+					})();
+					const selectedResult = resultURLs[selection];
+
+					const interactionComponents = interaction.message.components;
+
+					const resetMenu = async () => {
+						await interaction.message.edit({ components: [] });
+						await interaction.message.edit({ components: interactionComponents });
+					};
+
+					if (interaction.user.id === interaction.message.interaction.user.id) {
+						if (interaction.member.voice.channel) {
+							const addTrack = async (selectedResult) => {
+								const queue = await createQueue(client, interaction);
+								const res = await client.player.search(selectedResult, {
+									requestedBy: interaction.user,
+									searchEngine: QueryType.AUTO
+								});
+								try {
+									if (!queue.connection) await queue.connect(interaction.member.voice.channel);
+								} catch {
+									await client.player.deleteQueue(interaction.guildId);
+									return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `${interaction.user}, I can't join the audio channel. ❌`, ephemeral: true });
+								}
+								if (!res || !res.tracks.length) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `${interaction.user}, No search result was found. ❌\nWas the /search executed a long time ago? If so, that might be the reason.\nYou could try another option.`, ephemeral: true });
+								await interaction.editReply({ content: `${interaction.user}, Your chosen track is loading now... 🎧` }).catch((e) => { });
+
+								queue.addTrack(res.tracks[0]); // add music to queue
+
+								if (!queue.node.isPlaying()) await queue.node.play();
+							};
+							addTrack(selectedResult);
+							const createembed = async (name, selection, selectedResult) => {
+								const res = await client.player.search(selectedResult, {
+									requestedBy: interaction.user,
+									searchEngine: QueryType.AUTO
+								});
+								if (!res || !res.tracks.length) return;
+								const embed = new EmbedBuilder();
+
+								embed.setColor(Colors.Blue); // blue = 0x3498DB
+								embed.setTitle(`Searched Music: "${name}"`);
+
+								const description = resultCount === 10 ? (((interaction.message.embeds[0].description).substring(0, ((interaction.message.embeds[0].description).length) - 183)) + `Selection stopped because track **${selection + 1}** was selected. ✅`) : (((interaction.message.embeds[0].description).substring(0, ((interaction.message.embeds[0].description).length) - 182)) + `Selection stopped because track **${selection + 1}** was selected. ✅`);
+								embed.setDescription(description);
+
+								embed.setTimestamp();
+								embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+								const ui = [{ type: 1, components: [{ style: ButtonStyle.Success, label: `Add it again`, custom_id: `addAgainButton`, disabled: false, type: 2 }] }]; // eslint-disable-line camelcase
+								interaction.message.edit({ embeds: [embed], components: ui }).catch((e) => { });
+							};
+							createembed(name, selection, selectedResult);
+						} else {
+							discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You are not connected to an audio channel. ❌`, ephemeral: true });
+							resetMenu();
+						}
+					} else {
+						discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
 						resetMenu();
 					}
-				} else {
-					discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You aren't allowed to do this because you are not the person that executed the search-command! ❌`, ephemeral: true });
-					resetMenu();
 				}
-			}
 			}
 		}
 	}
