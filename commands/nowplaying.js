@@ -1,9 +1,10 @@
 const { Colors } = require(`discord.js`);
 const { ButtonStyle } = require(`discord.js`);
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require(`discord.js`);
+const { reformatString } = require(`../exports/timeStrings.js`);
 
 module.exports = {
-	description: `Provides information about the music currently being played.`,
+	description: `Get information about the current track (ability to save to DMs)`,
 	name: `nowplaying`,
 	options: [],
 
@@ -24,7 +25,7 @@ module.exports = {
 		const loopMode = options[queue.repeatMode];
 
 		const timestamp = queue.node.getTimestamp();
-		const trackDuration = timestamp.progress === `Forever` ? `Endless (Live)` : track.duration;
+		const trackDuration = timestamp.progress === `Forever` ? `Endless (Live)` : reformatString(track.duration);
 		const playlist = (typeof track.playlist === `undefined`) ? (`**Playlist:** \`none\``) : (`**Playlist:** [${track.playlist.title}](${track.playlist.url}) by \`${track.playlist.author.name}\``);
 
 		embed.setDescription(`**Title:** \`${track.title}\`\n**Author:** \`${track.author}\`\n**URL:** ${track.url}\n${playlist}\n**Duration:** \`${trackDuration}\`\n**Loop Mode:** \`${loopMode}\`\n**Audio:** \`${queue.node.volume}%\`\n**Track added by:** ${track.requestedBy}`);

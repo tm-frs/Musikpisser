@@ -4,21 +4,21 @@ const { convertSecondsToString, convertStringToSeconds } = require(`../exports/t
 
 
 module.exports = {
-	description: `Allows you to jump to a specific part of the current track.`,
+	description: `Jump to a specific point in the current track`,
 	name: `jump`,
 	options: [{
 		name: `second`,
-		description: `Type in what second (+ minutes + hours) you want to jump to.`,
+		description: `The second you want to jump to`,
 		type: ApplicationCommandOptionType.Integer,
 		required: false
 	}, {
 		name: `minute`,
-		description: `Type in what minute (+ seconds + hours) you want to jump to.`,
+		description: `The minute you want to jump to`,
 		type: ApplicationCommandOptionType.Number,
 		required: false
 	}, {
 		name: `hour`,
-		description: `Type in what hour (+ seconds + minutes) you want to jump to.`,
+		description: `The hour you want to jump to`,
 		type: ApplicationCommandOptionType.Number,
 		required: false
 	}],
@@ -39,17 +39,17 @@ module.exports = {
 		const currentProgressSeconds = Math.round(((await queue.node.getTimestamp()).current.value) / 1000);
 		const currentProgressString = convertSecondsToString(currentProgressSeconds);
 
-		const trackDurationString = convertStringToSeconds(await queue.currentTrack.duration);
-		const trackDurationSeconds = convertSecondsToString(trackDurationString);
+		const trackDurationSeconds = convertStringToSeconds(await queue.currentTrack.duration);
+		const trackDurationString = convertSecondsToString(trackDurationSeconds); // using this instead of queue.currentTrack.duration for the sake of uniform formatting
 
 		if (!secondsInput && !minutesInput && !hoursInput) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You need to specify where you want to jump to. ❌`, ephemeral: true });
 		if ((secondsInput < 0) || (minutesInput < 0) || (hoursInput < 0)) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `You can't jump to a negative time! ❌`, ephemeral: true });
-		if (secondsJumpTo > trackDurationString) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `The current track is only **${trackDurationSeconds}** long but you wanted to jump to **${jumpToString}**. ❌`, ephemeral: true });
+		if (secondsJumpTo > trackDurationSeconds) return discordTools.reReply(interaction, `There was an issue! ❌`, { content: `The current track is only **${trackDurationString}** long but you wanted to jump to **${jumpToString}**. ❌`, ephemeral: true });
 
 		const success = queue.node.seek(secondsJumpTo * 1000);
 
 		return success ?
-			interaction.editReply({ content: `Jumped from **${currentProgressString}** to **${jumpToString}** (the track is **${trackDurationSeconds}** long). ✅` }).catch((e) => { }) :
+			interaction.editReply({ content: `Jumped from **${currentProgressString}** to **${jumpToString}** (the track is **${trackDurationString}** long). ✅` }).catch((e) => { }) :
 			discordTools.reReply(interaction, `There was an issue! ❌`, { content: `Something went wrong. ❌`, ephemeral: true }).catch((e) => { });
 	}
 };

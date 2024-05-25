@@ -4,7 +4,7 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require(`discord.js`);
 const { convertSecondsToString } = require(`../exports/timeStrings.js`);
 
 module.exports = {
-	description: `Shows you how long the current track is and how much time is remaining.`,
+	description: `Show length and progression of the current track`,
 	name: `time`,
 	options: [],
 	voiceChannel: true,

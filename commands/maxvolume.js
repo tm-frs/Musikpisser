@@ -1,7 +1,7 @@
 const maxVol = require(`../config.js`).opt.maxVol;
 
 module.exports = {
-	description: `Changes the volume of the music to max volume (${maxVol}%).`,
+	description: `Change the volume of the music to max volume (${maxVol}%)`,
 	name: `maxvolume`,
 	options: [],
 	voiceChannel: true,

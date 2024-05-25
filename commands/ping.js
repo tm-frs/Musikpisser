@@ -3,7 +3,7 @@ const { ButtonStyle } = require(`discord.js`);
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require(`discord.js`);
 
 module.exports = {
-	description: `Shows you the bot's ping.`,
+	description: `Get the bot's ping`,
 	name: `ping`,
 	options: [],
 

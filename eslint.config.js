@@ -15,7 +15,7 @@ module.exports = [
 				...globals.node
 			}
 		},
-		rules: { // Übersicht über alle Regeln: https://eslint.org/docs/latest/rules/ --- Informaionen: https://github.com/eslint/eslint#configuration
+		rules: { // Overview of all rules: https://eslint.org/docs/latest/rules/ --- Information: https://github.com/eslint/eslint#configuration
 			"no-duplicate-imports": [ // Possible Problems: https://eslint.org/docs/latest/rules/#possible-problems
 				`error`
 			],
@@ -97,7 +97,8 @@ module.exports = [
 			],
 			"indent": [
 				`error`,
-				`tab`
+				`tab`,
+				{ "SwitchCase": 1 }
 			],
 			"key-spacing": [
 				`error`,
@@ -110,10 +111,10 @@ module.exports = [
 			"line-comment-position": [
 				`off`
 			],
-			/*"linebreak-style": [
+			"linebreak-style": [
 				`error`,
 				`unix`
-			],*/
+			],
 			"new-parens": [
 				`error`,
 				`always`

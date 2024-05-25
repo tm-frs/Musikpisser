@@ -1,5 +1,5 @@
 module.exports = {
-	description: `Pauses the currently playing music.`,
+	description: `Pause the current track`,
 	name: `pause`,
 	options: [],
 	voiceChannel: true,

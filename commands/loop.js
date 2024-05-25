@@ -4,18 +4,18 @@ const { QueueRepeatMode } = require(`discord-player`);
 const { EmbedBuilder } = require(`discord.js`);
 
 module.exports = {
-	description: `Turns the music loop mode on or off.`,
+	description: `Show or change current loop mode`,
 	name: `loop`,
 	options: [{
 		name: `mode`,
 		type: ApplicationCommandOptionType.String,
 		description: `Loop type`,
 		choices: [
-			{name: `Info`, value: `info`}, //INFO
-			{name: `📴 Off`, value: `off`}, //OFF
-			{name: `🔂 Track`, value: `track`}, //TRACK
-			{name: `🔁 Queue`, value: `queue`}, //QUEUE
-			{name: `▶ Autoplay`, value: `autoplay`} //AUTOPLAY
+			{name: `Get information`, value: `info`}, // INFO
+			{name: `📴 Off`, value: `off`}, // OFF
+			{name: `🔂 Track`, value: `track`}, // TRACK
+			{name: `🔁 Queue`, value: `queue`}, // QUEUE
+			{name: `▶ Autoplay`, value: `autoplay`} // AUTOPLAY
 		],
 		required: true
 	}],
@@ -26,7 +26,7 @@ module.exports = {
 		const botvoicechannel = interaction.guild.members.cache.find((user) => user.id === client.user.id).voice.channel;
 		const othervoicechannel = (botvoicechannel && interaction.member.voice.channel.id !== botvoicechannel.id);
 
-		if (loopMode === `off`) { //LOOP OFF ------------------------------------------------------------------------------------------------------------------------------------------------------------
+		if (loopMode === `off`) { // LOOP OFF ---------------------------------------------------------------------------------------------------------------------------------------------------
 			if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
 			if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 
@@ -49,7 +49,7 @@ module.exports = {
 			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
-		} else if (loopMode === `track`) { //LOOP TRACK -------------------------------------------------------------------------------------------------------------------------------------------------
+		} else if (loopMode === `track`) { // LOOP TRACK ---------------------------------------------------------------------------------------------------------------------------------------------------
 			if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
 			if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 
@@ -72,7 +72,7 @@ module.exports = {
 			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
-		} else if (loopMode === `queue`) { //LOOP QUEUE -------------------------------------------------------------------------------------------------------------------------------------------------
+		} else if (loopMode === `queue`) { // LOOP QUEUE ---------------------------------------------------------------------------------------------------------------------------------------------------
 			if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
 			if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 
@@ -95,7 +95,7 @@ module.exports = {
 			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
-		} else if (loopMode === `autoplay`) { //LOOP AUTOPLAY -------------------------------------------------------------------------------------------------------------------------------------------
+		} else if (loopMode === `autoplay`) { // LOOP AUTOPLAY ---------------------------------------------------------------------------------------------------------------------------------------------------
 			if (!interaction.member.voice.channel) return interaction.reply({ content: `You are not connected to an audio channel. ❌`, ephemeral: true });
 			if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 
@@ -118,10 +118,10 @@ module.exports = {
 			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
-		} else if (loopMode === `info`) { //LOOP INFO ---------------------------------------------------------------------------------------------------------------------------------------------------
+		} else if (loopMode === `info`) { // LOOP INFO ---------------------------------------------------------------------------------------------------------------------------------------------------
 			const queue = client.player.nodes.get(interaction.guild.id);
 			const noqueue = (!queue || !queue.node.isPlaying());
-		  const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
+			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 			const mode = noqueue ? `❌ _(No music currently playing!)_` : options[queue.repeatMode];
 
 			const embed = new EmbedBuilder();
@@ -136,6 +136,6 @@ module.exports = {
 			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply({ embeds: [embed] }).catch((e) => { });
-		} //ENDE --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		} // END ---------------------------------------------------------------------------------------------------------------------------------------------------
 	}
 };

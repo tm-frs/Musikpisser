@@ -1,5 +1,5 @@
 module.exports = {
-	description: `Clears the current queue`,
+	description: `Clear the queue`,
 	name: `clear`,
 	options: [],
 	voiceChannel: true,

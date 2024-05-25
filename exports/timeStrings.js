@@ -35,8 +35,12 @@ const convertStringToSeconds = (stringInput) => {
 	const seconds = (stringArray.length === 1) ? (+stringArray[0]) : (stringArray.length === 2) ? ((+stringArray[0]) * 60 + (+stringArray[1])) : (stringArray.length === 3) ? (((+stringArray[0]) * 60 + (+stringArray[1])) * 60 + (+stringArray[2])) : (stringArray.length === 4) ? ((((+stringArray[0]) * 24 + (+stringArray[1])) * 60 + (+stringArray[2])) * 60 + (+stringArray[3])) : 0;
 	return seconds;
 };
+const reformatString = (stringInput) => {
+	return convertSecondsToString(convertStringToSeconds(stringInput)); // first convert input to seconds, then convert seconds back to string
+};
 
 module.exports = {
 	convertSecondsToString,
-	convertStringToSeconds
+	convertStringToSeconds,
+	reformatString
 };
