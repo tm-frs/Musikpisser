@@ -181,6 +181,10 @@ module.exports = [
 			"space-infix-ops": [
 				`error`
 			],
+			"spaced-comment": [
+				`error`,
+				`always`
+			],
 			"template-curly-spacing": [
 				`error`,
 				`never`

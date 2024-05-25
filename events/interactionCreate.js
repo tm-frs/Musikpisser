@@ -95,7 +95,7 @@ module.exports = async (client, interaction) => {
 			//        console.log(client.user.id)
 			//        console.log(botvoicechannel)
 			if (othervoicechannel) return interaction.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
-			//old version:        if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
+			// old version:        if (int.guild.me.voice.channel && int.member.voice.channel.id !== int.guild.me.voice.channel.id) return int.reply({ content: `You are not on the same audio channel as me. ❌`, ephemeral: true });
 		}
 
 		const rrmOnAndAffectedAndPermission = (rrm.config.enabled && !rrm.config.notAffected.includes(cmd.name) && rrm.checkForPermissions(interaction));
