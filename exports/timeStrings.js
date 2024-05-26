@@ -9,7 +9,7 @@ const convertSecondsToString = (secondsInput) => {
 
 	if ((tempMathValue % (24 * 60 * 60)) !== tempMathValue) days = parseInt(tempMathValue / (24 * 60 * 60));
 	tempMathValue -= (days * 24 * 60 * 60);
-	const daysString = ((`` + days).length === 1) ? (`0` + days) : (`` + days);
+	const daysString = (`` + days);
 
 	if ((tempMathValue % (60 * 60)) !== tempMathValue) hours = parseInt(tempMathValue / (60 * 60));
 	tempMathValue -= (hours * 60 * 60);

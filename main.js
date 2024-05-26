@@ -146,8 +146,8 @@ player.events.on(`error`, (queue, error) => {
 		.replace(`GMT`, `UTC+0000 (Coordinated Universal Time)`);
 	console.log(`ERROR: ⚠️ There was a problem with the song queue! => Error: "${error.message}" (time: ${timestamp})`);
 
-	if (error.message === `The operation was aborted`) {
-		console.log(`===> Note to future self: Turning off the VPN has helped fixing "The operation was aborted".`);
+	if (error.code === `ABORT_ERR`) {
+		console.log(`===> Note to future self: Turning off the VPN (as well as just trying again) has helped fixing "The operation was aborted".`);
 	}
 
 	throw error;

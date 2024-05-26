@@ -92,6 +92,14 @@ module.exports = [
 		afterAdd: playlistprep
 	},
 	{
+		internalId: `stardewValleySeasonThemes`,
+		isMix: false,
+		content: [`https://www.youtube.com/playlist?list=PLUJm0mJ_TgqoABH9idm_tX8eV1o0Jv4iG`],
+		createCommand: true,
+		commandTitle: `Stardew Valley Season Themes`,
+		afterAdd: playlistprep
+	},
+	{
 		internalId: `nintendoAndChill`, // https://open.spotify.com/intl-de/artist/1T7zBkQCOCacKjbnmFX7cp/discography/album
 		isMix: false,
 		content: [`https://open.spotify.com/intl-de/album/4lBMa9JEuCSIs3NkPEIwvN?si=z25t1nqmQEe78ttSvO9QyQ`, `https://open.spotify.com/intl-de/album/3oNO1P0Qlr4oSlMA2MIj67?si=ydDtluOOQr-RSAfIbocFag`, `https://open.spotify.com/intl-de/album/0N0noai9OQs1rYEaS47vJw?si=RAmn0gOGRBm9EexcGMjFPQ`, `https://open.spotify.com/intl-de/album/2a15PtLwMSfMVOWJUcM4Ia?si=E-pYcPWTQMOUW00HPIQIKg`], // [`https://soundcloud.com/mikeljakobi/sets/poke-chill`, `https://soundcloud.com/gamechops/sets/zelda-chill`, `https://soundcloud.com/daniel-egan-16/sets/zelda-and-chill-2`, `https://soundcloud.com/pokegamer05/sets/zelda-and-chill-3`],
@@ -100,17 +108,17 @@ module.exports = [
 		afterAdd: playlistprep
 	},
 	{
-		internalId: `undertale-hypixel`,
+		internalId: `undertale-hypixel-stardewvalley`,
 		isMix: true,
-		content: [`undertaleBoth`, `hypixelSkyblockOst`],
+		content: [`undertaleBoth`, `hypixelSkyblockOst`, `stardewValleySeasonThemes`],
 		createCommand: true,
-		commandTitle: `Undertale (both) + Hypixel Skyblock OST`,
+		commandTitle: `Undertale (both) + Hypixel Skyblock OST + Stardew Valley`,
 		afterAdd: playlistprep
 	},
 	{
 		internalId: `playlistAll`,
 		isMix: true,
-		content: [`undertaleBoth`, `hypixelSkyblockOst`, `nintendoAndChill`],
+		content: [`undertaleBoth`, `hypixelSkyblockOst`, `nintendoAndChill`, `stardewValleySeasonThemes`],
 		createCommand: true,
 		commandTitle: `everything (Undertale, Hypixel Skyblock, ...)`,
 		afterAdd: playlistprep
