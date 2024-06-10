@@ -4,18 +4,12 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require(`discord.js`);
 const { convertSecondsToString, reformatString } = require(`../exports/timeStrings.js`);
 
 module.exports = {
-
-	description: `List the queue`,
-	name: `queue`,
-	options: [],
-	voiceChannel: true,
-
-	run: async (client, interaction) => {
-		const queue = client.player.nodes.get(interaction.guild.id);
-
-		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
-
-		if (!queue.tracks.data[0]) return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch((e) => { });
+	run: async (client, interaction, queue, othervoicechannel) => { // eslint-disable-line no-unused-vars
+		if (!queue || !queue.node.isPlaying()) {
+			return interaction.reply({ content: `No music currently playing. ❌`, ephemeral: true, components: [] });
+		} else if (!queue.tracks.data[0]) {
+			return interaction.reply({ content: `No music in queue after current. ❌`, ephemeral: true }).catch((e) => { });
+		}
 
 		const unixPlayingSince = Math.round((Date.now() - queue.node.streamTime) / 1000);
 		const discordPlayingSince = `<t:${unixPlayingSince}:R> (<t:${unixPlayingSince}:d>, <t:${unixPlayingSince}:T>)`;
@@ -42,9 +36,11 @@ module.exports = {
 			.setThumbnail(interaction.guild.iconURL({ size: 4096, format: `png`, dynamic: true }))
 			.setTitle(`Server Music List - ${interaction.guild.name} ${loopMode}`)
 			.setDescription(`Current session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*\nDuration of the entire queue: **${convertSecondsToString(Math.round(queue.estimatedDuration / 1000))}**\n\n**Currently Playing:** \`${queue.currentTrack.title}\` | by \`${queue.currentTrack.author}\` _(Duration: **${reformatString(queue.currentTrack.duration)}**)_ (requested by <@${queue.currentTrack.requestedBy.id}>)\n\n${tracks.slice(0, 5).join(`\n`)}\n\n${nextSongs}`)
+
 			.setTimestamp()
 			.setFooter({text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-		interaction.reply({ embeds: [embed], components: [row]}).catch((e) => { });
+		interaction.message.edit({ embeds: [embed], row: [row] }).catch((e) => { });
+		interaction.reply({ content: `**Success:** Queue data updated. ✅`, ephemeral: true }).catch((e) => { });
 	}
 };

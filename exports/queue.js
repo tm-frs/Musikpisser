@@ -1,3 +1,4 @@
+const botConfig = require(`../config.js`);
 const createQueue = async (client, interaction, initVolume) => {
 	const queue = await client.player.nodes.create(interaction.guild, {
 		metadata: {
@@ -5,10 +6,10 @@ const createQueue = async (client, interaction, initVolume) => {
 			client: client,
 			requestedBy: interaction.user
 		},
-		leaveOnEnd: client.config.opt.voiceConfig.leaveOnEnd,
-		selfDeaf: client.config.opt.voiceConfig.selfDeaf,
-		volume: ((initVolume !== undefined) ? initVolume : client.config.opt.discordPlayer.initialVolume),
-		volumeSmoothness: client.config.opt.discordPlayer.volumeSmoothness
+		leaveOnEnd: botConfig.opt.voiceConfig.leaveOnEnd,
+		selfDeaf: botConfig.opt.voiceConfig.selfDeaf,
+		volume: ((initVolume !== undefined) ? initVolume : botConfig.opt.discordPlayer.initialVolume),
+		volumeSmoothness: botConfig.opt.discordPlayer.volumeSmoothness
 	});
 	return queue;
 };

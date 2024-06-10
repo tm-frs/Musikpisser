@@ -3,14 +3,9 @@ const { ButtonStyle } = require(`discord.js`);
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require(`discord.js`);
 
 module.exports = {
-	description: `Get the bot's ping`,
-	name: `ping`,
-	options: [],
-
-	run: async (client, interaction) => {
+	run: async (client, interaction, queue, othervoicechannel) => { // eslint-disable-line no-unused-vars
 		const start = Date.now();
-		await interaction.reply(`Please wait...`);
-
+		await interaction.message.edit({ content: `Please wait...`, embeds: [], components: [] }).catch((e) => { });
 		let last = Date.now();
 
 		const updateButton = new ButtonBuilder()
@@ -30,6 +25,7 @@ module.exports = {
 			.setTimestamp()
 			.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-		interaction.editReply({ content: null, embeds: [embed], components: [row] }).catch((e) => { });
+		interaction.message.edit({ content: null, embeds: [embed], components: [row] }).catch((e) => { });
+		interaction.reply({ content: `**Success:** Ping data updated. ✅`, ephemeral: true }).catch((e) => { });
 	}
 };

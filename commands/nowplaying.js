@@ -35,12 +35,12 @@ module.exports = {
 
 		const updateButton = new ButtonBuilder();
 		updateButton.setLabel(`Update`);
-		updateButton.setCustomId(`nowplaying`);
+		updateButton.setCustomId(`nowplayingUpdateButton`);
 		updateButton.setStyle(ButtonStyle.Success);
 
 		const saveButton = new ButtonBuilder();
-		saveButton.setLabel(`Save Song`);
-		saveButton.setCustomId(`saveTrack`);
+		saveButton.setLabel(`Save Track`);
+		saveButton.setCustomId(`nowplayingSaveTrackButton`);
 		saveButton.setStyle(ButtonStyle.Success);
 
 		const row = new ActionRowBuilder()

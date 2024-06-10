@@ -1,4 +1,5 @@
-const initialVolume = require(`../config.js`).opt.discordPlayer.initialVolume;
+const botConfig = require(`../config.js`);
+const initialVolume = botConfig.opt.discordPlayer.initialVolume;
 
 module.exports = {
 	description: `Change the volume of the music to normal/initial volume (${initialVolume}%)`,

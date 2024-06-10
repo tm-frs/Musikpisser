@@ -14,20 +14,20 @@ module.exports = {
 
 		if (queue.repeatMode === 1) { // ---------------------------------------------------------------- QUEUE REPEAT MODE = TRACK
 			queue.setRepeatMode(QueueRepeatMode.OFF);
-			setTimeout(function() {
+			setTimeout(() => {
 				const success = queue.node.skip();
 				return interaction.reply({ content: success ? `**${queue.currentTrack.title}**, the song currently playing, has been skipped and removed from queue ✅` : `Something went wrong ❌` }).catch((e) => { });
 			}, 500);
-			setTimeout(function() {
+			setTimeout(() => {
 				queue.setRepeatMode(QueueRepeatMode.TRACK);
 			}, 1000);
 		} else if (queue.repeatMode === 2) { // --------------------------------------------------------- QUEUE REPEAT MODE = QUEUE
 			queue.setRepeatMode(QueueRepeatMode.OFF);
-			setTimeout(function() {
+			setTimeout(() => {
 				const success = queue.node.skip();
 				return interaction.reply({ content: success ? `**${queue.currentTrack.title}**, the song currently playing, has been skipped and removed from queue ✅` : `Something went wrong ❌` }).catch((e) => { });
 			}, 500);
-			setTimeout(function() {
+			setTimeout(() => {
 				queue.setRepeatMode(QueueRepeatMode.QUEUE);
 			}, 1000);
 		} else { // ---------------------------------------------------------------------------------- QUEUE REPEAT MODE = OFF/AUTOPLAY

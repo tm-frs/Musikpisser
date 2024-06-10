@@ -1,4 +1,5 @@
-const maxVol = require(`../config.js`).opt.maxVol;
+const botConfig = require(`../config.js`);
+const maxVol = botConfig.opt.maxVol;
 
 module.exports = {
 	description: `Change the volume of the music to max volume (${maxVol}%)`,

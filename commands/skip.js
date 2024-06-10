@@ -14,11 +14,11 @@ module.exports = {
 
 		if (queue.repeatMode === 1) {
 			queue.setRepeatMode(QueueRepeatMode.OFF);
-			setTimeout(function() {
+			setTimeout(() => {
 				const success = queue.node.skip();
 				return interaction.reply({ content: success ? `**${queue.currentTrack.title}**, the song currently playing, has been skipped ✅` : `Something went wrong ❌` }).catch((e) => { });
 			}, 500);
-			setTimeout(function() {
+			setTimeout(() => {
 				queue.setRepeatMode(QueueRepeatMode.TRACK);
 			}, 1000);
 		} else {

@@ -20,7 +20,7 @@ module.exports = {
 			alwaysAllowAdmins: true, // if this is set to true, everyone with the "Manage Guild"-permission can use it, even without the role
 			roleName: `Musikpisser Permissions`, // specify the name the role should have
 			notAffected: [`help`, `ping`, `crash`, `get-ip`, `nowplaying`, `queue`, `time`], // these are commands everyone can use, even if they don't have the role
-			affectedButtonsAndMenus: [`cancelButton`, `addAgainButton`, `trackMenu`] // these buttons/menus can't be used without the role
+			affectedButtonsAndMenus: [`searchCancelButton`, `searchAddAgainButton`, `searchTrackMenu`] // these buttons/menus can't be used without the role
 		},
 		voiceConfig: {
 			leaveOnEnd: true, // true ≙ the bot will leave the channel when the music ends

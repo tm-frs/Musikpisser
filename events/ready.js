@@ -1,3 +1,4 @@
+const botConfig = require(`../config.js`);
 var fs = require(`fs`);
 var logFile = fs.createWriteStream(`./logs/logins.log`, { flags: `as+` });
 
@@ -6,7 +7,7 @@ const writefile = (file, text) => {
 };
 
 module.exports = async (client) => {
-	const logPresenceUpdates = require(`../config.js`).logPresenceUpdates;
+	const logPresenceUpdates = botConfig.logPresenceUpdates;
 	const unixReadyAt = Math.floor(new Date(client.readyAt).getTime() / 1000);
 	const jsReadyAtShort = ((new Date(unixReadyAt * 1000)).toUTCString())
 		.replace(`GMT`, `(UTC+0)`);
@@ -19,10 +20,10 @@ module.exports = async (client) => {
 
 	const updatePresence = async () => {
 		const serverCount = client.guilds.cache.size;
-		const status = require(`../config.js`).onlineStatus;
-		const activityTypeConfig = require(`../config.js`).activityType;
+		const status = botConfig.onlineStatus;
+		const activityTypeConfig = botConfig.activityType;
 		const activityType = (activityTypeConfig === `PLAYING`) ? 0 : (activityTypeConfig === `STREAMING`) ? 1 : (activityTypeConfig === `LISTENING`) ? 2 : (activityTypeConfig === `WATCHING`) ? 3 : (activityTypeConfig === `COMPETING`) ? 5 : 0;
-		const activityText = ((require(`../config.js`).activityText).replace(`REPLACE-WITH_SERVER-COUNT`, serverCount)).replace(`REPLACE-WITH_LOGIN-AT`, jsReadyAtShort);
+		const activityText = ((botConfig.activityText).replace(`REPLACE-WITH_SERVER-COUNT`, serverCount)).replace(`REPLACE-WITH_LOGIN-AT`, jsReadyAtShort);
 		client.user.setPresence({
 			status: status,
 			activities: [{

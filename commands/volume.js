@@ -1,6 +1,7 @@
+const botConfig = require(`../config.js`);
 const { ApplicationCommandOptionType } = require(`discord.js`);
-const maxVol = require(`../config.js`).opt.maxVol;
-const initialVolume = require(`../config.js`).opt.discordPlayer.initialVolume;
+const maxVol = botConfig.opt.maxVol;
+const initialVolume = botConfig.opt.discordPlayer.initialVolume;
 
 module.exports = {
 	description: `Change the volume of the music`,

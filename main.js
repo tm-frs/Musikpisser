@@ -1,5 +1,4 @@
-const configvolumeSmoothness = require(`./config.js`).opt.volumeSmoothness;
-const configinitialVolume = require(`./config.js`).opt.initialVolume;
+const botConfig = require(`./config.js`);
 require(`dotenv`).config();
 const netTools = require(`./exports/netTools.js`);
 const { Player } = require(`discord-player`);
@@ -7,10 +6,9 @@ const { Client, GatewayIntentBits, Collection } = require(`discord.js`);
 const fs = require(`fs`);
 const util = require(`util`);
 var devnull = require(`dev-null`);
-const wait = require(`node:timers/promises`).setTimeout; // eslint-disable-line no-unused-vars
-const logFileLimit = require(`./config.js`).logFileLimit;
-const shouldCreateErrorLogFile = require(`./config.js`).logErrors;
-const enableDebugMessages = require(`./config.js`).debugLog;
+const logFileLimit = botConfig.logFileLimit;
+const shouldCreateErrorLogFile = botConfig.logErrors;
+const enableDebugMessages = botConfig.debugLog;
 
 if (!fs.existsSync(`./logs`)) {
 	fs.mkdirSync(`./logs`);
@@ -43,24 +41,24 @@ var errorLogfileStream = fs.createWriteStream(`./logs/errors.log`, { flags: `as+
 var logStdout = process.stdout;
 var logStderr = process.stderr;
 
-console.log = function() {
-	latestLogfileStream.write(util.format.apply(null, arguments) + `\n`);
-	logfileStream.write(util.format.apply(null, arguments) + `\n`);
+console.log = (...args) => {
+	latestLogfileStream.write(util.format.apply(null, args) + `\n`);
+	logfileStream.write(util.format.apply(null, args) + `\n`);
 
-	logStdout.write(util.format.apply(null, arguments) + `\n`);
+	logStdout.write(util.format.apply(null, args) + `\n`);
 };
-console.error = function() {
+console.error = (...args) => {
 	latestLogfileStream.write(`\n\nERROR: ${((new Date(Date.now())).toUTCString())
-		.replace(`GMT`, `UTC+0000 (Coordinated Universal Time)`)}\n` + util.format.apply(null, arguments) + `\n\n`);
+		.replace(`GMT`, `UTC+0000 (Coordinated Universal Time)`)}\n` + util.format.apply(null, args) + `\n\n`);
 	logfileStream.write(`\n\nERROR: ${((new Date(Date.now())).toUTCString())
-		.replace(`GMT`, `UTC+0000 (Coordinated Universal Time)`)}\n` + util.format.apply(null, arguments) + `\n\n`);
+		.replace(`GMT`, `UTC+0000 (Coordinated Universal Time)`)}\n` + util.format.apply(null, args) + `\n\n`);
 	errorLogfileStream.write(`\n\nERROR: ${((new Date(Date.now())).toUTCString())
-		.replace(`GMT`, `UTC+0000 (Coordinated Universal Time)`)}\n` + util.format.apply(null, arguments) + `\n\n`);
+		.replace(`GMT`, `UTC+0000 (Coordinated Universal Time)`)}\n` + util.format.apply(null, args) + `\n\n`);
 
 	logStderr.write(`\n\nERROR: ${((new Date(Date.now())).toUTCString())
-		.replace(`GMT`, `UTC`)}\n` + util.format.apply(null, arguments) + `\n\n`);
+		.replace(`GMT`, `UTC`)}\n` + util.format.apply(null, args) + `\n\n`);
 };
-process.on(`uncaughtException`, function(err) {
+process.on(`uncaughtException`, (err) => {
 	console.error((err && err.stack) ? err.stack : err);
 	setTimeout(() => {
 		process.kill(process.pid);
@@ -96,8 +94,7 @@ let client = new Client({
 	disableMentions: `everyone`
 });
 
-client.config = require(`./config`);
-client.player = new Player(client, client.config.opt.discordPlayer, {volume: configinitialVolume, volumeSmoothness: configvolumeSmoothness});
+client.player = new Player(client, botConfig.opt.discordPlayer, {volume: botConfig.opt.initialVolume, volumeSmoothness: botConfig.opt.volumeSmoothness});
 const player = client.player;
 player.extractors.loadDefault();
 
@@ -124,6 +121,21 @@ fs.readdir(`./commands/`, (_err, files) => {
 		type: ApplicationCommandType.ChatInput
 	})), {
 		debug: false
+	});
+});
+
+console.log(`-> Loading message components...`);
+client.components = new Collection();
+fs.readdir(`./components/`, (_err, files) => {
+	files.forEach((file) => {
+		if (!file.endsWith(`.js`)) return;
+		let props = require(`./components/${file}`);
+		let componentName = file.split(`.`)[0];
+		client.components.set(componentName, {
+			name: componentName,
+			...props
+		});
+		console.log(`${componentName} Component loaded`);
 	});
 });
 
@@ -161,7 +173,7 @@ player.events.on(`playerError`, (queue, error) => {
 });
 
 player.events.on(`playerStart`, (queue, track) => {
-	if (!client.config.opt.loopMessage && queue.repeatMode !== 0) return;
+	if (!botConfig.opt.loopMessage && queue.repeatMode !== 0) return;
 	queue.metadata.channel.send({ content: `🎵 Music started playing: **${track.title}** -> Channel: <#${queue.dispatcher.channel.id}> 🎧` }).catch((e) => { });
 });
 
@@ -174,10 +186,10 @@ player.events.on(`emptyChannel`, (queue) => {
 });
 
 player.events.on(`emptyQueue`, (queue) => {
-	if (client.config.opt.voiceConfig.leaveOnTimer.status === true) {
+	if (botConfig.opt.voiceConfig.leaveOnTimer.status === true) {
 		setTimeout(() => {
 			if (queue.connection) queue.connection.disconnect();
-		}, client.config.opt.voiceConfig.leaveOnTimer.time);
+		}, botConfig.opt.voiceConfig.leaveOnTimer.time);
 	}
 	queue.metadata.channel.send({ content: `All tracks in queue are finished. ✅` }).catch((e) => { });
 });

@@ -37,16 +37,13 @@ module.exports = {
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 			const mode = options[0];
 
-			const embed = new EmbedBuilder();
-
-			embed.setColor(Colors.Blue); // blue = 0x3498DB
-			embed.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }));
-			embed.setTitle(`Loop Mode`);
-
-			embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
-
-			embed.setTimestamp();
-			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			const embed = new EmbedBuilder()
+				.setColor(Colors.Blue) // blue = 0x3498DB
+				.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
+				.setTitle(`Loop Mode`)
+				.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`)
+				.setTimestamp()
+				.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `track`) { // LOOP TRACK ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -60,16 +57,13 @@ module.exports = {
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 			const mode = options[1];
 
-			const embed = new EmbedBuilder();
-
-			embed.setColor(Colors.Blue); // blue = 0x3498DB
-			embed.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }));
-			embed.setTitle(`Loop Mode`);
-
-			embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
-
-			embed.setTimestamp();
-			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			const embed = new EmbedBuilder()
+				.setColor(Colors.Blue) // blue = 0x3498DB
+				.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
+				.setTitle(`Loop Mode`)
+				.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`)
+				.setTimestamp()
+				.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `queue`) { // LOOP QUEUE ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -83,16 +77,13 @@ module.exports = {
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 			const mode = options[2];
 
-			const embed = new EmbedBuilder();
-
-			embed.setColor(Colors.Blue); // blue = 0x3498DB
-			embed.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }));
-			embed.setTitle(`Loop Mode`);
-
-			embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
-
-			embed.setTimestamp();
-			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			const embed = new EmbedBuilder()
+				.setColor(Colors.Blue) // blue = 0x3498DB
+				.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
+				.setTitle(`Loop Mode`)
+				.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`)
+				.setTimestamp()
+				.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `autoplay`) { // LOOP AUTOPLAY ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -106,16 +97,13 @@ module.exports = {
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 			const mode = options[3];
 
-			const embed = new EmbedBuilder();
-
-			embed.setColor(Colors.Blue); // blue = 0x3498DB
-			embed.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }));
-			embed.setTitle(`Loop Mode`);
-
-			embed.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
-
-			embed.setTimestamp();
-			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			const embed = new EmbedBuilder()
+				.setColor(Colors.Blue) // blue = 0x3498DB
+				.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
+				.setTitle(`Loop Mode`)
+				.setDescription(`**Loop mode:** ${mode}\n**Changed by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`)
+				.setTimestamp()
+				.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply(success ? { embeds: [embed] } : { content: `Could not update loop mode! ❌` }).catch((e) => { });
 		} else if (loopMode === `info`) { // LOOP INFO ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -124,16 +112,13 @@ module.exports = {
 			const options = [`📴 (Loop mode: Off)`, `🔂 (Loop mode: Track)`, `🔁 (Loop mode: Queue)`, `▶ (Loop mode: Autoplay)`];
 			const mode = noqueue ? `❌ _(No music currently playing!)_` : options[queue.repeatMode];
 
-			const embed = new EmbedBuilder();
-
-			embed.setColor(Colors.Blue); // blue = 0x3498DB
-			embed.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }));
-			embed.setTitle(`Loop Mode`);
-
-			embed.setDescription(`**Loop mode:** ${mode}\n**Requested by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`);
-
-			embed.setTimestamp();
-			embed.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
+			const embed = new EmbedBuilder()
+				.setColor(Colors.Blue) // blue = 0x3498DB
+				.setThumbnail(client.user.displayAvatarURL({ format: `png`, size: 4096 }))
+				.setTitle(`Loop Mode`)
+				.setDescription(`**Loop mode:** ${mode}\n**Requested by:** ${interaction.member.user}\n \n**Explanations:**\n📴: No loop mode is active.\n🔂: The current track will be repeated.\n🔁: The entire queue will be repeated.\n▶: After the queue is finished, the bot will start playing some random music.`)
+				.setTimestamp()
+				.setFooter({ text: `Musikpisser Music Bot`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
 			interaction.reply({ embeds: [embed] }).catch((e) => { });
 		} // END ---------------------------------------------------------------------------------------------------------------------------------------------------

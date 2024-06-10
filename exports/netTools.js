@@ -1,4 +1,5 @@
-const defaultApi = require(`../config.js`).defaultPublicIpApi;
+const botConfig = require(`../config.js`);
+const defaultApi = botConfig.defaultPublicIpApi;
 var https = require(`https`);
 var ip = require(`ip`);
 require(`dotenv`).config();
@@ -9,12 +10,12 @@ const getPublicIp = async (apiUrlInput) => {
 	var toReturn = new Promise((resolveReturn, rejectReturn) => { // eslint-disable-line no-unused-vars
 		https.get({
 			host: apiURL
-		}, function(response) {
+		}, (response) => {
 			var ip = ``;
-			response.on(`data`, function(d) {
+			response.on(`data`, (d) => {
 				ip += d;
 			});
-			response.on(`end`, function() {
+			response.on(`end`, () => {
 				if (ip) {
 					resolveReturn(`${ip}`);
 				} else {

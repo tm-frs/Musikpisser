@@ -4,14 +4,7 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require(`discord.js`);
 const { convertSecondsToString } = require(`../exports/timeStrings.js`);
 
 module.exports = {
-	description: `Show length and progression of the current track`,
-	name: `time`,
-	options: [],
-	voiceChannel: true,
-
-	run: async (client, interaction) => {
-		const queue = client.player.nodes.get(interaction.guild.id);
-
+	run: async (client, interaction, queue, othervoicechannel) => { // eslint-disable-line no-unused-vars
 		if (!queue || !queue.node.isPlaying()) return interaction.reply({ content: `No music currently playing! ❌`, ephemeral: true }).catch((e) => { });
 
 		const progress = queue.node.createProgressBar();
@@ -39,6 +32,7 @@ module.exports = {
 			.setDescription(`${progress} \nThe track is finished by **${timestamp.progress}%**.\nCurrent session playtime: **${playingDuraionString}**\n*(playing since: ${discordPlayingSince})*`)
 			.setFooter({ text: `Musikpisser Music Bot️`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) });
 
-		interaction.reply({ embeds: [embed], components: [row]}).catch((e) => { });
+		interaction.message.edit({ embeds: [embed], components: [row] }).catch((e) => { });
+		interaction.reply({ content: `**Success:** Time data updated. ✅`, ephemeral: true }).catch((e) => { });
 	}
 };

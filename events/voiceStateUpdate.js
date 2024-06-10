@@ -1,5 +1,6 @@
+const botConfig = require(`../config.js`);
 const { Colors } = require(`discord.js`);
-const rrm = { config: require(`../config.js`).opt.roleRestrictedMode };
+const rrm = { config: botConfig.opt.roleRestrictedMode };
 
 module.exports = async (client, oldState, newState) => {
 	if (client.user.id === newState.id) {
