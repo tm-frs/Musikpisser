@@ -34,7 +34,7 @@
     "ytdl-core": "^4.11.2"
   },
   "devDependencies": {
-    "eslint": "^9.3.0"
+    "eslint": "^9.4.0"
   },
   "engines": {
     "node": "^18.20.2"
