@@ -2,6 +2,7 @@ const botConfig = require(`./config.js`);
 require(`dotenv`).config();
 const netTools = require(`./exports/netTools.js`);
 const { Player } = require(`discord-player`);
+const { YoutubeiExtractor } = require(`discord-player-youtubei`);
 const { Client, GatewayIntentBits, Collection } = require(`discord.js`);
 const fs = require(`fs`);
 const util = require(`util`);
@@ -97,6 +98,7 @@ let client = new Client({
 client.player = new Player(client, botConfig.opt.discordPlayer, {volume: botConfig.opt.initialVolume, volumeSmoothness: botConfig.opt.volumeSmoothness});
 const player = client.player;
 player.extractors.loadDefault();
+player.extractors.register(YoutubeiExtractor, {});
 
 const synchronizeSlashCommands = require(`discord-sync-commands-v14`);
 const { ApplicationCommandType } = require(`discord.js`);

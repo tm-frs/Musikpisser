@@ -3,11 +3,14 @@
   "main": "main.js",
   "author": "tm-frs",
   "description": "Discord Music Bot based on discord.js and discord-player",
+  "//": "eslint-l -> Linux",
+  "//": "eslint-w -> Windows",
   "scripts": {
     "start": "node --trace-warnings main.js",
+    "eslint-l": "./node_modules/.bin/eslint ./",
+    "eslint-w": ".\\node_modules\\.bin\\eslint .\\",
     "prereinstall": "rm -rf node_modules",
-    "reinstall": "npm install",
-    "eslint": ".\\node_modules\\.bin\\eslint .\\"
+    "reinstall": "npm install"
   },
   "repository": {
     "type": "git",
@@ -19,16 +22,17 @@
   },
   "dependencies": {
     "@discord-player/extractor": "^4.4.7",
-    "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.17.0",
     "dev-null": "^0.1.1",
     "discord-player": "^6.6.10",
+    "discord-player-youtubei": "^1.0.9",
     "discord-sync-commands-v14": "^2.0.0",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "ffmpeg-static": "^5.1.0",
     "ip": "^2.0.1",
+    "mediaplex": "^0.0.9",
     "ms": "^3.0.0-canary.1",
     "play-dl": "^1.9.7",
     "ytdl-core": "^4.11.2"
